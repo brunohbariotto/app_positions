@@ -1,4 +1,4 @@
-gsheetsdb==0.1.13.1
+gspread_pandas==3.2.2
 plotly==5.9.0
 protobuf==4.22.0
 streamlit==1.11.1
