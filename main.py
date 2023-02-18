@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 from google.oauth2 import service_account
 #from gsheetsdb import connect
 from gspread_pandas import Spread, Client
+import pandas as pd
 
 st.write("New App Position!")
 st.write("Trying")
@@ -51,10 +52,17 @@ def worksheet_names():
         sheet_names.append(sheet.title)
     return sheet_names
 
+def load_spreadsheet(spreadsheetname):
+    worksheet = sh.worksheet(spreadsheetname)
+    df = pd.DataFrame(worksheet.get_all_records())
+    return df
+
 st.header('Controle de Posição - Bruno Bariotto')
 what_sheets = worksheet_names()
 
 ws_choice = st.sidebar.radio('Escolha a Aba desejada', what_sheets)
 
 st.write(ws_choice)
+df = load_spreadsheet(ws_choice)
+st.write(df)
 
