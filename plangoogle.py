@@ -14,7 +14,11 @@ class PlanGoogle:
     def __init__(self):
         self.scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
         self.client = self.init_credentials()
+        self.spreadsheetname = "Position_Control"
         
+    #
+    # inicializa as credenciais do google planilhas
+    #    
     def init_credentials(self):
         
         credentials = service_account.Credentials.from_service_account_info(
@@ -24,17 +28,15 @@ class PlanGoogle:
         client = Client(scope=self.scope, creds=credentials)
         return client
     
+    # lê e retorna um dataframe de uma aba (tabname) da planilha inicializada
     def read_spreadsheet(self, tabname):
-        
-        spreadsheetname = "Position_Control"
-        spread = Spread(spreadsheetname, client = self.client)
+        spread = Spread(self.spreadsheetname, client = self.client)
         st.write(spread.url)
 
-        sh = self.client.open(spreadsheetname)
+        sh = self.client.open(self.spreadsheetname)
         worksheet = sh.worksheet(tabname)
         df = pd.DataFrame(worksheet.get_all_records())
         return df
-        #worksheet_list = sh.worksheets()
 
     # @st.cache(ttl=600)
     # def worksheet_names():

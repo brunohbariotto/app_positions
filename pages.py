@@ -6,6 +6,7 @@ Created on Sat Feb 18 14:34:08 2023
 """
 
 import streamlit as st
+import plotly.graph_objects as go
 
 class Pages:
     def __init__(self):
@@ -17,6 +18,11 @@ class Pages:
     def posicao(self, df):
         st.header('Controle de Posição')
         st.dataframe(df)
+        
+        fig = go.Figure(data=[go.Pie(labels=df.Ação, values=df.pos_atual)])
+        st.plotly_chart(fig)
+        #fig.add_trace(go.Pie(x=cotacoes.index, y=cotacoes, name=df_info['Ativo'][count]))
+        
     
     # mercado
     # Tela que exibe informações de mercado das ações selecionadas: Gráficos de Preço e Volatilidade 
