@@ -14,19 +14,6 @@ from google.oauth2 import service_account
 from gspread_pandas import Spread, Client
 import pandas as pd
 
-st.write("New App Position!")
-st.write("Trying")
-
-
-
-# # Create a connection object.
-# credentials = service_account.Credentials.from_service_account_info(
-#     st.secrets["gcp_service_account"],
-#     scopes=[
-#         "https://www.googleapis.com/auth/spreadsheets",
-#     ],
-# )
-# conn = connect(credentials=credentials)
 
 # Create a google autentication object.
 scope=["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
@@ -56,6 +43,10 @@ def load_spreadsheet(spreadsheetname):
     worksheet = sh.worksheet(spreadsheetname)
     df = pd.DataFrame(worksheet.get_all_records())
     return df
+
+def update_spreadsheet(spreadsheetname, df):
+    spread.df_to_sheet(df, sheet=spreadsheetname, index=False)
+    st.info("Atualizado na Planilha !!!")
 
 st.header('Controle de Posição - Bruno Bariotto')
 what_sheets = worksheet_names()
