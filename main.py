@@ -44,7 +44,7 @@ st.write(spread.url)
 sh = client.open(spreadsheetname)
 worksheet_list = sh.worksheets()
 
-@st.cache_data(ttl=600)
+@st.cache(ttl=600)
 def worksheet_names():
     sheet_names = []
     for sheet in worksheet_list:
