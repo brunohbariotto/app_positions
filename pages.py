@@ -23,6 +23,13 @@ class Pages:
         fig = go.Figure(data=[go.Pie(labels=df.Acao, values=df.pos_atual, textinfo='label+percent')])
         fig.layout.height = 700
         fig.layout.width = 700
+        
+        fig.update_layout(
+            title={'text':'Posição Atual [% R$]'},
+            font=dict(
+                family="Courier New, monospace",
+                size=18))
+        
         st.plotly_chart(fig)
         
         #Comparação Posição atual x Markowitz x Oscilator
@@ -32,7 +39,16 @@ class Pages:
             go.Bar(name='Pos. Atual', x=df.Acao, y= df.pos_atual)
         ])
         fig2.layout.height = 700
-        fig2.layout.width = 700
+        fig2.layout.width = 800
+        
+        fig2.update_layout(
+            title={'text':'Comparação entre as Posições: Markowitz, Oscilator e Atual'},
+            xaxis_title='Ações',
+            yaxis_title='Quantidade de Ações',
+            font=dict(
+                family="Courier New, monospace",
+                size=18))
+        
         st.plotly_chart(fig2)
         
         
