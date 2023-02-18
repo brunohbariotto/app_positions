@@ -19,7 +19,7 @@ class Pages:
         st.header('Controle de Posição')
         st.dataframe(df)
         
-        fig = go.Figure(data=[go.Pie(labels=df.Ação, values=df.pos_atual)])
+        fig = go.Figure(data=[go.Pie(labels=df.Ação, values=df.pos_atual, textinfo='label+percent')])
         st.plotly_chart(fig)
         #fig.add_trace(go.Pie(x=cotacoes.index, y=cotacoes, name=df_info['Ativo'][count]))
         
