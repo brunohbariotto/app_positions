@@ -28,7 +28,7 @@ class Pages:
             title={'text':'Posição Atual [% R$]'},
             font=dict(
                 family="Courier New, monospace",
-                size=18))
+                size=10))
         
         st.plotly_chart(fig)
         
@@ -39,7 +39,7 @@ class Pages:
             go.Bar(name='Pos. Atual', x=df.Acao, y= df.pos_atual)
         ])
         fig2.layout.height = 700
-        fig2.layout.width = 800
+        fig2.layout.width = 1000
         
         fig2.update_layout(
             title={'text':'Comparação entre as Posições: Markowitz, Oscilator e Atual'},
