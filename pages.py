@@ -20,6 +20,8 @@ class Pages:
         st.dataframe(df)
         
         fig = go.Figure(data=[go.Pie(labels=df.Acao, values=df.pos_atual, textinfo='label+percent')])
+        fig.layout.height = 800
+        fig.layout.width = 800
         st.plotly_chart(fig)
         #fig.add_trace(go.Pie(x=cotacoes.index, y=cotacoes, name=df_info['Ativo'][count]))
         
