@@ -8,8 +8,8 @@ Created on Sat Feb 18 14:34:08 2023
 import streamlit as st
 
 class Pages:
-    def __init__(self, name):
-        self.name == name
+    def __init__(self):
+        pass
         
     # posicao
     # Tela que exibe a posição atual real bem como sua comparação com a posição de Markwitz e Oscilator
