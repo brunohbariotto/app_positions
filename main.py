@@ -41,20 +41,20 @@ spread = Spread(spreadsheetname, client = client)
 
 st.write(spread.url)
 
+sh = client.open(spreadsheetname)
+worksheet_list = sh.worksheets()
 
-# conn = connect(credentials=credentials)
+@st.cache_data(ttl=600)
+def worksheet_names():
+    sheet_names = []
+    for sheet in worksheet_list:
+        sheet_names.append(sheet.title)
+    return sheet_names
 
-# # Perform SQL query on the Google Sheet.
-# # Uses st.cache_data to only rerun when the query changes or after 10 min.
-# @st.cache_data(ttl=600)
-# def run_query(query):
-#     rows = conn.execute(query, headers=1)
-#     rows = rows.fetchall()
-#     return rows
+st.header('Controle de Posição - Bruno Bariotto')
+what_sheets = worksheet_names()
 
-# sheet_url = st.secrets["private_gsheets_url"]
-# rows = run_query(f'SELECT * FROM "{sheet_url}"')
+ws_choice = st.sidebar.radio('Escolha a Aba desejada', what_sheets)
 
-# # Print results.
-# for row in rows:
-#     st.write(f"{row.name} has a :{row.pet}:")
+st.write(ws_choice)
+
