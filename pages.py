@@ -19,11 +19,24 @@ class Pages:
         st.header('Controle de Posição')
         st.dataframe(df)
         
+        #Pizza da posição atual
         fig = go.Figure(data=[go.Pie(labels=df.Acao, values=df.pos_atual, textinfo='label+percent')])
-        fig.layout.height = 800
-        fig.layout.width = 800
+        fig.layout.height = 600
+        fig.layout.width = 600
         st.plotly_chart(fig)
-        #fig.add_trace(go.Pie(x=cotacoes.index, y=cotacoes, name=df_info['Ativo'][count]))
+        
+        #Comparação Posição atual x Markowitz x Oscilator
+        fig2 = go.Figure(data=[
+            go.Bar(name='Pos. Markowitz', x=df.Acao, y= df.pos_markw),
+            go.Bar(name='Pos. Oscilator', x=df.Acao, y= df.pos_osc),
+            go.Bar(name='Pos. Atual', x=df.Acao, y= df.pos_atual)
+        ])
+        fig2.layout.height = 600
+        fig2.layout.width = 600
+        st.plotly_chart(fig2)
+        
+        
+        
         
     
     # mercado
