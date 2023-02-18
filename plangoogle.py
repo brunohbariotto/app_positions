@@ -13,7 +13,6 @@ import pandas as pd
 class PlanGoogle:
     def __init__(self):
         self.scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/drive"]
-        self.client = self.init_credentials()
         
     def init_credentials(self):
         
@@ -26,11 +25,12 @@ class PlanGoogle:
     
     def read_spreadsheet(self, spreadsheetname):
         
+        client = self.init_credentials()
         #spreadsheetname = "Position_Control"
-        spread = Spread(spreadsheetname, client = self.client)
+        spread = Spread(spreadsheetname, client = client)
         st.write(spread.url)
 
-        sh = self.client.open(spreadsheetname)
+        sh = client.open(spreadsheetname)
         worksheet = sh.worksheet(spreadsheetname)
         df = pd.DataFrame(worksheet.get_all_records())
         return df
