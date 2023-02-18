@@ -59,7 +59,7 @@ pg = Pages()
 
 if escolha == 'Controle de Posição':
     df = load_spreadsheet('positions_BrunoBariotto')
-    pg.controle(df)
+    pg.posicao(df)
     
 if escolha == 'Mercado':
     df = load_spreadsheet('positions_BrunoBariotto')
@@ -69,7 +69,7 @@ if escolha == 'Modelos':
     pg.modelos()
     
 if escolha == 'Relatórios':
-    pg.relatorios()
+    pg.relatorio()
 
 
 #st.header('Controle de Posição - Bruno Bariotto')
