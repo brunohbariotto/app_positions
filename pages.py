@@ -21,7 +21,7 @@ class Pages:
         st.dataframe(df)
         
         m = Models()
-        
+        st.write(df.Acao)
         df_prices = m.download_prices(list(df.Acoes), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         
