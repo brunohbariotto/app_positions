@@ -51,6 +51,12 @@ class Pages:
         
         st.plotly_chart(fig2)
         
+        df['PosxMark'] = df['pos_markw'] - df['pos_atual']
+        df['PosxOsc'] = (df['pos_markw']*df['pos_osc']/100) - df['pos_atual']
+        
+        st.dataframe(df.set_index('Acao')[['PosxMark','PosxOsc']])
+        
+        
         
         
         
