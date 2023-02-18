@@ -7,6 +7,7 @@ Created on Sat Feb 18 14:34:08 2023
 
 import streamlit as st
 import plotly.graph_objects as go
+from models import Models
 
 class Pages:
     def __init__(self):
@@ -15,9 +16,14 @@ class Pages:
     # posicao
     # Tela que exibe a posição atual real bem como sua comparação com a posição de Markwitz e Oscilator
     #
-    def posicao(self, df):
+    def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.header('Controle de Posição')
         st.dataframe(df)
+        
+        m = Models()
+        
+        df_prices = m.download_prices(list(df.Acoes), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        st.write(df_prices)
         
         #Pizza da posição atual
         fig = go.Figure(data=[go.Pie(labels=df.Acao, values=df.pos_atual, textinfo='label+percent')])
