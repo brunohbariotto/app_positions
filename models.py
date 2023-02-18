@@ -24,6 +24,5 @@ class Models:
                 cotacoes.columns = ativos
             if per_data == 'Máx':
                 cotacoes = pd.concat([yf.download(tick, period='max')['Adj Close'] for tick in ativos], axis=1)
-                cotacoes.columns = ativos
-        st.write(cotacoes)  
+                cotacoes.columns = ativos 
         return cotacoes
