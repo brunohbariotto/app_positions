@@ -53,7 +53,7 @@ class Pages:
             go.Bar(name='Pos. Atual', x=df.Acao, y= df.pos_atual)
         ])
         fig2.layout.height = 700
-        fig2.layout.width = 1000
+        fig2.layout.width = 800
         
         fig2.update_layout(
             title={'text':'Comparação entre as Posições: Markowitz, Oscilator e Atual'},
@@ -70,7 +70,7 @@ class Pages:
         
         st.markdown('---')
         st.subheader('Comparação entre posições')
-        st.write(' > 0: Comprar, < 0: Vender')
+        st.write(' Se > 0: Comprar, < 0: Vender')
         st.dataframe(df.set_index('Acao')[['PosxMark','PosxOsc']])
         
         
