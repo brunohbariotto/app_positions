@@ -24,10 +24,8 @@ class Pages:
         df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         
-        st.write(df_prices.iloc[-1,:].T * df.pos_atual.values )
-        
         #Pizza da posição atual
-        fig = go.Figure(data=[go.Pie(labels=df.Acao, values=df.pos_atual, textinfo='label+percent')])
+        fig = go.Figure(data=[go.Pie(labels=df.Acao, values=(df_prices.iloc[-1,:].T * df.pos_atual.values), textinfo='label+percent+value')])
         fig.layout.height = 700
         fig.layout.width = 700
         
