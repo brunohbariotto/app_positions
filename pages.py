@@ -30,12 +30,13 @@ class Pages:
         #st.write(df_prices)
         
         #Pizza da posição atual
+        st.subheader('Posição Atual [% e R$]')
         fig = go.Figure(data=[go.Pie(labels=df.Acao, values=(df_prices.iloc[-1,:].T * df.pos_atual.values), textinfo='label+percent+value')])
         fig.layout.height = 700
         fig.layout.width = 700
         
         fig.update_layout(
-            title={'text':'Posição Atual [% R$]'},
+            title={'text':'Posição Atual [% e R$]'},
             font=dict(
                 family="Courier New, monospace",
                 size=12))
@@ -43,6 +44,7 @@ class Pages:
         st.plotly_chart(fig)
         
         #Comparação Posição atual x Markowitz x Oscilator
+        st.subheader('Comparação entre as Posições: Markowitz, Oscilator e Atual')
         fig2 = go.Figure(data=[
             go.Bar(name='Pos. Markowitz', x=df.Acao, y= df.pos_markw),
             go.Bar(name='Pos. Oscilator', x=df.Acao, y= df.pos_osc*df.pos_markw/100),
@@ -64,6 +66,8 @@ class Pages:
         df['PosxMark'] = df['pos_markw'] - df['pos_atual']
         df['PosxOsc'] = (df['pos_markw']*df['pos_osc']/100) - df['pos_atual']
         
+        st.subheader('Comparação entre posições')
+        st.write('>0: Comprar, <0: Vender')
         st.dataframe(df.set_index('Acao')[['PosxMark','PosxOsc']])
         
         
