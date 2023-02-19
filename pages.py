@@ -20,16 +20,14 @@ class Pages:
     # Tela que exibe a posição atual real bem como sua comparação com a posição de Markwitz e Oscilator
     #
     def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
-        colT1,colT2 = st.columns([1,8])
-        with colT2:
-            st.header('Controle de Posição')
-            image = Image.open('alocation2.jpg')
-            st.image(image, caption='Alocação',width=400)
-        st.dataframe(df)
+        st.header('Controle de Posição')
+        #image = Image.open('alocation2.jpg')
+        #st.image(image, caption='Alocação',width=400)
+        #st.dataframe(df)
         
         m = Models()
         df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
-        st.write(df_prices)
+        #st.write(df_prices)
         
         #Pizza da posição atual
         fig = go.Figure(data=[go.Pie(labels=df.Acao, values=(df_prices.iloc[-1,:].T * df.pos_atual.values), textinfo='label+percent+value')])
