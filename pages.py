@@ -22,7 +22,7 @@ class Pages:
     def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.header('Controle de Posição')
         image = Image.open('alocation2.jpg')
-        st.image(image, caption='Alocação', use_column_width='always')
+        st.image(image, caption='Alocação')
         st.dataframe(df)
         
         m = Models()
