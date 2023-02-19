@@ -20,7 +20,7 @@ class Pages:
     # Tela que exibe a posição atual real bem como sua comparação com a posição de Markwitz e Oscilator
     #
     def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
-        st.header('Controle de Posição')
+        st.title('Controle de Posição')
         #image = Image.open('alocation2.jpg')
         #st.image(image, caption='Alocação',width=400)
         #st.dataframe(df)
@@ -67,7 +67,7 @@ class Pages:
         df['PosxOsc'] = (df['pos_markw']*df['pos_osc']/100) - df['pos_atual']
         
         st.subheader('Comparação entre posições')
-        st.write('>0: Comprar, <0: Vender')
+        st.write(' > 0: Comprar, < 0: Vender')
         st.dataframe(df.set_index('Acao')[['PosxMark','PosxOsc']])
         
         
