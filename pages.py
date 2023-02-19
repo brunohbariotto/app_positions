@@ -38,7 +38,7 @@ class Pages:
             title={'text':'Posição Atual [% R$]'},
             font=dict(
                 family="Courier New, monospace",
-                size=10))
+                size=12))
         
         st.plotly_chart(fig)
         
@@ -57,7 +57,7 @@ class Pages:
             yaxis_title='Quantidade de Ações',
             font=dict(
                 family="Courier New, monospace",
-                size=18))
+                size=12))
         
         st.plotly_chart(fig2)
         

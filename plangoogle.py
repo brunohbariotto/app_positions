@@ -31,7 +31,7 @@ class PlanGoogle:
     # lê e retorna um dataframe de uma aba (tabname) da planilha inicializada
     def read_spreadsheet(self, tabname):
         spread = Spread(self.spreadsheetname, client = self.client)
-        st.write(spread.url)
+        #st.write(spread.url)
 
         sh = self.client.open(self.spreadsheetname)
         worksheet = sh.worksheet(tabname)
