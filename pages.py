@@ -21,6 +21,7 @@ class Pages:
     #
     def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.title('Controle de Posição')
+        st.markdown('---')
         #image = Image.open('alocation2.jpg')
         #st.image(image, caption='Alocação',width=400)
         #st.dataframe(df)
@@ -44,6 +45,7 @@ class Pages:
         st.plotly_chart(fig)
         
         #Comparação Posição atual x Markowitz x Oscilator
+        st.markdown('---')
         st.subheader('Comparação entre as Posições: Markowitz, Oscilator e Atual')
         fig2 = go.Figure(data=[
             go.Bar(name='Pos. Markowitz', x=df.Acao, y= df.pos_markw),
@@ -66,6 +68,7 @@ class Pages:
         df['PosxMark'] = df['pos_markw'] - df['pos_atual']
         df['PosxOsc'] = (df['pos_markw']*df['pos_osc']/100) - df['pos_atual']
         
+        st.markdown('---')
         st.subheader('Comparação entre posições')
         st.write(' > 0: Comprar, < 0: Vender')
         st.dataframe(df.set_index('Acao')[['PosxMark','PosxOsc']])
