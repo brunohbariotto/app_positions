@@ -20,9 +20,11 @@ class Pages:
     # Tela que exibe a posição atual real bem como sua comparação com a posição de Markwitz e Oscilator
     #
     def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
-        st.header('Controle de Posição')
-        image = Image.open('alocation2.jpg')
-        st.image(image, caption='Alocação',width=400)
+        colT1,colT2 = st.columns([1,8])
+        with colT2:
+            st.header('Controle de Posição')
+            image = Image.open('alocation2.jpg')
+            st.image(image, caption='Alocação',width=400)
         st.dataframe(df)
         
         m = Models()
