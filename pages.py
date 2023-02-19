@@ -8,6 +8,9 @@ Created on Sat Feb 18 14:34:08 2023
 import streamlit as st
 import plotly.graph_objects as go
 from models import Models
+from PIL import Image
+
+
 
 class Pages:
     def __init__(self):
@@ -18,6 +21,8 @@ class Pages:
     #
     def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.header('Controle de Posição')
+        image = Image.open('cincoinvestimentossegurancapoupancarendimento1_300820214544.jpg')
+        st.image(image, caption='Alocação')
         st.dataframe(df)
         
         m = Models()
