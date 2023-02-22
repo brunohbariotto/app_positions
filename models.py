@@ -59,10 +59,185 @@ class Models:
         
         st.plotly_chart(fig_m)
         
-    def oscilador(self):
+    def osc(self, prices, fast=32, slow=96):
+        f,g = 1-1/fast, 1-1/slow
+        return (prices.ewm(span=2*fast-1).mean() - prices.ewm(span=2*slow-1).mean())/np.sqrt(1.0 / (1 - f*f) - 2.0 / (1 - f*g) + 1.0 / (1 - g*g))
+    
+    def PL_osc(self,cotacoes, prices, volatility, fast=32, slow=96, fee = 30E-6):
+        currency_position = (np.tanh(self.osc(prices, fast=fast, slow=slow)) / volatility).clip(-50, 50).fillna(0.0)
+        euclid_norm = np.sqrt((currency_position*currency_position).sum(axis=1))
+        
+        currency_position_scaled = (currency_position.apply(lambda x : x/euclid_norm, axis=0)/volatility).clip(-50,50).fillna(0.0)
+        profit_scaled = (cotacoes.pct_change() * currency_position_scaled.shift(periods=1).fillna(0.0))
+        fee_scaled = np.abs(currency_position_scaled.diff()*fee).fillna(0.0)
+        
+        return currency_position_scaled, ((profit_scaled.subtract(fee_scaled))/volatility), (1.0+profit_scaled.subtract(fee_scaled)/volatility/(50*profit_scaled.shape[1])).fillna(1.0)
+        
+        
+    def oscilador(self, df_prices):
         st.subheader('Oscilador')
         
         st.markdown('---')
+        
+        volatility = np.log(df_prices.ffill()).diff().ewm(com=32).std()
+        prices = (np.log(df_prices.ffill()).diff() / volatility).clip(-5,5).cumsum()
+        
+        pos_slow, pnl_slow, pnl_comp_slow = self.PL_osc(df_prices, prices, volatility, fast=32, slow=96)
+        pos_medium, pnl_medium, pnl_comp_medium = self.PL_osc(df_prices, prices, volatility, fast=16, slow=48)
+        pos_fast, pnl_fast, pnl_comp_fast = self.PL_osc(df_prices, prices, volatility, fast=8, slow=24)
+        
+        pos_slow_q = pd.DataFrame(columns=pos_slow.columns)
+        pos_medium_q = pd.DataFrame(columns=pos_medium.columns)
+        pos_fast_q = pd.DataFrame(columns=pos_fast.columns)
+        
+        pos_slow_p = pd.DataFrame(index = pos_slow.index ,columns=pos_slow.columns)
+        pos_medium_p = pd.DataFrame(index = pos_medium.index ,columns=pos_medium.columns)
+        pos_fast_p = pd.DataFrame(index = pos_fast.index ,columns=pos_fast.columns)
+        
+        pos_slow_q.loc['q3',:] = pos_slow.quantile(.75)
+        pos_slow_q.loc['q2',:] = pos_slow.median()
+        pos_slow_q.loc['q1',:] = pos_slow.quantile(.25)
+        
+        pos_medium_q.loc['q3',:] = pos_medium.quantile(.75)
+        pos_medium_q.loc['q2',:] = pos_medium.median()
+        pos_medium_q.loc['q1',:] = pos_medium.quantile(.25)
+        
+        pos_fast_q.loc['q3',:] = pos_fast.quantile(.75)
+        pos_fast_q.loc['q2',:] = pos_fast.median()
+        pos_fast_q.loc['q1',:] = pos_fast.quantile(.25)
+        
+        pos_slow_p.iloc[:,:] = np.where(pos_slow.iloc[:,:] >= pos_slow_q.loc['q3',:], 0,
+                          np.where( (pos_slow.iloc[:,:] >= pos_slow_q.loc['q2',:]) & (pos_slow.iloc[:,:] < pos_slow_q.loc['q3',:]), 15,
+                          np.where( (pos_slow.iloc[:,:] >= pos_slow_q.loc['q1',:]) & (pos_slow.iloc[:,:] < pos_slow_q.loc['q2',:]), 30, 50 )))
+        
+        st.write('Posição Lenta')
+        st.write(pos_slow_p)
+        
+        pos_medium_p.iloc[:,:] = np.where(pos_medium.iloc[:,:] >= pos_medium_q.loc['q3',:], 0,
+                          np.where( (pos_medium.iloc[:,:] >= pos_medium_q.loc['q2',:]) & (pos_medium.iloc[:,:] < pos_medium_q.loc['q3',:]), 10,
+                          np.where( (pos_medium.iloc[:,:] >= pos_medium_q.loc['q1',:]) & (pos_medium.iloc[:,:] < pos_medium_q.loc['q2',:]), 25, 45 )))
+
+        st.write('Posição Média')
+        st.write(pos_medium_p)
+        
+        pos_fast_p.iloc[:,:] = np.where(pos_fast.iloc[:,:] >= pos_fast_q.loc['q3',:], 0,
+                          np.where( (pos_fast.iloc[:,:] >= pos_fast_q.loc['q2',:]) & (pos_fast.iloc[:,:] < pos_fast_q.loc['q3',:]), 5,
+                          np.where( (pos_fast.iloc[:,:] >= pos_fast_q.loc['q1',:]) & (pos_fast.iloc[:,:] < pos_fast_q.loc['q2',:]), 20, 40 )))
+        
+        st.write('Posição Rápida')
+        st.write(pos_fast_p)
+        
+        ultimo_preco = df_prices.iloc[-1,:]
+        st.write(ultimo_preco)
+        
+        fig_preco = go.Figure()
+        fig_vol = go.Figure()
+        fig_pos = go.Figure()
+        fig_pos_box_slow = go.Figure()
+        fig_pos_box_medium = go.Figure()
+        fig_pos_box_fast = go.Figure()
+        fig_PL = go.Figure()
+        fig_PLAcc = go.Figure()
+        for ac in pos_slow.columns:
+            
+            fig_preco.add_trace(go.Scatter(
+                 x=df_prices.index,
+                 y=df_prices[ac],
+                 name=ac))
+            fig_preco.update_layout(
+                title={'text':'Preço'},
+                xaxis_title='Data',
+                yaxis_title='Preço (R$)',
+                font=dict(
+                    family="Courier New, monospace",
+                    size=18))
+            
+            fig_vol.add_trace(go.Scatter(
+                 x=volatility.index,
+                 y=volatility[ac],
+                 name=ac))
+            fig_vol.update_layout(
+                title={'text':'Volatilidade'},
+                xaxis_title='Data',
+                yaxis_title='Vol',
+                font=dict(
+                    family="Courier New, monospace",
+                    size=18))
+                 
+
+            fig_pos_box_slow.update_layout(
+                title={'text':'Posição Escalada BoxPlot - SLOW'},
+                xaxis_title='Ticker',
+                yaxis_title='Posição',
+                font=dict(
+                    family="Courier New, monospace",
+                    size=18))
+            
+            
+            
+            fig_pos_box_medium.add_trace(go.Box(
+                y=pos_medium[ac],
+                name=ac)
+                )
+
+            fig_pos_box_medium.update_layout(
+                title={'text':'Posição Escalada BoxPlot - MEDIUM'},
+                xaxis_title='Ticker',
+                yaxis_title='Posição',
+                font=dict(
+                    family="Courier New, monospace",
+                    size=18))
+            
+            fig_pos_box_fast.add_trace(go.Box(
+                y=pos_fast[ac],
+                name=ac)
+                )
+
+            fig_pos_box_fast.update_layout(
+                title={'text':'Posição Escalada BoxPlot - FAST'},
+                xaxis_title='Ticker',
+                yaxis_title='Posição',
+                font=dict(
+                    family="Courier New, monospace",
+                    size=18))
+            
+            
+        st.plotly_chart(fig_preco)
+        st.plotly_chart(fig_vol)
+        st.plotly_chart(fig_pos)
+        
+        fig_pos_box_slow.add_trace(go.Scatter(
+            x=pos_slow.columns,
+            y=pos_slow.iloc[-1,:])
+            )
+        
+        
+        st.plotly_chart(fig_pos_box_slow)
+        
+        
+        fig_pos_box_medium.add_trace(go.Scatter(
+            x=pos_medium.columns,
+            y=pos_medium.iloc[-1,:])
+            )
+        
+        
+        st.plotly_chart(fig_pos_box_medium)
+        
+        
+        fig_pos_box_fast.add_trace(go.Scatter(
+            x=pos_fast.columns,
+            y=pos_fast.iloc[-1,:])
+            )
+        
+        
+        st.plotly_chart(fig_pos_box_fast)
+        
+        final_pos_osc = pd.DataFrame(columns=pos_fast_p.columns)
+        final_pos_osc = (pos_fast_p + pos_medium_p + pos_slow_p).iloc[-1,:]
+
+        st.write(pos_fast_p + pos_medium_p + pos_slow_p)
+        
+        st.write(final_pos_osc)
         
     def markowitz(self):
         st.subheader('Markowitz')
