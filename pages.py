@@ -121,7 +121,7 @@ class Pages:
             df_osc = m.oscilador(df_prices.loc[:,mult_simb]).copy()
             df_send = df.copy().set_index('Acao')
             
-            st.write(list(df_osc))
+            st.write(list(df_osc.values))
             st.write(df_send)
             
             
