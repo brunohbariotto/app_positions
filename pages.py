@@ -114,7 +114,8 @@ class Pages:
         
         #Ações
         lista_simb = inv.stocks.get_stocks(country='brazil')
-        mult_simb = st.multiselect('Escolha as ações: ', lista_simb['symbol'].unique(), list(df_returns.columns))
+        st.write(df_returns.columns)
+        mult_simb = st.multiselect('Escolha as ações: ', lista_simb['symbol'].unique(), df_returns.columns)
         
         if modelo == 'Correlação':
             m.correlacao(df_prices)
