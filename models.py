@@ -164,7 +164,7 @@ class Models:
                     family="Courier New, monospace",
                     size=14))
             
-            fig_pos_box_medium.add_trace(go.Box(
+            fig_pos_box_slow.add_trace(go.Box(
                 y=pos_slow[ac],
                 name=ac)
                 )
