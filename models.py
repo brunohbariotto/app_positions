@@ -254,7 +254,7 @@ class Models:
         
 
         st.write(final_pos_osc)
-        return pd.to_dataframe(final_pos_osc)
+        return final_pos_osc.to_frame()
         
     def markowitz(self):
         st.subheader('Markowitz')
