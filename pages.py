@@ -74,6 +74,10 @@ class Pages:
         st.write(' Se > 0: Comprar, < 0: Vender')
         st.dataframe(df.set_index('Acao')[['PosxMark','PosxOsc']])
         
+        ultimo_preco = df_prices.iloc[-1,:]
+        st.write('Referencia dos Preços')
+        st.write(ultimo_preco)
+        
         
         
         
