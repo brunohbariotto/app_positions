@@ -119,6 +119,9 @@ class Pages:
         for tick in lista_simb.symbol.unique():
             lista_ativos.append(tick+'.SA')
             
+        lista_ativos.append('USDBRL=X')
+        lista_ativos.append('BTC-USD')
+            
         st.write(df_returns.columns.values)
         mult_simb = st.multiselect('Escolha as ações: ', lista_ativos, list(df_returns.columns.values))
         
