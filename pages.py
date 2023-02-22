@@ -123,11 +123,15 @@ class Pages:
             st.write('Antes')
             st.write(df_send)
             st.write(df_osc)
-            #df_osc.columns = 'pos_osc'
-            df_osc.rename(columns={df_osc.columns[0]:'pos_osc'}, inplace=True)
-            df_send.update(df_osc)
+            
             st.write('Depois')
+            df_send.loc['pos_osc'] = 100
             st.write(df_send.reset_index())
+            #df_osc.columns = 'pos_osc'
+            # df_osc.rename(columns={df_osc.columns[0]:'pos_osc'}, inplace=True)
+            # df_send.update(df_osc)
+            # st.write('Depois')
+            # st.write(df_send.reset_index())
             
             if st.button('Atualizar Oscilador?'):
                 st.write('Enviando...')
