@@ -28,4 +28,4 @@ class Models:
         return cotacoes.fillna(method='ffill')
     
     def returns(self, df):
-        return df.pct_change().dropna()
+        return df.pct_change()
