@@ -51,7 +51,7 @@ if escolha == 'Mercado':
 if escolha == 'Modelos':
     pg.modelos()
     df = gog.read_spreadsheet('positions_BrunoBariotto')
-    pg.modelos(df, df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+    pg.modelos(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
 if escolha == 'Relatórios':
     pg.relatorio()
