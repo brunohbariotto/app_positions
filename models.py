@@ -110,25 +110,25 @@ class Models:
                           np.where( (pos_slow.iloc[:,:] >= pos_slow_q.loc['q2',:]) & (pos_slow.iloc[:,:] < pos_slow_q.loc['q3',:]), 15,
                           np.where( (pos_slow.iloc[:,:] >= pos_slow_q.loc['q1',:]) & (pos_slow.iloc[:,:] < pos_slow_q.loc['q2',:]), 30, 50 )))
         
-        st.write('Posição Lenta')
-        st.write(pos_slow_p)
+        #st.write('Posição Lenta')
+        #st.write(pos_slow_p)
         
         pos_medium_p.iloc[:,:] = np.where(pos_medium.iloc[:,:] >= pos_medium_q.loc['q3',:], 0,
                           np.where( (pos_medium.iloc[:,:] >= pos_medium_q.loc['q2',:]) & (pos_medium.iloc[:,:] < pos_medium_q.loc['q3',:]), 10,
                           np.where( (pos_medium.iloc[:,:] >= pos_medium_q.loc['q1',:]) & (pos_medium.iloc[:,:] < pos_medium_q.loc['q2',:]), 25, 45 )))
 
-        st.write('Posição Média')
-        st.write(pos_medium_p)
+        #st.write('Posição Média')
+        #st.write(pos_medium_p)
         
         pos_fast_p.iloc[:,:] = np.where(pos_fast.iloc[:,:] >= pos_fast_q.loc['q3',:], 0,
                           np.where( (pos_fast.iloc[:,:] >= pos_fast_q.loc['q2',:]) & (pos_fast.iloc[:,:] < pos_fast_q.loc['q3',:]), 5,
                           np.where( (pos_fast.iloc[:,:] >= pos_fast_q.loc['q1',:]) & (pos_fast.iloc[:,:] < pos_fast_q.loc['q2',:]), 20, 40 )))
         
-        st.write('Posição Rápida')
-        st.write(pos_fast_p)
+        #st.write('Posição Rápida')
+        #st.write(pos_fast_p)
         
         ultimo_preco = df_prices.iloc[-1,:]
-        st.write(ultimo_preco)
+        #st.write(ultimo_preco)
         
         fig_preco = go.Figure()
         fig_vol = go.Figure()
@@ -242,14 +242,15 @@ class Models:
         st.write(pos_fast_p + pos_medium_p + pos_slow_p)
         
         st.write('Posição Final [%] - Mais Recente')
-        st.write(df_prices.columns)
-        # if 'HASH11.SA' in df_prices.columns:
-        #     st.write('Entrou')
-        #     if 'BTC-USD' in df_prices.columns:
-        #         st.write('Entrou')
-        #         final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
-        #     else:
-        #         st.write('Insira BTC-USD para ponderar HASH11')
+        st.write(final_pos_osc)
+        
+        if 'HASH11.SA' in df_prices.columns:
+            st.write('Entrou')
+            if 'BTC-USD' in df_prices.columns:
+                st.write('Entrou')
+                final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
+            else:
+                st.write('Insira BTC-USD para ponderar HASH11')
         final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
         
         return final_pos_osc.to_frame()

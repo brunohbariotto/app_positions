@@ -105,13 +105,11 @@ class Pages:
         st.header('Modelos')
         st.markdown('---')
         
-        st.dataframe(df)
-        
         m = Models()
         df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
-        st.write(df_prices)
+        #st.write(df_prices)
         df_returns = m.returns(df_prices)
-        st.write(df_returns)
+        #st.write(df_returns)
         
         
         modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz'])
@@ -123,7 +121,8 @@ class Pages:
             return 
             
         if modelo == 'Oscilador':
-            df_osc = m.oscilador(df_prices.loc[:,mult_simb]).copy()
+            #df_osc = m.oscilador(df_prices.loc[:,mult_simb]).copy()
+            df_osc = m.oscilador(df_prices).copy()
             df_send = df.copy().set_index('Acao')
             df_send.index = df_osc.index
             
