@@ -9,6 +9,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from models import Models
 from PIL import Image
+import investpy as inv
 
 
 
@@ -108,6 +109,21 @@ class Pages:
         df_returns = m.returns(df_prices)
         st.write(df_returns)
         
+        
+        modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz'])
+        
+        #Ações
+        lista_simb = inv.stocks.get_stocks(country='brazil')
+        mult_simb = st.multiselect('Escolha as ações: ', list(lista_simb['symbol'].unique()).append("HASH11.SA", "WRLD11.SA", "XINA11.SA"), list(df_returns.columns))
+        
+        if modelo == 'Correlação':
+            m.correlacao(df_prices)
+            
+        if modelo == 'Oscilador':
+            m.oscilador()
+            
+        if modelo == 'Markowitz':
+            m.markowitz()
     
     #relatorio
     # Tela que exibe um relatório com a comparação dos retornos em períodos específicados
