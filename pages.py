@@ -120,8 +120,13 @@ class Pages:
         if modelo == 'Oscilador':
             df_osc = m.oscilador(df_prices.loc[:,mult_simb]).copy()
             df_send = df.copy().set_index('Acao')
+            df_send.index = df_osc.index
             
-            st.write(list(df_osc.values))
+            st.write('Antes')
+            st.write(df_send)
+            
+            df_send['pos_osc'] = df_osc[df_osc.columns].values
+            st.write('Depois')
             st.write(df_send)
             
             
