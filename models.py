@@ -253,7 +253,7 @@ class Models:
         final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
             
         st.write(final_pos_osc)
-        return final_pos_osc
+        return final_pos_osc.rename(columns={final_pos_osc.columns[0]:'pos_osc'})
         
     def markowitz(self):
         st.subheader('Markowitz')
