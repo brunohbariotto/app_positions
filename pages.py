@@ -114,10 +114,13 @@ class Pages:
         
         #Ações
         lista_simb = inv.stocks.get_stocks(country='brazil')
-        
-        st.write(tick + '.SA' for tick in lista_simb.symbol.unique())
+        lista_ativos = []
+        #st.write(tick + '.SA' for tick in lista_simb.symbol.unique())
+        for tick in lista_simb.symbol.unique():
+            lista_ativos.append(tick+'.SA')
+            
         st.write(df_returns.columns.values)
-        mult_simb = st.multiselect('Escolha as ações: ', (tick + '.SA' for tick in lista_simb.symbol.unique()), list(df_returns.columns.values))
+        mult_simb = st.multiselect('Escolha as ações: ', lista_ativos, list(df_returns.columns.values))
         
         if modelo == 'Correlação':
             m.correlacao(df_prices)
