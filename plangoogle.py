@@ -52,5 +52,5 @@ class PlanGoogle:
 
     def update_spreadsheet(self, spreadsheetname, df):
         spread = Spread(self.spreadsheetname, client = self.client)
-        spread.df_to_sheet(df, sheet=spreadsheetname, index=True)
+        spread.df_to_sheet(df, sheet=spreadsheetname, index=False)
         st.info("Atualizado na Planilha !!!")
