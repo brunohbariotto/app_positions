@@ -90,7 +90,7 @@ class Pages:
         df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         df_returns = m.returns(df_prices)
-        st.write(df_prices)
+        st.write(df_returns)
         
     
     # modelos
@@ -106,7 +106,7 @@ class Pages:
         df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         df_returns = m.returns(df_prices)
-        st.write(df_prices)
+        st.write(df_returns)
         
     
     #relatorio
