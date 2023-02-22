@@ -53,7 +53,9 @@ if escolha == 'Modelos':
     df_tosend = pg.modelos(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
     df_tosend = df_tosend.reset_index()
-    df_tosend.rename(columns={'index':'Acao'}, replace=True)
+    df_tosend.rename(columns={'index':'Acao'}, inplace=True)
+    
+    st.write(df_tosend)
     
     if st.button('Atualizar Oscilador?'):
         st.write('Enviando...')
