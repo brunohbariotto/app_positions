@@ -242,7 +242,7 @@ class Models:
         st.write(pos_fast_p + pos_medium_p + pos_slow_p)
         
         st.write('Posição Final [%] - Mais Recente')
-        final_pos_osc.loc['HASH11.SA',:] = final_pos_osc.loc['BTC-USD',:]
+        final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD'].value
         st.write(final_pos_osc)
         
     def markowitz(self):
