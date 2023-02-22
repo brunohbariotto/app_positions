@@ -118,13 +118,13 @@ class Pages:
             m.correlacao(df_prices.loc[:,mult_simb])
             
         if modelo == 'Oscilador':
-            df_osc = m.oscilador(df_prices.loc[:,mult_simb])
+            df_osc = m.oscilador(df_prices.loc[:,mult_simb]).copy()
             df_send = df.copy().set_index('Acao')
             st.write('Antes')
             st.write(df_send)
             st.write(df_osc)
             #df_osc.columns = 'pos_osc'
-            #df_osc.rename(columns={df_osc.columns[0]:'pos_osc'}, inplace=True)
+            df_osc.rename(columns={df_osc.columns[0]:'pos_osc'}, inplace=True)
             df_send.update(df_osc)
             st.write('Depois')
             st.write(df_send.reset_index())
