@@ -10,6 +10,7 @@ import plotly.graph_objects as go
 from models import Models
 from PIL import Image
 import investpy as inv
+import pandas as pd
 
 
 
@@ -118,7 +119,7 @@ class Pages:
         
         if modelo == 'Correlação':
             m.correlacao(df_prices.loc[:,mult_simb])
-            return 
+            return pd.DataFrame()
             
         if modelo == 'Oscilador':
             #df_osc = m.oscilador(df_prices.loc[:,mult_simb]).copy()
@@ -139,7 +140,7 @@ class Pages:
             
         if modelo == 'Markowitz':
             m.markowitz()
-            return
+            return pd.DataFrame()
     
     #relatorio
     # Tela que exibe um relatório com a comparação dos retornos em períodos específicados
