@@ -122,7 +122,7 @@ class Pages:
             df_send = df.copy()
             st.write('Antes')
             st.write(df_send)
-            df_send.loc[:,'pos_atual'] = df_osc.iloc[:,:]
+            df_send.loc[:,'pos_atual'] = df_osc.iloc[:,0]
             st.write('Depois')
             st.write(df_send)
             

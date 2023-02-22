@@ -242,9 +242,11 @@ class Models:
         st.write(pos_fast_p + pos_medium_p + pos_slow_p)
         
         st.write('Posição Final [%] - Mais Recente')
-        st.write(final_pos_osc.loc['BTC-USD'])
+        st.write(df_prices.columns)
         if 'HASH11.SA' in df_prices.columns:
+            st.write('Entrou')
             if 'BTC-USD' in df_prices.columns:
+                st.write('Entrou')
                 final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
             else:
                 st.write('Insira BTC-USD para ponderar HASH11')
