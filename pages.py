@@ -122,8 +122,8 @@ class Pages:
             df_send = df.copy().set_index('Acao')
             st.write('Antes')
             st.write(df_send)
-            st.write(df_osc.loc[df_osc.columns[0]])
-            df_send.loc[:,'pos_atual'] = df_osc.loc[df_osc.columns[0]]
+            st.write(df_osc.loc[df_osc.columns[0]].values)
+            df_send.loc[:,'pos_atual'] = df_osc.loc[df_osc.columns[0].values]
             st.write('Depois')
             st.write(df_send.reset_index())
             
