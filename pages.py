@@ -130,12 +130,7 @@ class Pages:
             st.write('Depois')
             st.write(df_send)
             
-            
-            if st.button('Atualizar Oscilador?'):
-                st.write('Enviando...')
-                return df_send
-                
-            return
+            return df_send
                 
             
             
