@@ -28,4 +28,8 @@ class Models:
         return cotacoes.fillna(method='ffill')
     
     def returns(self, df):
+        
+        if 'HASH11.SA' in df.columns:
+            df.drop(columns=['HASH11.SA'])
+            
         return df.pct_change()
