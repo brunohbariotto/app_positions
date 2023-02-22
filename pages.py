@@ -119,12 +119,12 @@ class Pages:
             
         if modelo == 'Oscilador':
             df_osc = m.oscilador(df_prices.loc[:,mult_simb])
-            df_send = df.copy()
+            df_send = df.copy().set_index('Acao')
             st.write('Antes')
             st.write(df_send)
             df_send['pos_atual'] = df_osc.iloc[:,0].values
             st.write('Depois')
-            st.write(df_send)
+            st.write(df_send.reset_index())
             
             if st.button('Atualizar Oscilador?'):
                 st.write('Enviando...')
