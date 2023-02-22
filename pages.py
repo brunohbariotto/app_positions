@@ -118,7 +118,7 @@ class Pages:
             m.correlacao(df_prices.loc[:,mult_simb])
             
         if modelo == 'Oscilador':
-            m.oscilador()
+            m.oscilador(df_prices.loc[:,mult_simb])
             
         if modelo == 'Markowitz':
             m.markowitz()
