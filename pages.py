@@ -122,10 +122,10 @@ class Pages:
         lista_ativos.append('USDBRL=X')
         lista_ativos.append('BTC-USD')
         
-        st.write(lista_ativos)
+        st.write(lista_ativos.values)
         st.write(df_returns.columns.values)
-        #mult_simb = st.multiselect('Escolha as ações: ', lista_ativos, list(df_returns.columns.values))
-        mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values), list(df_returns.columns.values))
+        mult_simb = st.multiselect('Escolha as ações: ', lista_ativos.values, list(df_returns.columns.values))
+        #mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values), list(df_returns.columns.values))
         
         if modelo == 'Correlação':
             m.correlacao(df_prices)
