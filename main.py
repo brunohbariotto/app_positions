@@ -57,7 +57,7 @@ if escolha == 'Modelos':
     
     if st.button('Atualizar Oscilador?'):
         st.write('Enviando...')
-        gog.update_spreadsheet('positions_BrunoBariotto2', df_tosend)
+        gog.update_spreadsheet('positions_BrunoBariotto', df_tosend)
     
 if escolha == 'Relatórios':
     pg.relatorio()
