@@ -252,10 +252,12 @@ class Models:
         #         st.write('Insira BTC-USD para ponderar HASH11')
         final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
         
+        final_pos_osc_send = final_pos_osc.copy()
+        
         #final_pos_osc.columns = 'osc_pos'
-        final_pos_osc.rename(columns={final_pos_osc.columns[0]:'pos_osc'}, inplace=True)
-        st.write(final_pos_osc)
-        return final_pos_osc#.rename(columns={final_pos_osc.columns[0]:'pos_osc'})
+        final_pos_osc_send.rename(columns={final_pos_osc.columns[0]:'pos_osc'}, inplace=True)
+        st.write(final_pos_osc_send)
+        return final_pos_osc_send#.rename(columns={final_pos_osc.columns[0]:'pos_osc'})
         
     def markowitz(self):
         st.subheader('Markowitz')
