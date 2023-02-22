@@ -118,7 +118,17 @@ class Pages:
             m.correlacao(df_prices.loc[:,mult_simb])
             
         if modelo == 'Oscilador':
-            m.oscilador(df_prices.loc[:,mult_simb])
+            df_osc = m.oscilador(df_prices.loc[:,mult_simb])
+            df_send = df.copy()
+            st.write('Antes')
+            st.write(df_send)
+            df_send.loc[:,'pos_atual'] = df_osc.iloc[:,:]
+            st.write('Depois')
+            st.write(df_send)
+            
+            if st.button('Atualizar Oscilador?'):
+                st.write('Enviando...')
+            
             
         if modelo == 'Markowitz':
             m.markowitz()

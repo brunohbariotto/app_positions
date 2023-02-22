@@ -154,12 +154,12 @@ class Models:
             
             fig_vol.add_trace(go.Scatter(
                  x=volatility.index,
-                 y=volatility[ac],
+                 y=volatility[ac]*100,
                  name=ac))
             fig_vol.update_layout(
                 title={'text':'Volatilidade'},
                 xaxis_title='Data',
-                yaxis_title='Vol',
+                yaxis_title='Vol [%]',
                 font=dict(
                     family="Courier New, monospace",
                     size=14))
@@ -243,8 +243,14 @@ class Models:
         
         st.write('Posição Final [%] - Mais Recente')
         st.write(final_pos_osc.loc['BTC-USD'])
-        final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
+        if 'HASH11.SA' in df_prices.columns:
+            if 'BTC-USD' in df_prices.columns:
+                final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
+            else:
+                st.write('Insira BTC-USD para ponderar HASH11')
+            
         st.write(final_pos_osc)
+        return final_pos_osc
         
     def markowitz(self):
         st.subheader('Markowitz')
