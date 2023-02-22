@@ -52,8 +52,9 @@ if escolha == 'Modelos':
     df = gog.read_spreadsheet('positions_BrunoBariotto')
     df_tosend = pg.modelos(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
-    df_tosend = df_tosend.reset_index()
-    df_tosend.rename(columns={'index':'Acao'}, inplace=True)
+    if not df_tosend.empty:
+        df_tosend = df_tosend.reset_index()
+        df_tosend.rename(columns={'index':'Acao'}, inplace=True)
     
     if st.button('Atualizar Oscilador?'):
         st.write('Enviando...')
