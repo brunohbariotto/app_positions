@@ -52,5 +52,7 @@ class PlanGoogle:
 
     def update_spreadsheet(self, spreadsheetname, df):
         spread = Spread(self.spreadsheetname, client = self.client)
+        st.write('Enviando o DataFrame: ')
+        st.write(df)
         spread.df_to_sheet(df, sheet=spreadsheetname, index=False, replace=True)
         st.info("Atualizado na Planilha !!!")
