@@ -81,16 +81,32 @@ class Pages:
     # mercado
     # Tela que exibe informações de mercado das ações selecionadas: Gráficos de Preço e Volatilidade 
     # E parâmetros de carteira (Atual e de Markowitz): Vol, Retorno, Sharpe, Drawdown
-    def mercado(self, df):
+    def mercado(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.header('Informações de Mercado')
+        st.markdown('---')
         st.dataframe(df)
+        
+        m = Models()
+        df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        st.write(df_prices)
+        df_returns = m.returns(df_prices)
+        st.write(df_prices)
         
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
     #
-    def modelos(self):
+    def modelos(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.header('Modelos')
+        st.markdown('---')
+        
+        st.dataframe(df)
+        
+        m = Models()
+        df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        st.write(df_prices)
+        df_returns = m.returns(df_prices)
+        st.write(df_prices)
         
     
     #relatorio

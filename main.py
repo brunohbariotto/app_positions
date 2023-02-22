@@ -50,6 +50,8 @@ if escolha == 'Mercado':
 
 if escolha == 'Modelos':
     pg.modelos()
+    df = gog.read_spreadsheet('positions_BrunoBariotto')
+    pg.modelos(df)
     
 if escolha == 'Relatórios':
     pg.relatorio()
