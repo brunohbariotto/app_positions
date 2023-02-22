@@ -125,7 +125,7 @@ class Pages:
             st.write('Antes')
             st.write(df_send)
             
-            df_send['pos_osc'] = df_osc[df_osc.columns].values
+            df_send['pos_osc'] = df_osc[df_osc.columns]
             st.write('Depois')
             st.write(df_send)
             
