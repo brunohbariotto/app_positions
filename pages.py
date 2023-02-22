@@ -123,7 +123,9 @@ class Pages:
             st.write('Antes')
             st.write(df_send)
             st.write(df_osc)
-            df_send['pos_atual'].update(df_osc)
+            df_osc.columns = ['pos_osc']
+            st.write(df_osc)
+            df_send.update(df_osc)
             st.write('Depois')
             st.write(df_send.reset_index())
             
