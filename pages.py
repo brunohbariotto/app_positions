@@ -121,6 +121,7 @@ class Pages:
             
         lista_ativos.append('USDBRL=X')
         lista_ativos.append('BTC-USD')
+        lista_ativos.append(news for news in list(df_returns.columns.values))
         
         st.write(lista_ativos[:])
         st.write(df_returns.columns.values)
