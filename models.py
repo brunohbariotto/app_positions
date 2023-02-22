@@ -150,7 +150,7 @@ class Models:
                 yaxis_title='Preço (R$)',
                 font=dict(
                     family="Courier New, monospace",
-                    size=18))
+                    size=14))
             
             fig_vol.add_trace(go.Scatter(
                  x=volatility.index,
@@ -162,16 +162,20 @@ class Models:
                 yaxis_title='Vol',
                 font=dict(
                     family="Courier New, monospace",
-                    size=18))
+                    size=14))
+            
+            fig_pos_box_medium.add_trace(go.Box(
+                y=pos_slow[ac],
+                name=ac)
+                )
                  
-
             fig_pos_box_slow.update_layout(
                 title={'text':'Posição Escalada BoxPlot - SLOW'},
                 xaxis_title='Ticker',
                 yaxis_title='Posição',
                 font=dict(
                     family="Courier New, monospace",
-                    size=18))
+                    size=14))
             
             
             
@@ -186,7 +190,7 @@ class Models:
                 yaxis_title='Posição',
                 font=dict(
                     family="Courier New, monospace",
-                    size=18))
+                    size=14))
             
             fig_pos_box_fast.add_trace(go.Box(
                 y=pos_fast[ac],
@@ -199,12 +203,11 @@ class Models:
                 yaxis_title='Posição',
                 font=dict(
                     family="Courier New, monospace",
-                    size=18))
+                    size=14))
             
             
         st.plotly_chart(fig_preco)
         st.plotly_chart(fig_vol)
-        st.plotly_chart(fig_pos)
         
         fig_pos_box_slow.add_trace(go.Scatter(
             x=pos_slow.columns,
@@ -235,8 +238,11 @@ class Models:
         final_pos_osc = pd.DataFrame(columns=pos_fast_p.columns)
         final_pos_osc = (pos_fast_p + pos_medium_p + pos_slow_p).iloc[-1,:]
 
+        st.write('Posição Final [%] - Histórico')
         st.write(pos_fast_p + pos_medium_p + pos_slow_p)
         
+        st.write('Posição Final [%] - Mais Recente')
+        final_pos_osc.loc['HASH11.SA',:] = final_pos_osc.loc['BTC-USD',:]
         st.write(final_pos_osc)
         
     def markowitz(self):
