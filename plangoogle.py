@@ -50,6 +50,7 @@ class PlanGoogle:
     #     df = pd.DataFrame(worksheet.get_all_records())
     #     return df
 
-    # def update_spreadsheet(spreadsheetname, df):
-    #     spread.df_to_sheet(df, sheet=spreadsheetname, index=False)
-    #     st.info("Atualizado na Planilha !!!")
+    def update_spreadsheet(self, spreadsheetname, df):
+        spread = Spread(self.spreadsheetname, client = self.client)
+        spread.df_to_sheet(df, sheet=spreadsheetname, index=False)
+        st.info("Atualizado na Planilha !!!")
