@@ -44,8 +44,25 @@ if escolha == 'Controle de Posição':
     pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
 if escolha == 'Mercado':
-    df = gog.read_spreadsheet('mercado_BrunoBariotto')
-    pg.mercado(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+    
+    mkt = st.radio('Escolha o Mercado: ', ['Ações','Fundos Imobiliários','Commodities','Moedas', 'Indicadores'], horizontal=True)
+    
+    if mkt == 'Ações':
+        df = gog.read_spreadsheet('acoes_BrunoBariotto')
+        
+    if mkt == 'Fundos Imobiliários':
+        df = gog.read_spreadsheet('fundos_BrunoBariotto')
+        
+    if mkt == 'Commodities':
+        df = gog.read_spreadsheet('commodities_BrunoBariotto')
+        
+    if mkt == 'Moedas':
+        df = gog.read_spreadsheet('moedas_BrunoBariotto')
+        
+    if mkt == 'Indicadores':
+        df = gog.read_spreadsheet('indicadores_BrunoBariotto')
+        
+    pg.mercado(mkt, df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
 
 if escolha == 'Modelos':
