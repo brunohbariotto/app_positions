@@ -88,15 +88,37 @@ class Pages:
     # Tela que exibe informações de mercado das ações selecionadas: Gráficos de Preço e Volatilidade 
     # E parâmetros de carteira (Atual e de Markowitz): Vol, Retorno, Sharpe, Drawdown
     def mercado(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
-        st.header('Informações de Mercado')
+        st.title('Informações de Mercado')
         st.markdown('---')
         st.dataframe(df)
         
         m = Models()
-        df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
-        st.write(df_prices)
-        df_returns = m.returns(df_prices)
-        st.write(df_returns)
+        # df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        # st.write(df_prices)
+        # df_returns = m.returns(df_prices)
+        # st.write(df_returns)
+        
+        mkt = st.radio('Escolha o Mercado: ', ['Ações','Fundos Imobiliários','Commodities','Moedas', 'Indicadores'], horizontal=True)
+        
+        if mkt == 'Ações':
+            st.header('Ações')
+            df_prices = m.download_prices([x + '.SA' for x in list(df.Acoes)], per_data, anos_cotacoes, datas_inicio, datas_fim)
+            st.write(df_prices)
+            
+        if mkt == 'Fundos Imobiliários':
+            st.header('Fundos Imobiliário')
+            
+        if mkt == 'Commodities':
+            st.header('Commodities')
+            
+        if mkt == 'Moedas':
+            st.header('Moedas')
+        
+        if mkt == 'Indicadores':
+            st.header('Indicadores')
+            
+        
+        
         
     
     # modelos

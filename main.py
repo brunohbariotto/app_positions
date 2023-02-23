@@ -44,7 +44,7 @@ if escolha == 'Controle de Posição':
     pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
 if escolha == 'Mercado':
-    df = gog.read_spreadsheet('positions_BrunoBariotto')
+    df = gog.read_spreadsheet('mercado_BrunoBariotto')
     pg.mercado(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
 
