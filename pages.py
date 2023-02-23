@@ -11,6 +11,7 @@ from models import Models
 from PIL import Image
 import investpy as inv
 import pandas as pd
+from datetime import datetime, date
 
 
 
@@ -101,11 +102,36 @@ class Pages:
         if name == 'Commodities' or name == 'Moedas':
             lista_acoes = [x for x in list(df.ticker)]
         if name == 'Indicadores':
-            lista_acoes = ['^BVSP','^MERV','^GSPC','^DJI','NQ=F','FTSE','^HSI','^N225', '^RUT','BOVA11.SA','SMAL11.SA','IFIX.SA','SPXI11.SA', 'XINA11.SA'] # A fazer
+            lista_acoes = ['^BVSP','^MERV','^GSPC','^DJI','NQ=F','^FTSE','^HSI','^N225', '^RUT','BOVA11.SA','SMAL11.SA','IFIX.SA','SPXI11.SA', 'XINA11.SA'] # A fazer
             
-        st.write(lista_acoes)
-        df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
-        st.write(df_prices)
+        #Puxando os preços
+        with st.spinner('Baixando Cotações...'):
+            df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
+            st.write(df_prices)
+            
+            st.markdown('---')
+            st.subheader('Cotações Intraday')
+            st.markdown(date.today().strftime('%d/%m/%Y'))
+            
+            count=0
+            cols = st.columns(3,gap='medium')
+            
+            df_info = pd.DataFrame({'Ativo': df_prices.columns})
+            
+            df_info['Ult. Valor'] = ''
+            df_info['Var. %'] = ''
+            
+            for tick in df_prices.columns:
+                #variação
+                var = ((df_prices.iloc[-1]/df_prices.iloc[-2])-1)*100
+                df_info['Ult. Valor'][count] = round(df_prices.iloc[-1],2)
+                df_info['Var. %'][count] = round(var,2)
+                
+                with cols[count%3]:
+                    st.metric(df_info['Ativo'][count], value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
+        
+                count +=1
+                
             
             
         
