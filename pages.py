@@ -186,8 +186,8 @@ class Pages:
             fig1.add_trace(go.Scatter(x=retornos[tick].index, y=retornos[tick], name=tick))
             fig1b.add_trace(go.Box(y=retornos[tick], name=tick))
             fig2.add_trace(go.Scatter(x=retornos_ac[tick].index, y=retornos_ac[tick], name=tick))
-            fig3.add_trace(go.Scatter(x=volatility[tick].index, y=volatility[tick]*100, name=tick))
-            fig4.add_trace(go.Box(y=volatility[tick]*100, name=tick))
+            fig3.add_trace(go.Scatter(x=volatility[tick].index, y=volatility[tick]*100*np.sqrt(252), name=tick))
+            fig4.add_trace(go.Box(y=volatility[tick]*100*np.sqrt(252), name=tick))
             
         st.markdown('---')
         st.subheader('Preços')
