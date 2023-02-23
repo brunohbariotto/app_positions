@@ -127,7 +127,6 @@ class Pages:
         
         st.title('Informações de Mercado')
         st.markdown('---')
-        st.dataframe(df)
         
         m = Models()
         
@@ -142,7 +141,6 @@ class Pages:
             
         #Puxando os preços
         df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
-        st.write(df_prices)
         
         st.markdown('---')
         st.subheader('Cotações Intraday')
@@ -188,8 +186,8 @@ class Pages:
             fig1.add_trace(go.Scatter(x=retornos[tick].index, y=retornos[tick], name=tick))
             fig1b.add_trace(go.Box(y=retornos[tick], name=tick))
             fig2.add_trace(go.Scatter(x=retornos_ac[tick].index, y=retornos_ac[tick], name=tick))
-            fig3.add_trace(go.Scatter(x=volatility[tick].index, y=volatility[tick], name=tick))
-            fig4.add_trace(go.Box(y=volatility[tick], name=tick))
+            fig3.add_trace(go.Scatter(x=volatility[tick].index, y=volatility[tick]*100, name=tick))
+            fig4.add_trace(go.Box(y=volatility[tick]*100, name=tick))
             
         st.markdown('---')
         st.subheader('Preços')
@@ -209,8 +207,6 @@ class Pages:
         st.subheader(f'Volatility EWM 36 dias')
         st.plotly_chart(fig3)
         st.plotly_chart(fig4)
-        
-        st.write(df_info)
         
         
         st.markdown('---')
