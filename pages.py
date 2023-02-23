@@ -133,9 +133,6 @@ class Pages:
         
                 count +=1
             
-            st.write(df_info)
-            
-            
         
         
         
