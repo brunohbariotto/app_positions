@@ -12,7 +12,7 @@ from PIL import Image
 import investpy as inv
 import pandas as pd
 from datetime import datetime, date
-
+import numpy as np
 
 
 class Pages:
@@ -155,6 +155,16 @@ class Pages:
         df_info['Ult. Valor'] = ''
         df_info['Var. %'] = ''
         
+        fig = go.Figure()
+        fig1 = go.Figure()
+        fig1b = go.Figure()
+        fig2 = go.Figure()
+        fig3 = go.Figure()
+        
+        retornos = df_prices.pct_change()
+        retornos_ac = (1+retornos).cumprod()
+        volatility = np.log(df_prices.ffill()).diff().ewm(com=32).std()
+        
         for tick in df_prices.columns:
             #variação
             var = ((df_prices[tick].iloc[-1]/df_prices[tick].iloc[-2])-1)*100
@@ -168,6 +178,32 @@ class Pages:
                     st.metric(tick, value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
     
             count +=1
+            
+            cotacoes = df_prices[tick]
+            
+            fig.add_trace(go.Scatter(x=cotacoes.index, y=cotacoes, name=tick))
+            fig1.add_trace(go.Scatter(x=retornos[tick].index, y=retornos[tick], name=tick))
+            fig1b.add_trace(go.Box(y=retornos[tick], name=tick))
+            fig2.add_trace(go.Scatter(x=retornos_ac[tick].index, y=retornos_ac[tick], name=tick))
+            fig3.add_trace(go.Scatter(x=volatility[tick].index, y=volatility[tick], name=tick))
+            
+        st.markdown('---')
+        st.subheader('Preços')
+        st.plotly_chart(fig)
+        
+        st.markdown('---')
+        st.subheader('Retornos')
+        st.plotly_chart(fig1)
+        st.plotly_chart(fig1b)
+        #st.dataframe(describe.describe())
+        
+        st.markdown('---')
+        st.subheader('Retornos Acumulados')
+        st.plotly_chart(fig2)
+        
+        st.markdown('---')
+        st.subheader(f'Volatility EWM 36 dias')
+        st.plotly_chart(fig3)
         
         st.write(df_info)
             
