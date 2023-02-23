@@ -101,7 +101,7 @@ class Pages:
         if name == 'Commodities' or name == 'Moedas':
             lista_acoes = [x for x in list(df.ticker)]
         if name == 'Indicadores':
-            lista_acoes = [] # A fazer
+            lista_acoes = ['^BVSP','^MERV','^GSPC','^DJI','NQ=F','FTSE','^HSI','^N225', '^RUT','BOVA11.SA','SMAL11.SA','IFIX.SA','SPXI11.SA', 'XINA11.SA'] # A fazer
             
         st.write(lista_acoes)
         df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
