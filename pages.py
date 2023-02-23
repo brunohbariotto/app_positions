@@ -127,11 +127,12 @@ class Pages:
                 df_info['Ult. Valor'][count] = round(df_prices.iloc[-1],2)
                 df_info['Var. %'][count] = round(var,2)
                 
-                with cols[count%3]:
-                    st.metric(df_info['Ativo'][count], value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
+                #with cols[count%3]:
+                #    st.metric(df_info['Ativo'][count], value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
         
                 count +=1
-                
+            
+            st.write(df_info)
             
             
         
