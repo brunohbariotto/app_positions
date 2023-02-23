@@ -124,14 +124,17 @@ class Pages:
             
             for tick in df_prices.columns:
                 #variação
-                var = ((df_prices.iloc[-1]/df_prices.iloc[-2])-1)*100
-                #df_info['Ult. Valor'][count] = round(df_prices.iloc[-1],2)
-                #df_info['Var. %'][count] = round(var,2)
+                var = ((df_prices[tick].iloc[-1]/df_prices[tick].iloc[-2])-1)*100
+                df_info['Ult. Valor'][count] = round(df_prices[tick].iloc[-1],2)
+                df_info['Var. %'][count] = round(var,2)
                 
                 with cols[count%3]:
-                    st.metric(tick, value=round(df_prices.iloc[-1],2), delta=str(round(var,2))+'%')
+                    st.metric(tick, value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
         
                 count +=1
+            
+            st.write(df_info)
+            
             
         
         
