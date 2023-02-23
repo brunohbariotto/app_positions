@@ -116,6 +116,7 @@ class Pages:
             count=0
             cols = st.columns(3,gap='medium')
             
+            
             df_info = pd.DataFrame({'Ativo': df_prices.columns})
             
             df_info['Ult. Valor'] = ''
@@ -124,11 +125,11 @@ class Pages:
             for tick in df_prices.columns:
                 #variação
                 var = ((df_prices.iloc[-1]/df_prices.iloc[-2])-1)*100
-                df_info['Ult. Valor'][count] = round(df_prices.iloc[-1],2)
-                df_info['Var. %'][count] = round(var,2)
+                #df_info['Ult. Valor'][count] = round(df_prices.iloc[-1],2)
+                #df_info['Var. %'][count] = round(var,2)
                 
-                #with cols[count%3]:
-                #    st.metric(df_info['Ativo'][count], value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
+                with cols[count%3]:
+                    st.metric(tick, value=round(df_prices.iloc[-1],2), delta=str(round(var,2))+'%')
         
                 count +=1
             
