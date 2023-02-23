@@ -96,7 +96,7 @@ class Pages:
         
         
         st.header(name)
-        lista_acoes = [x + '.SA' for x in list(df.Acoes)]
+        lista_acoes = [x + '.SA' for x in list(df.ticker)]
         st.write(lista_acoes)
         df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
