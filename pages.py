@@ -96,7 +96,13 @@ class Pages:
         
         
         st.header(name)
-        lista_acoes = [x + '.SA' for x in list(df.ticker)]
+        if name == "Ações" or name == "Fundos Imobiliários":
+            lista_acoes = [x + '.SA' for x in list(df.ticker)]
+        if name == 'Commodities' or name == 'Moedas':
+            lista_acoes = [x for x in list(df.ticker)]
+        if name == 'Indicadores':
+            lista_acoes = [] # A fazer
+            
         st.write(lista_acoes)
         df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
