@@ -102,7 +102,9 @@ class Pages:
         
         if mkt == 'Ações':
             st.header('Ações')
-            df_prices = m.download_prices([x + '.SA' for x in list(df.Acoes)], per_data, anos_cotacoes, datas_inicio, datas_fim)
+            lista_acoes = [x + '.SA' for x in list(df.Acoes)]
+            st.write(lista_acoes)
+            df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
             st.write(df_prices)
             
         if mkt == 'Fundos Imobiliários':
