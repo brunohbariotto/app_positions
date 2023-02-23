@@ -13,6 +13,8 @@ import investpy as inv
 import pandas as pd
 from datetime import datetime, date
 import numpy as np
+from ta.trend import SMAIndicator
+
 
 
 class Pages:
@@ -206,6 +208,38 @@ class Pages:
         st.plotly_chart(fig3)
         
         st.write(df_info)
+        
+        
+        st.markdown('---')
+        st.subheader(f'Preços Individuais')
+        sel_indiv = st.selectbox('Selecione a Ação', df_prices.columns )
+        
+        candle_df = df_prices[sel_indiv]
+        
+        fig_i = go.Figure(data=[go.Candlestick(name=sel_indiv ,x=candle_df.index,
+                                               open=candle_df['Open'],
+                                               high=candle_df['High'],
+                                               low=candle_df['Low'],
+                                               close=candle_df['Close'])])
+        fig_i.update_layout(title=sel_indiv, xaxis_rangeslider_visible=False)
+        
+        sma_short = 20
+        sma_medium = 60
+        sma_long = 100
+        
+        #add SMA
+        sma_short_t = SMAIndicator(candle_df['Adj Close'], window=sma_short)
+        candle_df['SMA_SHORT'] = sma_short_t.sma_indicator()
+        sma_medium_t = SMAIndicator(candle_df['Adj Close'], window=sma_medium)
+        candle_df['SMA_MID'] = sma_medium_t.sma_indicator()
+        sma_long_t = SMAIndicator(candle_df['Adj Close'], window=sma_long)
+        candle_df['SMA_LONG'] = sma_long_t.sma_indicator()
+        
+        fig_i.add_trace(go.Scatter(name=f'SMA_SHORT_{sma_short}d', x=candle_df.index, y=candle_df['SMA_SHORT']))
+        fig_i.add_trace(go.Scatter(name=f'SMA_MID_{sma_medium}d', x=candle_df.index, y=candle_df['SMA_MID']))
+        fig_i.add_trace(go.Scatter(name=f'SMA_LONG_{sma_long}d', x=candle_df.index, y=candle_df['SMA_LONG']))
+        
+        st.plotly_chart(fig_i)
             
             
         
