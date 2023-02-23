@@ -89,6 +89,40 @@ class Pages:
     # Tela que exibe informações de mercado das ações selecionadas: Gráficos de Preço e Volatilidade 
     # E parâmetros de carteira (Atual e de Markowitz): Vol, Retorno, Sharpe, Drawdown
     def mercado(self, name, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
+        
+        dict_index = { #nomeIndex : Ticker  : yfinance
+                      'USDBRL':'USDBRL=X',
+                      'Gold':'GC=F',
+                      'Silver': 'SI=F',
+                      'Platinum': 'PL=F',
+                      'Copper': 'HG=F',
+                      'Paladium': 'PA=F',
+                      'Crude Oil': 'CL=F',
+                      'Heating Oil': 'HO=F',
+                      'Natural Gas': 'NG=F',
+                      'RBOB Gasoline': 'RB=F',
+                      'Brent Crude Oil': 'BZ=F',
+                      'Corn CME': 'ZC=F',
+                      'Oat': 'ZO=F',
+                      'KC HRW Wheat': 'KE=F',
+                      'Rough Rice': 'ZR=F',
+                      'Soybean Meal': 'ZM=F',
+                      'Soybean Oil': 'ZL=F',
+                      'Soybean': 'ZS=F',
+                      'Feeder Cattle': 'GF=F',
+                      'Lean Hogs': 'HE=F',
+                      '	Live Cattle':'LE=F',
+                      'Cocoa':'CC=F',
+                      'Coffee ARA ICE': 'KC=F',
+                      'Cotton': 'CT=F',
+                      'Lumber': 'LBS=F',
+                      'Orange Juice': 'OJ=F',
+                      'Sugar11':'SB=F'
+                        
+            }
+        
+        dict_index_inv = dict(zip(dict_index.values(), dict_index.keys()))
+        
         st.title('Informações de Mercado')
         st.markdown('---')
         st.dataframe(df)
@@ -105,35 +139,37 @@ class Pages:
             lista_acoes = ['^BVSP','^MERV','^GSPC','^DJI','NQ=F','^FTSE','^HSI','^N225', '^RUT','BOVA11.SA','SMAL11.SA','IFIX.SA','SPXI11.SA', 'XINA11.SA'] # A fazer
             
         #Puxando os preços
-        with st.spinner('Baixando Cotações...'):
-            df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
-            st.write(df_prices)
-            
-            st.markdown('---')
-            st.subheader('Cotações Intraday')
-            st.markdown(date.today().strftime('%d/%m/%Y'))
-            
-            count=0
-            cols = st.columns(3,gap='medium')
-            
-            
-            df_info = pd.DataFrame({'Ativo': df_prices.columns})
-            
-            df_info['Ult. Valor'] = ''
-            df_info['Var. %'] = ''
-            
-            for tick in df_prices.columns:
-                #variação
-                var = ((df_prices[tick].iloc[-1]/df_prices[tick].iloc[-2])-1)*100
-                df_info['Ult. Valor'][count] = round(df_prices[tick].iloc[-1],2)
-                df_info['Var. %'][count] = round(var,2)
-                
-                with cols[count%3]:
-                    st.metric(tick, value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
+        df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        st.write(df_prices)
         
-                count +=1
+        st.markdown('---')
+        st.subheader('Cotações Intraday')
+        st.markdown(date.today().strftime('%d/%m/%Y'))
+        
+        count=0
+        cols = st.columns(3,gap='medium')
+        
+        
+        df_info = pd.DataFrame({'Ativo': df_prices.columns})
+        
+        df_info['Ult. Valor'] = ''
+        df_info['Var. %'] = ''
+        
+        for tick in df_prices.columns:
+            #variação
+            var = ((df_prices[tick].iloc[-1]/df_prices[tick].iloc[-2])-1)*100
+            df_info['Ult. Valor'][count] = round(df_prices[tick].iloc[-1],2)
+            df_info['Var. %'][count] = round(var,2)
             
-            st.write(df_info)
+            with cols[count%3]:
+                if name == 'Commodities':
+                    st.metric(dict_index_inv[tick], value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
+                else:
+                    st.metric(tick, value=df_info['Ult. Valor'][count], delta=str(df_info['Var. %'][count])+'%')
+    
+            count +=1
+        
+        st.write(df_info)
             
             
         
