@@ -14,7 +14,7 @@ import pandas as pd
 from datetime import datetime, date
 import numpy as np
 from ta.trend import SMAIndicator
-
+import yfinance as yf
 
 
 class Pages:
@@ -214,7 +214,12 @@ class Pages:
         st.subheader(f'Preços Individuais')
         sel_indiv = st.selectbox('Selecione a Ação', df_prices.columns )
         
-        candle_df = df_prices[sel_indiv]
+        if per_data == 'Períodos':
+            candle_df = yf.download(sel_indiv, period=f'{anos_cotacoes}y')
+        if per_data == 'Data':
+            candle_df = yf.download(sel_indiv, start=datas_inicio , end=datas_fim)
+        if per_data == 'Máx':
+            candle_df = yf.download(sel_indiv, period='max')
         
         fig_i = go.Figure(data=[go.Candlestick(name=sel_indiv ,x=candle_df.index,
                                                open=candle_df['Open'],
