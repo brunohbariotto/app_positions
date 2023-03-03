@@ -394,6 +394,9 @@ class Models:
         
         final_dataframe['Vol. Média Anual'] = volatilidade.mean()*np.sqrt(252)
         
+        return ret_anual, vol_anual, final_dataframe.fillna(0).round({'Pesos %':2, 'Pos. Qtdd':0, 'Últ. Preço':2}), ret_otimizado, vol_otimizada, model_ret
+    
+        
     def markowitz_inputs(self, df_prices,anos_cotacoes):
         
         st.subheader('Markowitz')
