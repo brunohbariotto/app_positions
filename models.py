@@ -10,13 +10,14 @@ import yfinance as yf
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
-from PyPortfolioOpt import expected_returns
-from PyPortfolioOpt import risk_models
-from PyPortfolioOpt import EfficientFrontier
-from PyPortfolioOpt import objective_functions
-from PyPortfolioOpt.discrete_allocation import DiscreteAllocation, get_latest_prices
-from PyPortfolioOpt import HRPOpt
-from PyPortfolioOpt import plotting
+from PyPortfolioOpt import pypfopt
+# from PyPortfolioOpt import expected_returns
+# from PyPortfolioOpt import risk_models
+# from PyPortfolioOpt import EfficientFrontier
+# from PyPortfolioOpt import objective_functions
+# from PyPortfolioOpt.discrete_allocation import DiscreteAllocation, get_latest_prices
+# from PyPortfolioOpt import HRPOpt
+# from PyPortfolioOpt import plotting
 import matplotlib.pyplot as plt
 
 class Models:
@@ -298,34 +299,34 @@ class Models:
         
         if exp_return_type == 'mean_historical_return':
             #retorno medio historico
-            mu = expected_returns.mean_historical_return(precos)
+            mu = pypfopt.expected_returns.mean_historical_return(precos)
         if exp_return_type == 'ema_historical_return':
         #retorno media movel exponencial
-            mu = expected_returns.ema_historical_return(precos, span=span)
+            mu = pypfopt.expected_returns.ema_historical_return(precos, span=span)
         if exp_return_type == 'capm':
         #retorno CAPM - retorno benchmark (IBOV) > CAPM = Rf + beta*(Rm-Rf)
             
             ibov = pd.DataFrame(yf.download('^BVSP', period='f{anos_cotacoes}y')['Adj Close'])
-            mu = expected_returns.capm_return(precos, market_prices=ibov, risk_free_rate=df['Selic'].mean())
+            mu = pypfopt.expected_returns.capm_return(precos, market_prices=ibov, risk_free_rate=df['Selic'].mean())
         
         #'CovarianceShrinkage', 'sample_cov', 'semicovariance', 'exp_cov'
         ### --- Matrizes de covariância
         # Matriz de covariancia
         if cov_type == 'sample_cov':
-            cov = risk_models.sample_cov(precos)
+            cov = pypfopt.risk_models.sample_cov(precos)
         if cov_type == 'semicovariance':
         # Matriz de Semicovariancia - benchmark = 0 pega somente retornos abaixo de 0 (perdas)
         # Somente modelos que aceitem matriz de semicov
-            cov = risk_models.semicovariance(precos, benchmark=0)
+            cov = pypfopt.risk_models.semicovariance(precos, benchmark=0)
         if cov_type == 'exp_cov':
         #Exponentially-Weighted Covariance - peso maior para informações mais recentes
-            cov = risk_models.exp_cov(precos, span=200)
+            cov = pypfopt.risk_models.exp_cov(precos, span=200)
         if cov_type == 'CovarianceShrinkage':
         # Estimadores de Ledoit Wolf - Redução de valores extremos (normalização da matriz de cov)
         # constant_variance : diagonal da matriz como media das variancias dos retornos
         # single_factor: baseado no sharp, utiliza o beta como parâmetro do encolhedor
         # constant_correlation: relacionado a matriz de correlação e desvio da amostra
-            cov = risk_models.CovarianceShrinkage(precos).ledoit_wolf()
+            cov = pypfopt.risk_models.CovarianceShrinkage(precos).ledoit_wolf()
         
         
         #'MaxSharp','MinVol','EfficientRisk','EfficientReturn','RiskParity'
@@ -333,12 +334,12 @@ class Models:
         # Modelo de Portólio de Mínima Variancia > Reduzir a Volatilidade do Portfólio, pesos = 1, long_only
         # Se long short (weight-bounds(none,none))
         if is_longOnly == 'Sim':
-            mv = EfficientFrontier(mu, cov)
+            mv = pypfopt.EfficientFrontier(mu, cov)
         if is_longOnly == 'Não':
-            mv = EfficientFrontier(mu, cov, weight_bounds=(-1,1))
+            mv = pypfopt.EfficientFrontier(mu, cov, weight_bounds=(-1,1))
             
         if regul_zeros == 'Sim':
-            mv.add_objective(objective_functions.L2_reg, gamma=0.1)
+            mv.add_objective(pypfopt.objective_functions.L2_reg, gamma=0.1)
         
         if otimizador == 'MinVol':
             w = mv.min_volatility()
@@ -353,12 +354,12 @@ class Models:
             w = mv.efficient_return(target_return=ret_effic)
             
         if otimizador == 'RiskParity':
-            hrp_portfolio = HRPOpt(expected_returns.returns_from_prices(precos))
+            hrp_portfolio = pypfopt.HRPOpt(pypfopt.expected_returns.returns_from_prices(precos))
             cleaned_weights = hrp_portfolio.optimize()
             model_ret = hrp_portfolio.portfolio_performance(verbose=True, risk_free_rate= (1+df['Selic'].iloc[-1])**(1/252) -1 )
             #st.write(hrp_portfolio)
             fig = plt.figure()
-            plotting.plot_dendrogram(hrp_portfolio)
+            pypfopt.plotting.plot_dendrogram(hrp_portfolio)
             st.pyplot(fig)
             st.set_option('deprecation.showPyplotGlobalUse', True)
             
@@ -372,10 +373,10 @@ class Models:
         ret_otimizado = cf_anual.dot(pesos)
         
         
-        ultimos_precos = get_latest_prices(precos)
+        ultimos_precos = pypfopt.get_latest_prices(precos)
 
         
-        da = DiscreteAllocation(cleaned_weights, ultimos_precos, total_portfolio_value=cash)
+        da = pypfopt.DiscreteAllocation(cleaned_weights, ultimos_precos, total_portfolio_value=cash)
         
         if otimizador != 'RiskParity':
             allocation, leftover = da.lp_portfolio()
