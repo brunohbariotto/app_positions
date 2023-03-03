@@ -11,6 +11,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
 import pypfopt
+from pypfopt import plotting
 # from PyPortfolioOpt import expected_returns
 # from PyPortfolioOpt import risk_models
 # from PyPortfolioOpt import EfficientFrontier
@@ -359,7 +360,7 @@ class Models:
             model_ret = hrp_portfolio.portfolio_performance(verbose=True, risk_free_rate= (1+df['Selic'].iloc[-1])**(1/252) -1 )
             #st.write(hrp_portfolio)
             fig = plt.figure()
-            pypfopt.plotting.plot_dendrogram(hrp_portfolio)
+            plotting.plot_dendrogram(hrp_portfolio)
             st.pyplot(fig)
             st.set_option('deprecation.showPyplotGlobalUse', True)
             
