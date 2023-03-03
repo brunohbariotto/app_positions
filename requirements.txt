@@ -7,3 +7,4 @@ streamlit==1.11.1
 yfinance==0.1.74
 ta==0.10.1
 cvxpy>=1.1.10
+PyPortfolioOpt==1.2.1
