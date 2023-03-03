@@ -266,7 +266,7 @@ class Pages:
         
         modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz'])
         
-        mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values))
+        mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values), list(df_returns.columns.values))
         
         if modelo == 'Correlação':
             m.correlacao(df_prices.loc[:,mult_simb])
@@ -290,7 +290,7 @@ class Pages:
             
             
         if modelo == 'Markowitz':
-            f_mark = df_prices.copy()
+            f_mark = df_prices.loc[:,mult_simb].copy()
             m.markowitz_inputs(f_mark,anos_cotacoes)
             return pd.DataFrame()
     
