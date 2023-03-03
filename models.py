@@ -10,6 +10,14 @@ import yfinance as yf
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
+from pypfopt import expected_returns
+from pypfopt import risk_models
+from pypfopt import EfficientFrontier
+from pypfopt import objective_functions
+from pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
+from pypfopt import HRPOpt
+from pypfopt import plotting
+import matplotlib.pyplot as plt
 
 class Models:
     def __init__(self):
@@ -253,8 +261,179 @@ class Models:
         #final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
         
         return final_pos_osc.to_frame()
+    
+    def markowitz(self, precos, volatilidade ,anos_cotacoes, otimizador, cov_type, is_longOnly, regul_zeros, exp_return_type,
+                  vol_effic=0.2, ret_effic=0.2
+                         , span=100, selic_aa=0.02
+                         , span_cov=100, cash=100000):
         
-    def markowitz(self):
+        url = 'http://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json'
+        df = pd.read_json(url)
+        
+        df['data'] = pd.to_datetime(df['data'], dayfirst=True)
+        df.set_index('data', inplace=True)
+        df = df['1996-01-01':]
+        
+        df['Selic'] = ((1+df['valor'].iloc[:]/100)**(252) -1)*100
+        selic_diaria = (1+selic_aa)**(1/252) -1
+        
+        #retorno anualizado
+        precos.dropna(inplace=True)
+        cf_anual = (precos.iloc[-1]-precos.iloc[0])/precos.iloc[0]
+        cf_anual = ((1+cf_anual)**(1/anos_cotacoes))-1
+        
+        num_ativos = len(precos.columns)
+        pesos = np.array(num_ativos*[1/num_ativos])
+        
+        ret_anual = cf_anual.dot(pesos)
+        
+        
+        #vol da carteira
+        cov = precos.pct_change().cov()
+        vol_diaria = np.sqrt(np.dot(pesos.T, np.dot(cov, pesos)))
+        vol_anual = vol_diaria*np.sqrt(252)
+        
+        
+        ### --- Expectativa de Retornos
+        
+        if exp_return_type == 'mean_historical_return':
+            #retorno medio historico
+            mu = expected_returns.mean_historical_return(precos)
+        if exp_return_type == 'ema_historical_return':
+        #retorno media movel exponencial
+            mu = expected_returns.ema_historical_return(precos, span=span)
+        if exp_return_type == 'capm':
+        #retorno CAPM - retorno benchmark (IBOV) > CAPM = Rf + beta*(Rm-Rf)
+            
+            ibov = pd.DataFrame(yf.download('^BVSP', period='f{anos_cotacoes}y')['Adj Close'])
+            mu = expected_returns.capm_return(precos, market_prices=ibov, risk_free_rate=df['Selic'].mean())
+        
+        #'CovarianceShrinkage', 'sample_cov', 'semicovariance', 'exp_cov'
+        ### --- Matrizes de covariância
+        # Matriz de covariancia
+        if cov_type == 'sample_cov':
+            cov = risk_models.sample_cov(precos)
+        if cov_type == 'semicovariance':
+        # Matriz de Semicovariancia - benchmark = 0 pega somente retornos abaixo de 0 (perdas)
+        # Somente modelos que aceitem matriz de semicov
+            cov = risk_models.semicovariance(precos, benchmark=0)
+        if cov_type == 'exp_cov':
+        #Exponentially-Weighted Covariance - peso maior para informações mais recentes
+            cov = risk_models.exp_cov(precos, span=200)
+        if cov_type == 'CovarianceShrinkage':
+        # Estimadores de Ledoit Wolf - Redução de valores extremos (normalização da matriz de cov)
+        # constant_variance : diagonal da matriz como media das variancias dos retornos
+        # single_factor: baseado no sharp, utiliza o beta como parâmetro do encolhedor
+        # constant_correlation: relacionado a matriz de correlação e desvio da amostra
+            cov = risk_models.CovarianceShrinkage(precos).ledoit_wolf()
+        
+        
+        #'MaxSharp','MinVol','EfficientRisk','EfficientReturn','RiskParity'
+        ### --- Modelos de Otimização
+        # Modelo de Portólio de Mínima Variancia > Reduzir a Volatilidade do Portfólio, pesos = 1, long_only
+        # Se long short (weight-bounds(none,none))
+        if is_longOnly == 'Sim':
+            mv = EfficientFrontier(mu, cov)
+        if is_longOnly == 'Não':
+            mv = EfficientFrontier(mu, cov, weight_bounds=(-1,1))
+            
+        if regul_zeros == 'Sim':
+            mv.add_objective(objective_functions.L2_reg, gamma=0.1)
+        
+        if otimizador == 'MinVol':
+            w = mv.min_volatility()
+            
+        if otimizador == 'MaxSharp':
+            w = mv.max_sharpe()
+        
+        if otimizador == 'EfficientRisk':
+            w = mv.efficient_risk(target_volatility=vol_effic)
+            
+        if otimizador == 'EfficientReturn':
+            w = mv.efficient_return(target_return=ret_effic)
+            
+        if otimizador == 'RiskParity':
+            hrp_portfolio = HRPOpt(expected_returns.returns_from_prices(precos))
+            cleaned_weights = hrp_portfolio.optimize()
+            model_ret = hrp_portfolio.portfolio_performance(verbose=True, risk_free_rate= (1+df['Selic'].iloc[-1])**(1/252) -1 )
+            #st.write(hrp_portfolio)
+            fig = plt.figure()
+            plotting.plot_dendrogram(hrp_portfolio)
+            st.pyplot(fig)
+            st.set_option('deprecation.showPyplotGlobalUse', True)
+            
+        if otimizador != 'RiskParity':
+            cleaned_weights = mv.clean_weights()
+            model_ret = mv.portfolio_performance(verbose=True, risk_free_rate=df['Selic'].iloc[-1]/100)
+
+        pesos = np.array(list(cleaned_weights.values()))
+        
+        vol_otimizada = np.sqrt(np.dot(pesos.T, np.dot(cov,pesos)))
+        ret_otimizado = cf_anual.dot(pesos)
+        
+        
+        ultimos_precos = get_latest_prices(precos)
+
+        
+        da = DiscreteAllocation(cleaned_weights, ultimos_precos, total_portfolio_value=cash)
+        
+        if otimizador != 'RiskParity':
+            allocation, leftover = da.lp_portfolio()
+        elif otimizador == 'RiskParity':
+            allocation, leftover = da.greedy_portfolio()
+            
+        alocacao = pd.DataFrame(allocation.values(),index=allocation.keys())
+        
+        final_dataframe = pd.DataFrame(cleaned_weights.values(),index=cleaned_weights.keys())
+        final_dataframe = pd.concat([final_dataframe, alocacao.iloc[:,0]], axis=1)
+        final_dataframe = pd.concat([final_dataframe, ultimos_precos], axis=1)
+        final_dataframe.columns = ['Pesos %', 'Pos. Qtdd', 'Últ. Preço']
+        final_dataframe['Pesos %'] = final_dataframe['Pesos %']*100
+        final_dataframe['Pos. R$'] = final_dataframe['Pos. Qtdd']*final_dataframe['Últ. Preço']
+        
+        final_dataframe['Vol. Média Anual'] = volatilidade.mean()*np.sqrt(252)
+        
+    def markowitz_inputs(self, df_prices, volatility ,anos_cotacoes, 
+                         otimizador, cov_type, is_longOnly, regul_zeros, exp_return_type,
+                                       vol_effic, ret_effic
+                                              , span, selic_aa
+                                              , span_cov,cash):
+        
         st.subheader('Markowitz')
         
         st.markdown('---')
+        
+        volatility = np.log(df_prices.ffill()).diff().ewm(com=32).std()
+        prices = (np.log(df_prices.ffill()).diff() / volatility).clip(-5,5).cumsum()
+        
+        vol_effic, ret_effic, span, selic_aa, span_cov = 0.2,0.2,100,0.02,100       
+
+        otimizador = st.radio('Escolha a Otimização', ['MaxSharp','MinVol','EfficientRisk','EfficientReturn','RiskParity'])
+        
+        cash = st.number_input('Coloque o valor alocado em R$', min_value=100, step=100, key=1974)
+        
+        if otimizador == 'EfficientRisk':
+            vol_effic = st.number_input('Qual a Volatilidade desejada', min_value=0.05, key=111)
+        if otimizador == 'EfficientReturn':
+            ret_effic = st.number_input('Qual o Retorno desejado', min_value=0.05, key=222)
+        
+        exp_return_type = st.radio('Escolha o Tipo de Expected Return', ['ema_historical_return', 'mean_historical_return', 'capm'])
+        if exp_return_type == 'ema_historical_return':
+            span = st.number_input('Escolha o Span', min_value=100, key=333)
+            
+        cov_type = st.radio('Escolha o Tipo de Covariância', ['CovarianceShrinkage', 'sample_cov', 'semicovariance', 'exp_cov'])
+        if cov_type == 'exp_cov':
+            span_cov = st.number_input('Escolha o Span', min_value=100, key=555)
+            
+        is_longOnly = st.radio('Estratégia Long Only?', ['Sim', 'Não'])
+        
+        regul_zeros = st.radio('Regularização remoção de nulos?', ['Sim', 'Não'])
+        
+        ret_anual, vol_anual, pesos, ret_otimizado, vol_otimizada, model_ret =  self.markowitz(df_prices, volatility ,anos_cotacoes, 
+                             otimizador, cov_type, is_longOnly, regul_zeros, exp_return_type,
+                                           vol_effic, ret_effic
+                                                  , span, selic_aa
+                                                  , span_cov,cash)
+        
+        st.write(pesos)
+        st.write(pd.DataFrame(model_ret, index=['Expected annual return','Annual volatility','Sharpe Ratio'], columns=['Values']))

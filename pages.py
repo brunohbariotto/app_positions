@@ -290,7 +290,8 @@ class Pages:
             
             
         if modelo == 'Markowitz':
-            m.markowitz()
+            f_mark = m.oscilador(df_prices).copy()
+            m.markowitz_inputs(f_mark,)
             return pd.DataFrame()
     
     #relatorio
