@@ -266,7 +266,7 @@ class Pages:
         
         modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz'])
         
-        mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values), list(df_returns.columns.values))
+        mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values))
         
         if modelo == 'Correlação':
             m.correlacao(df_prices.loc[:,mult_simb])
