@@ -76,11 +76,10 @@ if escolha == 'Modelos':
         df = gog.read_spreadsheet('fundos_BrunoBariotto')
         df.columns = ['Acao']
         df['Acao'] = df['Acao'] + '.SA'
-        st.write(df)
         
     df_tosend = pg.modelos(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
-    if len(df_tosend) != 0:
+    if len(df_tosend) != 0 and escolha_tipo=="Ações":
         df_tosend = df_tosend.reset_index()
         df_tosend.rename(columns={'index':'Acao'}, inplace=True)
     
