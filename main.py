@@ -19,7 +19,10 @@ gog = PlanGoogle()
 pg = Pages()
 
 lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Relatórios']
+lista_tipo = ['Ações', 'Fundos Imob.']
 st.sidebar.subheader('Menu Principal')
+
+escolha_tipo = st.sidebar.radio('Escolha o Tipo: ', lista_menu)
 escolha = st.sidebar.radio('Escolha a Opção: ', lista_menu)
 
 st.sidebar.markdown('---')
@@ -66,7 +69,12 @@ if escolha == 'Mercado':
     
 
 if escolha == 'Modelos':
-    df = gog.read_spreadsheet('positions_BrunoBariotto')
+    if escolha_tipo == 'Ações':
+        df = gog.read_spreadsheet('positions_BrunoBariotto')
+    elif escolha_tipo == 'Fundos Imob.':
+        df = gog.read_spreadsheet('fundos_BrunoBariotto')
+        df.columns = ['Acao']
+        
     df_tosend = pg.modelos(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
     
     if len(df_tosend) != 0:
