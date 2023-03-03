@@ -244,9 +244,9 @@ class Models:
         st.write('Posição Final [%] - Mais Recente')
         st.write(final_pos_osc)
         
-        if 'HASH11.SA' in final_pos_osc.index.values:
+        if 'HASH11.SA' in final_pos_osc.index.get_level_values(0):
             st.write('Entrou')
-            if 'BTC-USD' in final_pos_osc.index.values:
+            if 'BTC-USD' in final_pos_osc.index.get_level_values(0):
                 st.write('Entrou')
                 final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
             else:
