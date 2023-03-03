@@ -245,9 +245,9 @@ class Models:
         st.write(final_pos_osc)
         st.write(df_prices)
         
-        if 'HASH11.SA' in df_prices.columns:
+        if 'HASH11.SA' in final_pos_osc.columns.get_level_values(0):
             st.write('Entrou')
-            if 'BTC-USD' in df_prices.columns:
+            if 'BTC-USD' in df_prices.columns.get_level_values(0):
                 st.write('Entrou')
                 final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
             else:
