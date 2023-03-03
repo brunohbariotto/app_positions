@@ -10,13 +10,13 @@ import yfinance as yf
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
-from pypfopt import expected_returns
-from pypfopt import risk_models
-from pypfopt import EfficientFrontier
-from pypfopt import objective_functions
-from pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
-from pypfopt import HRPOpt
-from pypfopt import plotting
+from PyPortfolioOpt.pypfopt import expected_returns
+from PyPortfolioOpt.pypfopt import risk_models
+from PyPortfolioOpt.pypfopt import EfficientFrontier
+from PyPortfolioOpt.pypfopt import objective_functions
+from PyPortfolioOpt.pypfopt.discrete_allocation import DiscreteAllocation, get_latest_prices
+from PyPortfolioOpt.pypfopt import HRPOpt
+from PyPortfolioOpt.pypfopt import plotting
 import matplotlib.pyplot as plt
 
 class Models:
