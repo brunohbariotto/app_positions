@@ -244,7 +244,7 @@ class Models:
         st.write('Posição Final [%] - Mais Recente')
         st.write(final_pos_osc)
         
-        if 'HASH11.SA' in final_pos_osc.columns:
+        if 'HASH11.SA' in df_prices.columns:
             st.write('Entrou')
             if 'BTC-USD' in df_prices.columns:
                 st.write('Entrou')
