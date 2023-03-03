@@ -243,6 +243,7 @@ class Models:
         
         st.write('Posição Final [%] - Mais Recente')
         st.write(final_pos_osc)
+        st.write(df_prices)
         
         if 'HASH11.SA' in df_prices.columns:
             st.write('Entrou')
