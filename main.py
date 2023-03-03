@@ -22,7 +22,7 @@ lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Relatórios']
 lista_tipo = ['Ações', 'Fundos Imob.']
 st.sidebar.subheader('Menu Principal')
 
-escolha_tipo = st.sidebar.radio('Escolha o Tipo: ', lista_menu)
+escolha_tipo = st.sidebar.radio('Escolha o Tipo: ', lista_tipo)
 escolha = st.sidebar.radio('Escolha a Opção: ', lista_menu)
 
 st.sidebar.markdown('---')
