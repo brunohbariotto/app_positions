@@ -251,7 +251,7 @@ class Models:
                 final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
             else:
                 st.write('Insira BTC-USD para ponderar HASH11')
-        final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
+        #final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
         
         return final_pos_osc.to_frame()
         
