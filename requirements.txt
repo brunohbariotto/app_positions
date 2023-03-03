@@ -6,4 +6,4 @@ plotly==5.9.0
 streamlit==1.11.1
 yfinance==0.1.74
 ta==0.10.1
-pyodbc==4.0.30
+cvxpy>=1.1.10
