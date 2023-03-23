@@ -251,9 +251,6 @@ class Models:
         st.write('Posição Final [%] - Histórico')
         st.write(pos_fast_p + pos_medium_p + pos_slow_p)
         
-        st.write('Posição Final [%] - Mais Recente')
-        st.write(final_pos_osc)
-        st.write(df_prices)
 
         if 'BTC-USD' in df_prices.columns.get_level_values(0):
             st.write('Entrou')

@@ -286,8 +286,7 @@ class Pages:
             st.write(df_send)
             
             df_send['pos_osc'] = df_osc[df_osc.columns].values
-            st.write('Depois')
-            st.write(df_send)
+
             
             st.write(df_compare[['pos_osc','pos_osc_pos']])
             
