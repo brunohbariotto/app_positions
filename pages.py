@@ -279,7 +279,7 @@ class Pages:
             df_send.index = df_osc.index
             
             df_compare = df_send.copy()
-            df_compare['pos_osc_pos'] = df_osc['pos_osc'].values
+            df_compare['pos_osc_pos'] = df_osc['pos_osc']
             
             st.write('Antes')
             st.write(df_send)
