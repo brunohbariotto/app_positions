@@ -275,6 +275,7 @@ class Pages:
         if modelo == 'Oscilador':
             #df_osc = m.oscilador(df_prices.loc[:,mult_simb]).copy()
             df_osc = m.oscilador(df_prices).copy()
+            st.write(df_osc)
             df_send = df.copy().set_index('Acao')
             df_send.index = df_osc.index
             
