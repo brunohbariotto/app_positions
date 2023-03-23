@@ -35,7 +35,7 @@ datas_inicio = datetime(2000,1,1)
 datas_fim = datetime.now()
 
 if per_data == 'Períodos':
-	anos_cotacoes = st.sidebar.slider('Quantos períodos (anos) de dados?', 1, 20)
+	anos_cotacoes = st.sidebar.slider('Quantos períodos (anos) de dados?', 8, 20)
 elif per_data == 'Data':
 	datas_inicio = st.sidebar.date_input('Data de Inicio', value=datetime(2000,1,1) , min_value = datetime(2000,1,1), max_value=datetime.now())
 	datas_fim = st.sidebar.date_input('Data Final', value=datetime.now() , min_value = datetime(2000,1,1), max_value=datetime.now())
