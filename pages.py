@@ -61,6 +61,10 @@ class Pages:
         st.write('SPX MarkxOsc')
         st.write(markowitz_spx/(df_prices['SPXI11.SA'].iloc[-1]))
         
+        df.loc[df['Acao']=='HASH11.SA','pos_markw'] = df[df['Acao']=='HASH11.SA']['pos_mark'] + (markowitz_btc/(df_prices['HASH11.SA'].iloc[-1]))
+        df.loc[df['Acao']=='SPXI11.SA','pos_markw'] = df[df['Acao']=='SPXI11.SA']['pos_mark'] + (markowitz_btc/(df_prices['SPXI11.SA'].iloc[-1]))
+        
+        
         df['pos_oscxmark'] = df.pos_osc*df.pos_markw/100
         
         st.write(df_prices)
@@ -89,7 +93,7 @@ class Pages:
         st.plotly_chart(fig2)
         
         df['PosxMark'] = df['pos_markw'] - df['pos_atual']
-        df['PosxOsc'] = (df['pos_markw']*df['pos_osc']/100) - df['pos_atual']
+        df['PosxOsc'] = (df['pos_oscxmark']) - df['pos_atual']
         
         st.markdown('---')
         st.subheader('Comparação entre posições')
