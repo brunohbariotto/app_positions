@@ -49,6 +49,9 @@ class Pages:
         
         st.plotly_chart(fig)
         
+        markowitz_usd = 29979.47076
+        df['pos_oscxmark'] = df.pos_osc*df.pos_markw/100
+        
         st.write(df)
         
         #Comparação Posição atual x Markowitz x Oscilator
@@ -56,7 +59,7 @@ class Pages:
         st.subheader('Comparação entre as Posições: Markowitz, Oscilator e Atual')
         fig2 = go.Figure(data=[
             go.Bar(name='Pos. Markowitz', x=df.Acao, y= df.pos_markw),
-            go.Bar(name='Pos. Oscilator', x=df.Acao, y= df.pos_osc*df.pos_markw/100),
+            go.Bar(name='Pos. Oscilator', x=df.Acao, y= df.pos_oscxmark),
             go.Bar(name='Pos. Atual', x=df.Acao, y= df.pos_atual)
         ])
         fig2.layout.height = 700
