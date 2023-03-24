@@ -49,7 +49,7 @@ class Pages:
         
         st.plotly_chart(fig)
         
-        markowitz_usd = 29979.47076*df[df['Acao'] == 'USDBRL=X']['pos_osc']
+        markowitz_usd = 29979.47076*df[df['Acao'] == 'USDBRL=X']['pos_osc']/100
         st.write(markowitz_usd)
         
         markowitz_btc = markowitz_usd*(1.62/(1.62+15.56))/1.5
