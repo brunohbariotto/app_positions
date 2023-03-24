@@ -64,8 +64,10 @@ class Pages:
         st.write(df.loc[df['Acao']=='HASH11.SA','pos_markw'].iloc[0])
         st.write(df.loc[df['Acao']=='SPXI11.SA','pos_markw'].iloc[0])
         
-        df.loc[(df['Acao']=='HASH11.SA'),['pos_markw']] = df[df['Acao']=='HASH11.SA']['pos_mark'].iloc[0] + ((markowitz_btc)/(df_prices['HASH11.SA'].iloc[-1])).iloc[0]
-        df.loc[(df['Acao']=='SPXI11.SA'),['pos_markw']] = df[df['Acao']=='SPXI11.SA']['pos_mark'].iloc[0] + ((markowitz_spx)/(df_prices['SPXI11.SA'].iloc[-1])).iloc[0]
+        st.write()
+        
+        df.loc[(df['Acao']=='HASH11.SA'),['pos_markw']] = df.loc[df['Acao']=='HASH11.SA','pos_markw'].iloc[0] + ((markowitz_btc)/(df_prices['HASH11.SA'].iloc[-1])).iloc[0]
+        df.loc[(df['Acao']=='SPXI11.SA'),['pos_markw']] = df.loc[df['Acao']=='SPXI11.SA','pos_markw'].iloc[0] + ((markowitz_spx)/(df_prices['SPXI11.SA'].iloc[-1])).iloc[0]
         
         
         df['pos_oscxmark'] = df.pos_osc*df.pos_markw/100
