@@ -49,22 +49,24 @@ class Pages:
         
         st.plotly_chart(fig)
         
-        markowitz_usd = 29979.47076*df[df['Acao'] == 'USDBRL=X']['pos_osc']/100
-        st.write('USD-BRL MarkxOsc')
-        st.write(markowitz_usd)
-        
+        markowitz_usd = 0
+        #alterar aqui
+        #markowitz_usd = 29979.47076*df[df['Acao'] == 'USDBRL=X']['pos_osc']/100
+        #st.write('USD-BRL MarkxOsc')
+        #st.write(markowitz_usd)
+        #e aqui
         markowitz_btc = markowitz_usd*(1.62/(1.62+15.56))/1.5
         markowitz_spx = markowitz_usd*(15.56/(1.62+15.56))/1.5
         
-        st.write('BTC MarkxOsc')
-        st.write(((markowitz_btc)/(df_prices['HASH11.SA'].iloc[-1])).iloc[0])
-        st.write('SPX MarkxOsc')
-        st.write(((markowitz_spx)/(df_prices['SPXI11.SA'].iloc[-1])).iloc[0])
+        #st.write('BTC MarkxOsc')
+        #st.write(((markowitz_btc)/(df_prices['HASH11.SA'].iloc[-1])).iloc[0])
+        #st.write('SPX MarkxOsc')
+        #st.write(((markowitz_spx)/(df_prices['SPXI11.SA'].iloc[-1])).iloc[0])
         
-        st.write(df.loc[df['Acao']=='HASH11.SA','pos_markw'].iloc[0])
-        st.write(df.loc[df['Acao']=='SPXI11.SA','pos_markw'].iloc[0])
+        #st.write(df.loc[df['Acao']=='HASH11.SA','pos_markw'].iloc[0])
+        #st.write(df.loc[df['Acao']=='SPXI11.SA','pos_markw'].iloc[0])
         
-        st.write()
+        #st.write()
         
         df.loc[(df['Acao']=='HASH11.SA'),['pos_markw']] = df.loc[df['Acao']=='HASH11.SA','pos_markw'].iloc[0] + ((markowitz_btc)/(df_prices['HASH11.SA'].iloc[-1])).iloc[0]
         df.loc[(df['Acao']=='SPXI11.SA'),['pos_markw']] = df.loc[df['Acao']=='SPXI11.SA','pos_markw'].iloc[0] + ((markowitz_spx)/(df_prices['SPXI11.SA'].iloc[-1])).iloc[0]
@@ -72,9 +74,9 @@ class Pages:
         
         df['pos_oscxmark'] = df.pos_osc*df.pos_markw/100
         
-        st.write(df_prices)
+        #st.write(df_prices)
         
-        st.write(df)
+        #st.write(df)
         
         #Comparação Posição atual x Markowitz x Oscilator
         st.markdown('---')
