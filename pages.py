@@ -49,6 +49,8 @@ class Pages:
         
         st.plotly_chart(fig)
         
+        st.write(df)
+        
         #Comparação Posição atual x Markowitz x Oscilator
         st.markdown('---')
         st.subheader('Comparação entre as Posições: Markowitz, Oscilator e Atual')
