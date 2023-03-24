@@ -57,9 +57,9 @@ class Pages:
         markowitz_spx = markowitz_usd*(15.56/(1.62+15.56))/1.5
         
         st.write('BTC MarkxOsc')
-        st.write(markowitz_btc.values)
+        st.write(markowitz_btc/(df_prices['HASH11.SA'].iloc[-1]))
         st.write('SPX MarkxOsc')
-        st.write(markowitz_spx.values)
+        st.write(markowitz_spx/(df_prices['SPXI11.SA'].iloc[-1]))
         
         df['pos_oscxmark'] = df.pos_osc*df.pos_markw/100
         
