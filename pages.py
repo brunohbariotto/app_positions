@@ -51,12 +51,12 @@ class Pages:
         
         #markowitz_usd = 0
         #alterar aqui
-        markowitz_usd = 1*df[df['Acao'] == 'USDBRL=X']['pos_osc']/100
+        markowitz_usd = 30120*df[df['Acao'] == 'USDBRL=X']['pos_osc']/100
         #st.write('USD-BRL MarkxOsc')
         #st.write(markowitz_usd)
         #e aqui
-        markowitz_btc = markowitz_usd*(1.62/(1.62+15.56))/1.5
-        markowitz_spx = markowitz_usd*(15.56/(1.62+15.56))/1.5
+        markowitz_btc = markowitz_usd*(1.62/(1.62+15.58))/1.5
+        markowitz_spx = markowitz_usd*(15.56/(1.62+15.58))/1.5
         
         #st.write('BTC MarkxOsc')
         #st.write(((markowitz_btc)/(df_prices['HASH11.SA'].iloc[-1])).iloc[0])
