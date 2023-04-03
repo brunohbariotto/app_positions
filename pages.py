@@ -33,7 +33,7 @@ class Pages:
         
         m = Models()
         df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
-        #st.write(df_prices)
+        st.write(df_prices)
         
         #Pizza da posição atual
         st.subheader('Posição Atual [% e R$]')
@@ -171,6 +171,7 @@ class Pages:
         #Puxando os preços
         df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
         
+        st.write(df_prices)
         st.markdown('---')
         st.subheader('Cotações Intraday')
         st.markdown(date.today().strftime('%d/%m/%Y'))
@@ -293,7 +294,7 @@ class Pages:
         #st.write(df_returns)
         
         
-        modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz'])
+        modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz', 'Lineares'])
         
         mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values), list(df_returns.columns.values))
         
@@ -327,6 +328,16 @@ class Pages:
             f_mark = df_prices.loc[:,mult_simb].copy()
             m.markowitz_inputs(f_mark,anos_cotacoes)
             return pd.DataFrame()
+        
+        if modelo == 'Lineares':
+            st.write('--------------------------------------')
+            st.write('Modelos Lineares Ordinários - OLS')
+            st.write('Resíduos aderentes a distribuição Normal (Gaussiana')
+            st.write('--------------------------------------')
+            st.write('Modelos Lineares Generalizados - GLM')
+            st.write('Resíduos não aderentes a distribuição Normal')
+            st.write('Natureza da variável resposta: Contagem, Proporção e Binária/Multinomial')
+            st.write('Contagem: Distribuição de erros assimétrica para valores baixos e variância aumenta com a média dos valores preditos')
     
     #relatorio
     # Tela que exibe um relatório com a comparação dos retornos em períodos específicados
