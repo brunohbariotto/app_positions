@@ -387,6 +387,15 @@ class Pages:
         
         try:
             st.write(df_input)
+            
+            x_y_df = st.experimental_data_editor(
+                pd.DataFrame(np.array([[df_input.columns], [False]*n_cols, [False]*n_cols]),
+                             columns = ['Variable', 'Dependent_Y', 'Independent_X']
+                             )
+                )
+            
+            st.write(x_y_df)
+            
         except:
             st.write('Insira os dados no dataframe acima')
         
