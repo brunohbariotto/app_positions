@@ -30,7 +30,7 @@ class Ml_models:
             st.markdown("**Probabilidade** de ocorrência de uma contagem m em dada exposição")
             st.latex(r'''p(Y_{i} = m) = \left(\frac{e^{-\lambda}.\lambda^{m}}{m!}\right)''')
             st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
-            st.markdown("Para **Poisson**, Var \approx Média = $\mu = \lambda_{poisson} $")
+            st.latex( r'''Var \approx Média = \mu = \lambda_{poisson}''')
             
             
             
