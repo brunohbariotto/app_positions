@@ -1,3 +1,4 @@
+seaborn
 cvxpy
 gspread_pandas
 investpy
