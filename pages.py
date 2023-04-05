@@ -358,6 +358,21 @@ class Pages:
             st.subheader('Algoritmos Não-Supervisionados')
             
             modelo_ml = st.radio('Escolha o Modelo: ', ['PCA', 'Clusterização'], key=13173)
+            
+        
+        st.write('Insira a base de dados')
+        
+        input_type = st.selectbox('Escolha o tipo de input', ['Manual', 'Arquivo'])
+        
+        if input_type == 'Manual':
+            df_input = st.experimental_data_editor(None, num_rows="dynamic")
+        
+        elif input_type == 'Arquivo':
+            uploaded_file = st.file_uploader('Escolha um arquivo')
+            if uploaded_file is not None:
+                df_input = pd.csv(uploaded_file)
+        
+        st.write(df_input)
         
         
     
