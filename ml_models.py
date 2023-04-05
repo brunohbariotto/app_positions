@@ -21,6 +21,20 @@ class Ml_models:
             st.markdown('---')
             st.header('**Modelos de Contagem**')
             
+            st.markdown("Analisar o comportamento de variáveis dependentes na forma **quantitativa, com valores discretos e não negativos.**Contagem por exposição (tempo, espaço, social, etc).")
+            
+            st.markdown("Y: **Quantitativa** com **Valores Inteiros** e **não negativos**")
+            st.markdown("Modelos de Regressão: **Poisson** e **Binomial Negativo**")
+            
+            st.subheader("**Poisson**")
+            st.markdown("$ ln(\hat{Y} = \alpha + \beta_{1}.X_{1} + ... + \beta_{k}.X_{k} $")
+            st.markdown("**Probabilidade** de ocorrência de uma contagem m em dada exposição")
+            st.markdown("$ p(Y_{i}) = \frac{e^{-\lambda}.\lambda^{m}}{m!} $")
+            st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
+            st.markdown("Para **Poisson**, Var $\approx $ Média = $\mu = \lambda_{poisson} $")
+            
+            
+            
         elif self.model == "Regressão Logística":
             st.markdown('---')
             st.header('**Modelos de Regressão Logística**')

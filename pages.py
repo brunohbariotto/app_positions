@@ -399,7 +399,12 @@ class Pages:
                              )
                 )
             
-            st.write(x_y_df)
+            
+            x_var = x_y_df[x_y_df.is_X == True].Variable
+            y_var = x_y_df[x_y_df.is_Y == True].Variable
+            
+            st.write(f'Variável Dependente Y: {y_var}')
+            st.write(f'Variáveis Independentes X: {x_var}')
             
             ml = Ml_models(modelo_ml)
             ml.choose_model()
