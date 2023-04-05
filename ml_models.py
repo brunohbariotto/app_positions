@@ -28,9 +28,9 @@ class Ml_models:
             st.subheader("**Poisson**")
             st.latex(r'''ln(\hat{Y}) = \alpha + \beta_{1}.X_{1} + ... + \beta_{k}.X_{k}''')
             st.markdown("**Probabilidade** de ocorrência de uma contagem m em dada exposição")
-            st.latex('''p(Y_{i} = m) = \left(\frac{e^{-\lambda}.\lambda^{m}}{m!}\right)''')
+            st.latex(r'''p(Y_{i} = m) = \left(\frac{e^{-\lambda}.\lambda^{m}}{m!}\right)''')
             st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
-            st.latex("Para **Poisson**, Var $\approx $ Média = $\mu = \lambda_{poisson} $")
+            st.markdown("Para **Poisson**, Var $\approx $ Média = $\mu = \lambda_{poisson} $")
             
             
             
