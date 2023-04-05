@@ -7,7 +7,7 @@ Created on Wed Apr  5 14:32:00 2023
 
 import streamlit as st
 import matplotlib.pyplot as plt
-import seaborn as sns
+import seasborn as sns
 import pandas as pd
 
 
