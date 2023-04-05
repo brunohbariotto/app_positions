@@ -15,6 +15,7 @@ from datetime import datetime, date
 import numpy as np
 from ta.trend import SMAIndicator
 import yfinance as yf
+from ml_models import Ml_models
 
 
 class Pages:
@@ -352,7 +353,7 @@ class Pages:
                 if algo == 'Regressão':
                     modelo_ml = st.radio('Escolha o Modelo: ', ['Regressão Linear', 'Contagem'], key=13171)
                 elif algo == 'Classificação':
-                    modelo_ml = st.radio('Escolha o Modelo: ', ['Regressão Logística' ,'KNN', 'SVM', 'Árvores de Decisão', 'Redes Neurais'], key=13172)
+                    modelo_ml = st.radio('Escolha o Modelo: ', ['Regressão Logística'], key=13172)
                     
         elif tipo == 'Unsupervised Learning':
             st.subheader('Algoritmos Não-Supervisionados')
@@ -399,6 +400,9 @@ class Pages:
                 )
             
             st.write(x_y_df)
+            
+            ml = Ml_models(modelo_ml)
+            ml.choose_model()
 
         except:
             st.write('Insira os dados no dataframe acima')
