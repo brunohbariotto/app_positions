@@ -406,7 +406,7 @@ class Pages:
             st.write(f'Variável Dependente Y: {y_var}')
             st.write(f'Variáveis Independentes X: {x_var}')
             
-            ml = Ml_models(modelo_ml)
+            ml = Ml_models(modelo_ml, x_y_df, y_var, x_var )
             ml.choose_model()
 
         except:
