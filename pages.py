@@ -375,13 +375,18 @@ class Pages:
                 )
     
             df_input = st.experimental_data_editor(df_m, num_rows="dynamic")
+            
+            df_input.columns = df_input.iloc[0,:]
+            df_input_final = df_input.copy().iloc[1:]
+            
         
         elif input_type == 'Arquivo':
             uploaded_file = st.file_uploader('Escolha um arquivo')
             if uploaded_file is not None:
                 df_input = pd.csv(uploaded_file)
         
-        st.write(df_input)
+        if df_input_final is not None:
+            st.write(df_input_final)
         
         
     
