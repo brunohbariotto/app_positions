@@ -365,11 +365,15 @@ class Pages:
         input_type = st.selectbox('Escolha o tipo de input', ['Manual', 'Arquivo'])
         
         if input_type == 'Manual':
+            n_cols = st.number_input('Selecione o número de colunas', min_value=1, value=1, step=1)
+            
+            cols = [f'col_{n}' for n in range(n_cols)]
+            
             df_m = pd.DataFrame(
-                [
-                   {'Teste':1} 
-                    ]
+                np.array([['Column_Name']*n_cols,[1]*n_cols]),
+                columns = cols
                 )
+    
             df_input = st.experimental_data_editor(df_m, num_rows="dynamic")
         
         elif input_type == 'Arquivo':
