@@ -385,8 +385,10 @@ class Pages:
             if uploaded_file is not None:
                 df_input = pd.csv(uploaded_file)
         
-        
-        st.write(df_input)
+        try:
+            st.write(df_input)
+        except:
+            st.write('Insira os dados no dataframe acima')
         
         
     
