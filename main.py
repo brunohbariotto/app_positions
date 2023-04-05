@@ -18,7 +18,7 @@ gog = PlanGoogle()
 #Objeto que inicializa e cria as páginas do menu principal
 pg = Pages()
 
-lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Relatórios']
+lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
 lista_tipo = ['Ações', 'Fundos Imob.']
 st.sidebar.subheader('Menu Principal')
 
@@ -87,5 +87,5 @@ if escolha == 'Modelos':
             st.write('Enviando...')
             gog.update_spreadsheet('positions_BrunoBariotto', df_tosend)
     
-if escolha == 'Relatórios':
-    pg.relatorio()
+if escolha == 'Machine Learning':
+    pg.machine()

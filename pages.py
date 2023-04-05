@@ -294,7 +294,7 @@ class Pages:
         #st.write(df_returns)
         
         
-        modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz', 'Lineares'])
+        modelo = st.radio('Escolha o modelo: ', ['Correlação','Oscilador','Markowitz'])
         
         mult_simb = st.multiselect('Escolha as ações: ', list(df_returns.columns.values), list(df_returns.columns.values))
         
@@ -329,21 +329,37 @@ class Pages:
             m.markowitz_inputs(f_mark,anos_cotacoes)
             return pd.DataFrame()
         
-        if modelo == 'Lineares':
-            st.write('--------------------------------------')
-            st.write('Modelos Lineares Ordinários - OLS')
-            st.write('Resíduos aderentes a distribuição Normal (Gaussiana')
-            st.write('--------------------------------------')
-            st.write('Modelos Lineares Generalizados - GLM')
-            st.write('Resíduos não aderentes a distribuição Normal')
-            st.write('Natureza da variável resposta: Contagem, Proporção e Binária/Multinomial')
-            st.write('Contagem: Distribuição de erros assimétrica para valores baixos e variância aumenta com a média dos valores preditos')
+            
     
     #relatorio
     # Tela que exibe um relatório com a comparação dos retornos em períodos específicados
     #
-    def relatorio(self):
-        st.header('Relatório por Períodos')
+    def machine(self):
+        st.header('Machine Learning Models')
+        st.markdown('---')
+        
+        tipo = st.radio('Escolha o tipo: ', ['Supervised Learning', 'Unsupervised Learning'], key=13170)
+        
+        if tipo == 'Supervised Learning':
+            st.subheader('Algoritmos Supervisionados')
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                algo = st.selectbox('Selecione o algoritmo', ('Regressão', 'Classificação'))
+                
+            with col2:
+                if algo == 'Regressão':
+                    modelo_ml = st.radio('Escolha o Modelo: ', ['Regressão Linear', 'Contagem'], key=13171)
+                elif algo == 'Classificação':
+                    modelo_ml = st.radio('Escolha o Modelo: ', ['Regressão Logística' ,'KNN', 'SVM', 'Árvores de Decisão', 'Redes Neurais'], key=13172)
+                    
+        elif tipo == 'Unsupervised Learning':
+            st.subheader('Algoritmos Não-Supervisionados')
+            
+            modelo_ml = st.radio('Escolha o Modelo: ', ['PCA', 'Clusterização'], key=13173)
+        
+        
     
     
         
