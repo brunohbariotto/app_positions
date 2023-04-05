@@ -390,11 +390,11 @@ class Pages:
             
             list_xy = list()
             for c in df_input.columns:
-                list_xy.append([c, False, False])
+                list_xy.append([c, bool(False), bool(True)])
                 
             x_y_df = st.experimental_data_editor(
                 pd.DataFrame(np.array(list_xy),
-                             columns = ['Variable', 'Dependent_Y', 'Independent_X']
+                             columns = ['Variable', 'is_Y', 'is_X']
                              )
                 )
             
