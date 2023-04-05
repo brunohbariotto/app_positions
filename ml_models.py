@@ -25,10 +25,10 @@ class Ml_models:
             st.markdown("**Modelos de Regressão**: **Poisson** e **Binomial Negativo**")
             
             st.subheader("**Poisson**")
-            st.markdown(':blue[$\ln(\hat{Y}) = $\alpha$ + $\beta$_{1}.X_{1}$]')
-            st.markdown(":blue[ $ln(\hat{Y} = \alpha + \beta_{1}.X_{1} + ... + \beta_{k}.X_{k} $]")
+            st.markdown(':blue[$$\ln(\hat{Y}) = \alpha + \beta_{1}.X_{1}$$]')
+            st.markdown(":blue[ $$ln(\hat{Y} = \alpha + \beta_{1}.X_{1} + ... + \beta_{k}.X_{k} $$]")
             st.markdown("**Probabilidade** de ocorrência de uma contagem m em dada exposição")
-            st.markdown(":blue[$p(Y_{i} = m) = \frac{e^{-\lambda}.\lambda^{m}}{m!}$]")
+            st.markdown(":blue[$$p(Y_{i} = m) = \frac{e^{-\lambda}.\lambda^{m}}{m!}$$]")
             st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
             st.markdown("Para **Poisson**, Var $\approx $ Média = $\mu = \lambda_{poisson} $")
             
