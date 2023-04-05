@@ -365,7 +365,12 @@ class Pages:
         input_type = st.selectbox('Escolha o tipo de input', ['Manual', 'Arquivo'])
         
         if input_type == 'Manual':
-            df_input = st.experimental_data_editor(None, num_rows="dynamic")
+            df_m = pd.DataFrame(
+                [
+                   {'Teste':1} 
+                    ]
+                )
+            df_input = st.experimental_data_editor(df_m, num_rows="dynamic")
         
         elif input_type == 'Arquivo':
             uploaded_file = st.file_uploader('Escolha um arquivo')
