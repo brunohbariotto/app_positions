@@ -46,7 +46,6 @@ class Ml_models:
             self.description_count(df_cont, self.y_var[0], self.x_var)
             
             #Poisson Model
-            
             m_poi = self.poisson(df_cont, self.y_var[0], self.x_var, formula)
             
             
@@ -64,6 +63,18 @@ class Ml_models:
             st.subheader('Predict')
             st.write(df_pred_output)
             
+            #Teste de Superdispersão
+            st.header('Teste de Superdispersão de Cameron e Trivedi (1990)')
+            df_cont['lambda_poisson'] = m_poi.fittedvalues
+            
+            df_cont['ystar'] = (((df_cont[self.y_var[0]]
+                                  -df_cont['lambda_poisson'])**2)
+                                -df_cont[self.y_var[0]])/df_cont['lambda_poisson']
+            
+            m_aux = smf.ols(formula='ystar ~ 0 + lambda_poisson',
+                            data=df_cont).fit()
+            
+            st.write(m_aux.summary())
             
             
             
