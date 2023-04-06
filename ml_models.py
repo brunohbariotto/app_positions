@@ -64,7 +64,10 @@ class Ml_models:
             st.write(df_pred_output)
             
             #Teste de Superdispersão
+            st.markdown('---')
             st.header('Teste de Superdispersão de Cameron e Trivedi (1990)')
+            
+            
             df_cont['lambda_poisson'] = m_poi.fittedvalues
             
             df_cont['ystar'] = (((df_cont[self.y_var[0]]
@@ -75,6 +78,16 @@ class Ml_models:
                             data=df_cont).fit()
             
             st.write(m_aux.summary())
+            st.write(f'p-value do lambda de poisson: {float(m_aux.pvalues[1])}')
+            
+            st.write('Se p-value do lambda_poisson > 0.05: Equidispersão. Usar Poisson!')
+            st.write('Se p-value do lambda_poisson < 0.05: Superdispersão. Usar Binomial Negativa!')
+            
+            if float(m_aux.pvalues[1]) < 0.05:
+                st.header('Binomial Negativa')
+                
+            else:
+                st.write('O modelo de Poisson é suficiente!')
             
             
             
