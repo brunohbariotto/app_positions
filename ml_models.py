@@ -53,14 +53,18 @@ class Ml_models:
             st.subheader('Summary')
             st.write(m_poi.summary())
             
+            
             st.subheader('Predict')
             
+            st.write('Insira os Parâmetros')
             df_pred = df_cont.copy().loc[:,self.x_var].iloc[-1,:].T
             df_pred.columns = ['Variables', 'Inputs']
+            st.write(df_pred)
             df_pred_input = st.experimental_data_editor(df_pred, num_rows="dynamic")
             
             df_pred_output = m_poi.predict(df_pred_input)
             df_pred_output.columns = ['Output_Poisson']
+            
             st.write(df_pred_output)
             
             
