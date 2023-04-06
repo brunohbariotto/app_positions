@@ -40,7 +40,7 @@ class Ml_models:
             st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
             st.latex( r'''Var \approx Média = \mu = \lambda_{poisson}''')
             
-            self.description_count(self.df, self.y_var, self.x_var)
+            self.description_count(self.df, self.y_var[0], self.x_var)
             
             
         elif self.model == "Regressão Logística":
@@ -71,9 +71,9 @@ class Ml_models:
         percent = df[y_var].value_counts(dropna=False, normalize=True)
         st.write(pd.concat([contagem, percent], axis=1, keys=['count', '%'], sort=True))
         
-        plt.figure(figsize=(15,20))
-        sns.histplot(data=df, x=y_var[0], bins=20, color='darkorchid')
-        plt.show()
+        fig_hist_count = plt.figure(figsize=(15,20))
+        sns.histplot(data=df, x=y_var, bins=20, color='darkorchid')
+        st.pyplot(fig_hist_count)
         
         st.subheader('Média e Variância de Y')
         st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
