@@ -78,12 +78,12 @@ class Ml_models:
                             data=df_cont).fit()
             
             st.write(m_aux.summary())
-            st.write(f'p-value do lambda de poisson: {float(m_aux.pvalues[1])}')
+            st.write(f'p-value do lambda de poisson: {float(m_aux.pvalues[0])}')
             
             st.write('Se p-value do lambda_poisson > 0.05: Equidispersão. Usar Poisson!')
             st.write('Se p-value do lambda_poisson < 0.05: Superdispersão. Usar Binomial Negativa!')
             
-            if float(m_aux.pvalues[1]) < 0.05:
+            if float(m_aux.pvalues[0]) < 0.05:
                 st.header('Binomial Negativa')
                 
             else:
