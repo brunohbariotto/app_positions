@@ -69,7 +69,7 @@ class Ml_models:
         st.subheader('Histograma de Contagem')
         contagem = df[y_var].value_counts(dropna=False)
         percent = df[y_var].value_counts(dropna=False, normalize=True)
-        pd.concat([contagem, percent], axis=1, keys=['count', '%'], sort=True)
+        st.write(pd.concat([contagem, percent], axis=1, keys=['count', '%'], sort=True))
         
         plt.figure(figsize=(15,20))
         sns.histplot(data=df, x=y_var, bins=20, color='darkorchid')
