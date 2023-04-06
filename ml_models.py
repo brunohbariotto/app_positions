@@ -53,9 +53,9 @@ class Ml_models:
             st.subheader('Summary')
             st.write(m_poi.summary())
             
-            st.write('Predict')
+            st.subheader('Predict')
             
-            df_pred = df_cont.copy().loc[:,self.x_var].iloc[-1,:]
+            df_pred = df_cont.copy().loc[:,self.x_var].iloc[-1,:].T
             df_pred_input = st.experimental_data_editor(df_pred, num_rows="dynamic")
             
             st.write(m_poi.predict(df_pred_input))
