@@ -393,14 +393,17 @@ class Pages:
             for c in df_input.columns:
                 list_xy.append([c, False, True])
                 
-            x_y_df = st.experimental_data_editor(
-                pd.DataFrame(np.array(list_xy),
-                             columns = ['Variable', 'is_Y', 'is_X']
-                             )
-                )
+            df_xy_in = pd.DataFrame(np.array(list_xy),
+                         columns = ['Variable', 'is_Y', 'is_X']
+                         )
             
-            x_y_df['is_X'] = x_y_df['is_X'].astype('bool')
-            x_y_df['is_Y'] = x_y_df['is_Y'].astype('bool')
+            df_xy_in['Variable'] = df_xy_in['Variable'].astype('string')
+            df_xy_in['is_X'] = df_xy_in['is_X'].astype('bool')
+            df_xy_in['is_Y'] = df_xy_in['is_Y'].astype('bool')
+                
+            x_y_df = st.experimental_data_editor(
+                df_xy_in
+                )
             
             st.write(x_y_df)
             x_var = list(x_y_df[x_y_df.is_X == True]['Variable'].values)
