@@ -32,6 +32,8 @@ class Ml_models:
 
             st.markdown("**Y (Variável Dependente)**: Quantitativa com Valores Inteiros e não negativos")
             
+            self.description_count(self.df, self.y_var[0], self.x_var)
+            
             st.markdown('---')
             st.header("**Poisson**")
             st.latex(r'''ln(\hat{Y}) = \alpha + \beta_{1}.X_{1} + ... + \beta_{k}.X_{k}''')
@@ -39,8 +41,6 @@ class Ml_models:
             st.latex(r'''p(Y_{i} = m) = \left(\frac{e^{-\lambda}.\lambda^{m}}{m!}\right)''')
             st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
             st.latex( r'''Var \approx Média = \mu = \lambda_{poisson}''')
-            
-            self.description_count(self.df, self.y_var[0], self.x_var)
             
             
         elif self.model == "Regressão Logística":
@@ -57,6 +57,7 @@ class Ml_models:
             
             
     def description_count(self, df, y_var, x_var):
+        st.header('Description')
         st.subheader('DataFrame')
         df[x_var] = df[x_var].astype('float')
         df[y_var] = df[y_var].astype('int64')
