@@ -58,8 +58,7 @@ class Ml_models:
             
             st.write('Insira os Parâmetros')
             #df_pred = pd.pivot_table(df_cont, index='Input', values=[1]*len(self.x_var), columns=self.x_var)
-            df_pred = df_cont.copy().loc[:,self.x_var].iloc[-1,:]
-
+            df_pred = df_cont.loc[df_cont[df_cont.iloc[-1]],self.x_var]
             st.write(df_pred)
             df_pred_input = st.experimental_data_editor(df_pred, num_rows="dynamic")
             
