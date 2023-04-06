@@ -400,13 +400,13 @@ class Pages:
                 )
             
             
-            x_var = x_y_df[x_y_df.is_X == True].Variable
-            y_var = x_y_df[x_y_df.is_Y == True].Variable
+            x_var = x_y_df[x_y_df.is_X == True]['Variable'].values
+            y_var = x_y_df[x_y_df.is_Y == True]['Variable'].values
             
             st.write(f'Variável Dependente Y: {y_var}')
             st.write(f'Variáveis Independentes X: {x_var}')
             
-            ml = Ml_models(modelo_ml, x_y_df, y_var, x_var )
+            ml = Ml_models(modelo_ml, df_input, y_var, x_var )
             ml.choose_model()
 
         except:
