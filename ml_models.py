@@ -9,7 +9,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-import statsmodels.formula.api as smf #poisson and binneg
+import statsmodels.formula.api as smf #poisson and binneg model
+import statsmodels.api as sm #poisson and binneg family
 from statsmodels.iolib.summary2 import summary_col
 #from statstests.tests import overdisp
 
@@ -39,11 +40,16 @@ class Ml_models:
             
             df_cont[self.x_var] = df_cont[self.x_var].astype('float')
             df_cont[self.y_var] = df_cont[self.y_var].astype('int64')
+            formula = f'{self.x_var[0]} ~ ' + ' + '.join(self.x_var)
             
             #Description
             self.description_count(df_cont, self.y_var[0], self.x_var)
+            
             #Poisson Model
-            self.poisson(df_cont, self.y_var[0], self.x_var)
+            
+            m_poi = self.poisson(df_cont, self.y_var[0], self.x_var, formula)
+            
+            st.write(m_poi.summary())
             
             
             
@@ -90,7 +96,7 @@ class Ml_models:
         
         
         
-    def poisson(self, df, y_var, x_var):
+    def poisson(self, df, y_var, x_var, formula):
         st.markdown('---')
         st.header("**Poisson**")
         st.latex(r'''ln(\hat{Y}) = \alpha + \beta_{1}.X_{1} + ... + \beta_{k}.X_{k}''')
@@ -98,6 +104,13 @@ class Ml_models:
         st.latex(r'''p(Y_{i} = m) = \left(\frac{e^{-\lambda}.\lambda^{m}}{m!}\right)''')
         st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
         st.latex( r'''Var \approx Média = \mu = \lambda_{poisson}''')
+        
+        m_poisson = smf.glm(formula=formula, 
+                            data=df,
+                            family = sm.families.Poisson()).fit()
+        
+        return m_poisson
+
         
             
         

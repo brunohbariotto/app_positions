@@ -411,12 +411,14 @@ class Pages:
             st.write(f'Variável Dependente Y: {y_var}')
             st.write(f'Variáveis Independentes X: {x_var}')
             
+            ml = Ml_models(modelo_ml, df_input, y_var, x_var )
+            ml.choose_model()
+            
 
         except:
             st.write('Insira os dados no dataframe acima')
             
-        ml = Ml_models(modelo_ml, df_input, y_var, x_var )
-        ml.choose_model()
+        
             
 
         
