@@ -57,7 +57,7 @@ class Ml_models:
             st.subheader('Predict')
             
             st.write('Insira os Parâmetros')
-            df_pred = pd.pivot_table(df_cont, index='Input', values=1, columns=self.x_var)
+            df_pred = pd.pivot_table(df_cont, index='Input', values=[1]*len(self.x_var), columns=self.x_var)
             #df_pred = df_cont.copy().loc[:,self.x_var].iloc[-1,:]
             #df_pred.columns = ['Inputs']
             st.write(df_pred)
