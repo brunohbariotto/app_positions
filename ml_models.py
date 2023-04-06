@@ -49,7 +49,16 @@ class Ml_models:
             
             m_poi = self.poisson(df_cont, self.y_var[0], self.x_var, formula)
             
+            
+            st.subheader('Summary')
             st.write(m_poi.summary())
+            
+            st.write('Predict')
+            
+            df_pred = df_cont.iloc[-1,:]
+            df_pred_input = st.experimental_data_editor(df_pred, num_rows="dynamic")
+            
+            st.write(m_poi.predict(df_pred_input))
             
             
             
