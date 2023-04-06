@@ -1,4 +1,3 @@
-overdisp
 statsmodels
 seaborn
 cvxpy
