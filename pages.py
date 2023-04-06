@@ -400,7 +400,7 @@ class Pages:
                 )
             
             x_y_df['is_X'] = x_y_df['is_X'].astype('bool')
-            x_y_df['is_Y'] = x_y_df['is_X'].astype('bool')
+            x_y_df['is_Y'] = x_y_df['is_Y'].astype('bool')
             
             st.write(x_y_df)
             x_var = list(x_y_df[x_y_df.is_X == True]['Variable'].values)
