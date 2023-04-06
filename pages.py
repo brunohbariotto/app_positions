@@ -404,19 +404,19 @@ class Pages:
             x_y_df = st.experimental_data_editor(
                 df_xy_in
                 )
-            
-            st.write(x_y_df)
+
             x_var = list(x_y_df[x_y_df.is_X == True]['Variable'].values)
             y_var = list(x_y_df[x_y_df.is_Y == True]['Variable'].values)
             
             st.write(f'Variável Dependente Y: {y_var}')
             st.write(f'Variáveis Independentes X: {x_var}')
             
-            ml = Ml_models(modelo_ml, df_input, y_var, x_var )
-            ml.choose_model()
 
         except:
             st.write('Insira os dados no dataframe acima')
+            
+        ml = Ml_models(modelo_ml, df_input, y_var, x_var )
+        ml.choose_model()
             
 
         
