@@ -71,8 +71,8 @@ class Ml_models:
         percent = df[y_var].value_counts(dropna=False, normalize=True)
         st.write(pd.concat([contagem, percent], axis=1, keys=['count', '%'], sort=True))
         
-        fig_hist_count = plt.figure(figsize=(15,20))
-        sns.histplot(data=df, x=y_var, bins=20, color='darkorchid')
+        fig_hist_count = plt.figure(figsize=(20,15))
+        sns.histplot(data=df, x=y_var, bins=15, color='darkorchid')
         st.pyplot(fig_hist_count)
         
         st.subheader('Média e Variância de Y')
