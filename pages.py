@@ -399,7 +399,7 @@ class Pages:
                              )
                 )
             
-            
+            st.write(x_y_df)
             x_var = list(x_y_df[x_y_df.is_X == True]['Variable'].values)
             y_var = list(x_y_df[x_y_df.is_Y == True]['Variable'].values)
             
