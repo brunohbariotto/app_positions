@@ -75,9 +75,12 @@ class Ml_models:
         sns.histplot(data=df, x=y_var, bins=15, color='darkorchid')
         st.pyplot(fig_hist_count)
         
+        st.write(df[y_var])
+        st.write(df[y_var].var())
+        
         st.subheader('Média e Variância de Y')
-        st.write(pd.DataFrame({'Mean':df[y_var].mean(),
-                               'Variance':df[y_var].var()}))
+        st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
+                               'Variance':[df[y_var].var()]}))
         
         
         
