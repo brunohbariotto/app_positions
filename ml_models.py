@@ -56,9 +56,12 @@ class Ml_models:
             st.subheader('Predict')
             
             df_pred = df_cont.copy().loc[:,self.x_var].iloc[-1,:].T
+            df_pred.columns = ['Variables', 'Inputs']
             df_pred_input = st.experimental_data_editor(df_pred, num_rows="dynamic")
             
-            st.write(m_poi.predict(df_pred_input))
+            df_pred_output = m_poi.predict(df_pred_input)
+            df_pred_output.columns = ['Output_Poisson']
+            st.write(df_pred_output)
             
             
             
