@@ -400,8 +400,8 @@ class Pages:
                 )
             
             
-            x_var = x_y_df[x_y_df.is_X == True]['Variable'].values
-            y_var = x_y_df[x_y_df.is_Y == True]['Variable'].values
+            x_var = list(x_y_df[x_y_df.is_X == True]['Variable'].values)
+            y_var = list(x_y_df[x_y_df.is_Y == True]['Variable'].values)
             
             st.write(f'Variável Dependente Y: {y_var}')
             st.write(f'Variáveis Independentes X: {x_var}')
