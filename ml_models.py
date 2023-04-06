@@ -40,7 +40,7 @@ class Ml_models:
             st.markdown("em que $\lambda$ é o número esperado de ocorrências ou taxa média estimada de incidências")
             st.latex( r'''Var \approx Média = \mu = \lambda_{poisson}''')
             
-            self.description_count()
+            self.description_count(self.df, self.y_var, self.x_var)
             
             
         elif self.model == "Regressão Logística":
@@ -56,28 +56,28 @@ class Ml_models:
             st.header('**Modelos de Clusterização**')
             
             
-    def description_count(self):
+    def description_count(self, df, y_var, x_var):
         st.subheader('DataFrame')
-        st.write(self.df)
+        st.write(df)
         
         st.subheader('Info')
-        st.write(self.df.info())
+        st.write(df.info())
         
         st.subheader('Describe')
-        st.write(self.df.describe())
+        st.write(df.describe())
         
         st.subheader('Histograma de Contagem')
-        contagem = self.df[self.y_var].value_counts(dropna=False)
-        percent = self.df[self.y_var].value_counts(dropna=False, normalize=True)
+        contagem = df[y_var].value_counts(dropna=False)
+        percent = df[y_var].value_counts(dropna=False, normalize=True)
         pd.concat([contagem, percent], axis=1, keys=['count', '%'], sort=True)
         
         plt.figure(figsize=(15,20))
-        sns.histplot(data=self.df, x=self.y_var, bins=20, color='darkorchid')
+        sns.histplot(data=df, x=y_var, bins=20, color='darkorchid')
         plt.show()
         
         st.subheader('Média e Variância de Y')
-        st.write(pd.DataFrame({'Mean':[self.df[self.y_var].mean()],
-                               'Variance':[self.df[self.y_var].var()]}))
+        st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
+                               'Variance':[df[y_var].var()]}))
         
         
         
