@@ -58,6 +58,9 @@ class Ml_models:
             
     def description_count(self, df, y_var, x_var):
         st.subheader('DataFrame')
+        df[x_var] = df[x_var].astype('float')
+        df[y_var] = df[y_var].astype('int64')
+        
         st.write(df)
         
         st.subheader('Info')
@@ -71,16 +74,15 @@ class Ml_models:
         percent = df[y_var].value_counts(dropna=False, normalize=True)
         st.write(pd.concat([contagem, percent], axis=1, keys=['count', '%'], sort=True))
         
+        n_bins = st.number_input('Bins', min_value=1, value=20, step=1, key=13175)
+        
         fig_hist_count = plt.figure(figsize=(20,15))
-        sns.histplot(data=df, x=y_var, bins=15, color='darkorchid')
+        sns.histplot(data=df, x=y_var, bins=n_bins, color='darkorchid')
         st.pyplot(fig_hist_count)
         
-        st.write(df[y_var])
-        #st.write(df[y_var].values.var())
-        
         st.subheader('Média e Variância de Y')
-        st.write(pd.DataFrame({'Mean':[df[y_var].astype('int64').mean()],
-                               'Variance':[df[y_var].astype('int64').var()]}))
+        st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
+                               'Variance':[df[y_var].var()]}))
         
         
         
