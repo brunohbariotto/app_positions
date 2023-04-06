@@ -76,11 +76,11 @@ class Ml_models:
         st.pyplot(fig_hist_count)
         
         st.write(df[y_var])
-        st.write(df[y_var].var())
+        st.write(df[y_var].values.var())
         
         st.subheader('Média e Variância de Y')
-        st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
-                               'Variance':[df[y_var].var()]}))
+        st.write(pd.DataFrame({'Mean':[df[y_var].values.mean()],
+                               'Variance':[df[y_var].values.var()]}))
         
         
         
