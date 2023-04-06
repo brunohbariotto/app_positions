@@ -391,7 +391,7 @@ class Pages:
             
             list_xy = list()
             for c in df_input.columns:
-                list_xy.append([c, bool(False), bool(True)])
+                list_xy.append([c, False, True])
                 
             x_y_df = st.experimental_data_editor(
                 pd.DataFrame(np.array(list_xy),
