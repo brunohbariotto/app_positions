@@ -72,7 +72,7 @@ class Ml_models:
         st.write(pd.concat([contagem, percent], axis=1, keys=['count', '%'], sort=True))
         
         plt.figure(figsize=(15,20))
-        sns.histplot(data=df, x=y_var, bins=20, color='darkorchid')
+        sns.histplot(data=df, x=y_var[0], bins=20, color='darkorchid')
         plt.show()
         
         st.subheader('Média e Variância de Y')
