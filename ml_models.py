@@ -67,6 +67,13 @@ class Ml_models:
             st.markdown('---')
             st.header('Teste de Superdispersão de Cameron e Trivedi (1990)')
             
+            st.latex(r''' T_{cam} = \frac{[(Y_{i} - \lambda_{poisson})^2 - Y_{i}]}{\lambda_{poisson}} ''')
+            st.latex(r''' T_{cam} = \beta . \lambda_{poisson} ''')
+            
+            st.latex(r''' Cameron e Trivedi (1990): Superdispersão nos dados se \beta do modelo auxiliar T_{cam} sem intercepto é estatísticamente diferente de zero para dado nível de significancia''')
+            
+            st.latex( r'''Var \gg Média = \mu = \lambda_{poisson}''')
+            
             
             df_cont['lambda_poisson'] = m_poi.fittedvalues
             
@@ -80,13 +87,12 @@ class Ml_models:
             st.write(m_aux.summary())
             st.write(f'p-value do lambda de poisson: {float(m_aux.pvalues[0])}')
             
-            st.write('Se p-value do lambda_poisson > 0.05: Equidispersão. Usar Poisson!')
-            st.write('Se p-value do lambda_poisson < 0.05: Superdispersão. Usar Binomial Negativa!')
-            
             if float(m_aux.pvalues[0]) < 0.05:
+                st.write('p-value do lambda_poisson < 0.05: Superdispersão.')
                 st.header('Binomial Negativa')
                 
             else:
+                st.write('p-value do lambda_poisson > 0.05: Equidispersão.')
                 st.write('O modelo de Poisson é suficiente!')
             
             
