@@ -133,11 +133,13 @@ with headerSection:
         st.session_state['loggedIn'] = False
         st.header('Curriculum')
         pdf_file = 'curriculum.pdf'
-        with open(pdf_file,"rb") as f:
+        with open(pdf_file, "rb") as f:
             base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-            
-        pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf">'
-        
+
+        # Embedding PDF in HTML
+        pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+
+        # Displaying File
         st.markdown(pdf_display, unsafe_allow_html=True)
         
         show_login_page()
