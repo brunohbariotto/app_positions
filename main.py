@@ -18,7 +18,7 @@ gog = PlanGoogle()
 #Objeto que inicializa e cria as páginas do menu principal
 pg = Pages()
 
-df_senha = gog.read_spreadsheet('acoes_BrunoBariotto')
+df_senha = gog.read_spreadsheet('Login')
 
 st.write(df_senha)
 logged = False
