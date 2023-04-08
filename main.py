@@ -20,8 +20,10 @@ pg = Pages()
 
 df_senha = gog.read_spreadsheet('Login')
 
-st.write(df_senha)
 logged = False
+
+if logged == False:
+    st.header('Curriculum')
 
 if not logged:
     
@@ -35,7 +37,7 @@ if not logged:
                 logged = True
                 st.sidebar.success('Logged In as {}'.format(user_name))
                 
-                lista_menu = ['Curruculum','Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
+                lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
                 lista_tipo = ['Ações', 'Fundos Imob.']
                 st.sidebar.subheader('Menu Principal')
                 
@@ -59,9 +61,6 @@ if not logged:
                 
                 
                 # Escolha das páginas
-                if escolha == 'Curriculum':
-                    st.header('Curriculum')
-                
                 if escolha == 'Controle de Posição':
                     df = gog.read_spreadsheet('positions_BrunoBariotto')
                     pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
