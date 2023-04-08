@@ -132,7 +132,7 @@ with headerSection:
     if 'loggedIn' not in st.session_state:
         st.session_state['loggedIn'] = False
         st.header('Curriculum')
-        pdf_file = 'curriculum.pdf'
+        pdf_file = '/curriculum.pdf'
         
         with open(pdf_file, "rb") as pdf_file:
             PDFbyte = pdf_file.read()
