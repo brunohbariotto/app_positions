@@ -31,14 +31,14 @@ if not logged:
     password = st.sidebar.text_input("Password", type="password")
     
     if st.sidebar.checkbox("Login"):
-        st.write(df_senha.iloc[0,0])
-        st.write(df_senha.iloc[1,0])
-        st.write(df_senha.iloc[1,0])
-        st.write(df_senha.iloc[1,1])
         
-        logged = True
-        
-else:
+        if user_name == str(df_senha.iloc[0,0]) and password == str(df_senha.iloc[0,1]):
+                logged = True
+                st.success('Logged In as {}'.format(user_name))
+        else:
+            st.warning('Incorrect Username/Password')
+
+elif logged:
     
     lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
     lista_tipo = ['Ações', 'Fundos Imob.']
