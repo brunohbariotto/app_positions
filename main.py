@@ -13,8 +13,8 @@ from plangoogle import PlanGoogle
 from datetime import datetime, date
 
 
-loginSection = st.container()
-headerSection = st.container()
+#loginSection = st.container()
+#headerSection = st.container()
 
 #Objeto que inicializa, lê e atualiza a planilha do google drive
 gog = PlanGoogle()
@@ -31,11 +31,11 @@ def LoggedIn_Clicked(user_name, password):
         st.error("Usuário/Senha Inválido")
 
 def show_login_page():
-    with loginSection:
-        if st.session_state['loggedIn'] == 'False':
-            user_name = st.text_input(label = "", value="", placeholder="Usuário")
-            password = st.text_input(label = "", value="", placeholder="Senha",type="password")
-            LoginButtonClicked = st.button("Login", on_click=LoggedIn_Clicked, args=(user_name,password))
+    
+    if st.session_state['loggedIn'] == 'False':
+        user_name = st.text_input(label = "", value="", placeholder="Usuário")
+        password = st.text_input(label = "", value="", placeholder="Senha",type="password")
+        LoginButtonClicked = st.button("Login", on_click=LoggedIn_Clicked, args=(user_name,password))
                 
                     
 def show_main_page():
@@ -113,19 +113,17 @@ def show_main_page():
     if escolha == 'Machine Learning':
         pg.machine()
         
-        
 
-with headerSection:
-    st.header('Curriculum')
-    
-    if 'loggedIn' not in st.session_state:
-        st.session_state['loggedIn'] = False
-        show_login_page()
+st.header('Curriculum')
+
+if 'loggedIn' not in st.session_state:
+    st.session_state['loggedIn'] = False
+    show_login_page()
+else:
+    if st.session_state['loggedIn']:
+        show_main_page()
     else:
-        if st.session_state['loggedIn']:
-            show_main_page()
-        else:
-            show_login_page()
+        show_login_page()
         
 
 
