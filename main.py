@@ -24,19 +24,18 @@ st.write(df_senha)
 logged = False
 
 if not logged:
-    st.header('Curriculum')
     
-    st.sidebar.subheader('Login')
     user_name = st.sidebar.text_input("User Name")
     password = st.sidebar.text_input("Password", type="password")
+    logged = st.sidebar.subheader('Login')
     
     if st.sidebar.checkbox("Login"):
         
         if user_name == str(df_senha.iloc[0,0]) and password == str(df_senha.iloc[0,1]):
                 logged = True
-                st.success('Logged In as {}'.format(user_name))
+                st.sidebar.success('Logged In as {}'.format(user_name))
                 
-                lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
+                lista_menu = ['Curruculum','Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
                 lista_tipo = ['Ações', 'Fundos Imob.']
                 st.sidebar.subheader('Menu Principal')
                 
@@ -60,6 +59,9 @@ if not logged:
                 
                 
                 # Escolha das páginas
+                if escolha == 'Curriculum':
+                    st.header('Curriculum')
+                
                 if escolha == 'Controle de Posição':
                     df = gog.read_spreadsheet('positions_BrunoBariotto')
                     pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
@@ -108,6 +110,6 @@ if not logged:
                 if escolha == 'Machine Learning':
                     pg.machine()
         else:
-            st.warning('Incorrect Username/Password')
+            st.sidebar.warning('Incorrect Username/Password')
     
     
