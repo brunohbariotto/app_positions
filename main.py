@@ -14,6 +14,7 @@ from datetime import datetime, date
 
 
 loginSection = st.container()
+logOutSection = st.container()
 headerSection = st.container()
 
 #Objeto que inicializa, lê e atualiza a planilha do google drive
@@ -34,10 +35,17 @@ def show_login_page():
     with loginSection:
         if st.session_state['loggedIn'] == False:
             st.sidebar.subheader('Login')
-            st.sidebar.write('Inserir login e senha para acessar a página:')
             user_name = st.sidebar.text_input(label = "", value="", placeholder="Usuário")
             password = st.sidebar.text_input(label = "", value="", placeholder="Senha",type="password")
             LoginButtonClicked = st.sidebar.button("Login", on_click=LoggedIn_Clicked, args=(user_name,password))
+            
+def LoggedOut_Clicked():
+    st.session_state['loggedIn'] = False
+            
+def show_logout_page():
+    loginSection.empty();
+    with logOutSection:
+        st.sidebar.button("Log out", key="logout", on_click=LoggedOut_Clicked)
                 
                     
 def show_main_page():
