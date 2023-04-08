@@ -134,6 +134,7 @@ with headerSection:
         show_login_page()
     else:
         if st.session_state['loggedIn']:
+            show_logout_page()
             show_main_page()
         else:
             st.header('Curriculum')
