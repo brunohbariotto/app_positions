@@ -39,7 +39,7 @@ def show_login_page():
                 
                     
 def show_main_page():
-    st.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
+    st.sidebar.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
 
     lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
     lista_tipo = ['Ações', 'Fundos Imob.']
@@ -126,6 +126,7 @@ with headerSection:
         if st.session_state['loggedIn']:
             show_main_page()
         else:
+            st.header('Curriculum')
             show_login_page()
         
 
