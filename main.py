@@ -133,18 +133,15 @@ with headerSection:
         st.session_state['loggedIn'] = False
         st.header('Curriculum')
         pdf_file = 'curriculum.pdf'
-        
-        with open(pdf_file, "rb") as pdf_file:
-                    PDFbyte = pdf_file.read()
-                    
+
+        with open(pdf_file, "rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+            PDFbyte = f.read()
+            
         st.download_button(label="Download Curriculum.pdf", key='3',
                 data=PDFbyte,
                 file_name="curriculum_brunobariotto.pdf",
                 mime='application/octet-stream')
-        
-        
-        with open(pdf_file, "rb") as f:
-            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
 
         # Embedding PDF in HTML
         pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
