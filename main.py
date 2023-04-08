@@ -116,9 +116,9 @@ def show_main_page():
         
 
 with headerSection:
+    st.header('Curriculum')
     
     if 'loggedIn' not in st.session_state:
-        st.header('Curriculum')
         st.session_state['loggedIn'] = False
         show_login_page()
     else:
