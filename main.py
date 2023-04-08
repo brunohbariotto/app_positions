@@ -11,6 +11,7 @@ import pandas as pd
 from pages import Pages
 from plangoogle import PlanGoogle
 from datetime import datetime, date
+import base64
 
 
 loginSection = st.container()
@@ -131,6 +132,14 @@ with headerSection:
     if 'loggedIn' not in st.session_state:
         st.session_state['loggedIn'] = False
         st.header('Curriculum')
+        pdf_file = 'curriculum.pdf'
+        with open(pdf_file,"rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+            
+        pdf_display = F'<embed src=”data:application/pdf;base64,{base64_pdf}” width=”700″ height=”1000″ type=”application/pdf”>'
+        
+        st.markdown(pdf_display, unsafe_allow_html=True)
+        
         show_login_page()
     else:
         if st.session_state['loggedIn']:
