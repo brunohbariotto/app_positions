@@ -28,14 +28,14 @@ def LoggedIn_Clicked(user_name, password):
         st.session_state['loggedIn'] = True
     else:
         st.session_state['loggedIn'] = False
-        st.error("Usuário/Senha Inválido")
+        st.sidebar.error("Usuário/Senha Inválido")
 
 def show_login_page():
     with loginSection:
         if st.session_state['loggedIn'] == False:
-            user_name = st.text_input(label = "", value="", placeholder="Usuário")
-            password = st.text_input(label = "", value="", placeholder="Senha",type="password")
-            LoginButtonClicked = st.button("Login", on_click=LoggedIn_Clicked, args=(user_name,password))
+            user_name = st.sidebar.text_input(label = "", value="", placeholder="Usuário")
+            password = st.sidebar.text_input(label = "", value="", placeholder="Senha",type="password")
+            LoginButtonClicked = st.sidebar.button("Login", on_click=LoggedIn_Clicked, args=(user_name,password))
                 
                     
 def show_main_page():
@@ -116,10 +116,11 @@ def show_main_page():
         
 
 with headerSection:
-    st.header('Curriculum')
+    
     
     if 'loggedIn' not in st.session_state:
         st.session_state['loggedIn'] = False
+        st.header('Curriculum')
         show_login_page()
     else:
         if st.session_state['loggedIn']:
