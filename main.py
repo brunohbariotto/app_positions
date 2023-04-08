@@ -21,9 +21,7 @@ pg = Pages()
 df_senha = gog.read_spreadsheet('Login')
 
 logged = False
-
-if logged == False:
-    st.header('Curriculum')
+    
 
 if not logged:
     
@@ -110,5 +108,6 @@ if not logged:
                     pg.machine()
         else:
             st.sidebar.warning('Incorrect Username/Password')
+            st.header('Curriculum')
     
     
