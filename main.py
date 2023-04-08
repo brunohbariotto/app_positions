@@ -18,74 +18,96 @@ gog = PlanGoogle()
 #Objeto que inicializa e cria as páginas do menu principal
 pg = Pages()
 
-lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
-lista_tipo = ['Ações', 'Fundos Imob.']
-st.sidebar.subheader('Menu Principal')
+df_senha = gog.read_spreadsheet('acoes_BrunoBariotto')
 
+st.write(df_senha)
+logged = False
 
-escolha = st.sidebar.radio('Escolha a Opção: ', lista_menu)
-
-st.sidebar.markdown('---')
-st.sidebar.subheader('Janela de datas')
-
-per_data = st.sidebar.radio('Por Período ou Datas', ['Períodos', 'Data', 'Máx'])
-
-anos_cotacoes = 1
-datas_inicio = datetime(2000,1,1)
-datas_fim = datetime.now()
-
-if per_data == 'Períodos':
-	anos_cotacoes = st.sidebar.slider('Quantos períodos (anos) de dados?', 1, 20, 8)
-elif per_data == 'Data':
-	datas_inicio = st.sidebar.date_input('Data de Inicio', value=datetime(2000,1,1) , min_value = datetime(2000,1,1), max_value=datetime.now())
-	datas_fim = st.sidebar.date_input('Data Final', value=datetime.now() , min_value = datetime(2000,1,1), max_value=datetime.now())
-
-
-# Escolha das páginas
-if escolha == 'Controle de Posição':
-    df = gog.read_spreadsheet('positions_BrunoBariotto')
-    pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+if not logged:
+    st.header('Curriculum')
     
-if escolha == 'Mercado':
+    st.sidebar.subheader('Login')
+    user_name = st.sidebar.text_input("User Name")
+    password = st.sidebar.text_input("Password", type="password")
     
-    mkt = st.radio('Escolha o Mercado: ', ['Ações','Fundos Imobiliários','Commodities','Moedas', 'Indicadores'], horizontal=True)
+    if st.sidebar.checkbox("Login"):
+        st.write(df_senha.iloc[0,0])
+        st.write(df_senha.iloc[1,0])
+        st.write(df_senha.iloc[1,0])
+        st.write(df_senha.iloc[1,1])
+        
+        logged = True
+        
+else:
     
-    if mkt == 'Ações':
-        df = gog.read_spreadsheet('acoes_BrunoBariotto')
-        
-    if mkt == 'Fundos Imobiliários':
-        df = gog.read_spreadsheet('fundos_BrunoBariotto')
-        
-    if mkt == 'Commodities':
-        df = gog.read_spreadsheet('commodities_BrunoBariotto')
-        
-    if mkt == 'Moedas':
-        df = gog.read_spreadsheet('moedas_BrunoBariotto')
-        
-    if mkt == 'Indicadores':
-        df = gog.read_spreadsheet('indicadores_BrunoBariotto')
-        
-    pg.mercado(mkt, df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+    lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
+    lista_tipo = ['Ações', 'Fundos Imob.']
+    st.sidebar.subheader('Menu Principal')
     
-
-if escolha == 'Modelos':
-    escolha_tipo = st.radio('Escolha o Tipo: ', lista_tipo)
-    if escolha_tipo == 'Ações':
+    
+    escolha = st.sidebar.radio('Escolha a Opção: ', lista_menu)
+    
+    st.sidebar.markdown('---')
+    st.sidebar.subheader('Janela de datas')
+    
+    per_data = st.sidebar.radio('Por Período ou Datas', ['Períodos', 'Data', 'Máx'])
+    
+    anos_cotacoes = 1
+    datas_inicio = datetime(2000,1,1)
+    datas_fim = datetime.now()
+    
+    if per_data == 'Períodos':
+    	anos_cotacoes = st.sidebar.slider('Quantos períodos (anos) de dados?', 1, 20, 8)
+    elif per_data == 'Data':
+    	datas_inicio = st.sidebar.date_input('Data de Inicio', value=datetime(2000,1,1) , min_value = datetime(2000,1,1), max_value=datetime.now())
+    	datas_fim = st.sidebar.date_input('Data Final', value=datetime.now() , min_value = datetime(2000,1,1), max_value=datetime.now())
+    
+    
+    # Escolha das páginas
+    if escolha == 'Controle de Posição':
         df = gog.read_spreadsheet('positions_BrunoBariotto')
-    elif escolha_tipo == 'Fundos Imob.':
-        df = gog.read_spreadsheet('fundos_BrunoBariotto')
-        df.columns = ['Acao']
-        df['Acao'] = df['Acao'] + '.SA'
+        pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
         
-    df_tosend = pg.modelos(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+    if escolha == 'Mercado':
+        
+        mkt = st.radio('Escolha o Mercado: ', ['Ações','Fundos Imobiliários','Commodities','Moedas', 'Indicadores'], horizontal=True)
+        
+        if mkt == 'Ações':
+            df = gog.read_spreadsheet('acoes_BrunoBariotto')
+            
+        if mkt == 'Fundos Imobiliários':
+            df = gog.read_spreadsheet('fundos_BrunoBariotto')
+            
+        if mkt == 'Commodities':
+            df = gog.read_spreadsheet('commodities_BrunoBariotto')
+            
+        if mkt == 'Moedas':
+            df = gog.read_spreadsheet('moedas_BrunoBariotto')
+            
+        if mkt == 'Indicadores':
+            df = gog.read_spreadsheet('indicadores_BrunoBariotto')
+            
+        pg.mercado(mkt, df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        
     
-    if len(df_tosend) != 0 and escolha_tipo=="Ações":
-        df_tosend = df_tosend.reset_index()
-        df_tosend.rename(columns={'index':'Acao'}, inplace=True)
-    
-        if st.button('Atualizar Oscilador?'):
-            st.write('Enviando...')
-            gog.update_spreadsheet('positions_BrunoBariotto', df_tosend)
-    
-if escolha == 'Machine Learning':
-    pg.machine()
+    if escolha == 'Modelos':
+        escolha_tipo = st.radio('Escolha o Tipo: ', lista_tipo)
+        if escolha_tipo == 'Ações':
+            df = gog.read_spreadsheet('positions_BrunoBariotto')
+        elif escolha_tipo == 'Fundos Imob.':
+            df = gog.read_spreadsheet('fundos_BrunoBariotto')
+            df.columns = ['Acao']
+            df['Acao'] = df['Acao'] + '.SA'
+            
+        df_tosend = pg.modelos(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        
+        if len(df_tosend) != 0 and escolha_tipo=="Ações":
+            df_tosend = df_tosend.reset_index()
+            df_tosend.rename(columns={'index':'Acao'}, inplace=True)
+        
+            if st.button('Atualizar Oscilador?'):
+                st.write('Enviando...')
+                gog.update_spreadsheet('positions_BrunoBariotto', df_tosend)
+        
+    if escolha == 'Machine Learning':
+        pg.machine()
