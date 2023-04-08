@@ -23,18 +23,20 @@ pg = Pages()
 
 df_senha = gog.read_spreadsheet('Login')
 
+def LoggedIn_Clicked(user_name, password):
+    if user_name == str(df_senha.iloc[0,0]) and password == str(df_senha.iloc[0,1]):
+        st.session_state['loggedIn'] = True
+    else:
+        st.session_state['loggedIn'] = False
+        st.sidebar.error("Usuário/Senha Inválido")
+
 def show_login_page():
     with loginSection:
         if st.session_state['loggedIn'] == 'False':
             user_name = st.sidebar.text_input(label = "", value="", placeholder="Usuário")
             password = st.sidebar.text_input(label = "", value="", placeholder="Senha",type="password")
-            LoginButtonClicked = st.sidebar.button("Login",)
-            if LoginButtonClicked:
-                if user_name == str(df_senha.iloc[0,0]) and password == str(df_senha.iloc[0,1]):
-                    st.session_state['loggedIn'] = True
-                else:
-                    st.session_state['loggedIn'] = False
-                    st.sidebar.error("Usuário/Senha Inválido")
+            LoginButtonClicked = st.sidebar.button("Login", on_click=LoggedIn_Clicked, args=(user_name,password))
+                
                     
 def show_main_page():
     st.sidebar.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
@@ -122,6 +124,8 @@ with headerSection:
     else:
         if st.session_state['loggedIn']:
             show_main_page()
+        else:
+            show_login_page()
         
 
 
