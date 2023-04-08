@@ -138,13 +138,14 @@ with headerSection:
             base64_pdf = base64.b64encode(f.read()).decode('utf-8')
             PDFbyte = f.read()
             
-        st.download_button(label="Download Curriculum.pdf", key='3',
-                data=PDFbyte,
-                file_name="curriculum_brunobariotto.pdf",
-                mime='application/octet-stream')
 
         # Embedding PDF in HTML
         pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+
+        st.download_button(label="Download Curriculum.pdf", key='3',
+                data=PDFbyte,
+                file_name="curriculum_brunobariotto.pdf",
+                mime='application/octet-stream')        
 
         # Displaying File
         st.markdown(pdf_display, unsafe_allow_html=True)
