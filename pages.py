@@ -338,9 +338,9 @@ class Pages:
 
         with col2T:
         
-            st.title('Bruno Bariotto')
+            st.title('Bruno Henrique Bariotto')
         
-            st.markdown(':house: Jd. Santa Genebra, Campinas-SP')
+            st.markdown(':house: R. Benedita Amaral Pinto, 538. Jd. Santa Genebra, Campinas-SP')
         
         st.markdown('---')
 
