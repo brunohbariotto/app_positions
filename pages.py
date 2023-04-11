@@ -336,11 +336,11 @@ class Pages:
 
         col1T, col2T = st.columns(2)
 
-        with col2T:
+        with col1T:
         
-            st.title('Bruno Henrique Bariotto')
+            st.title('Bruno Bariotto')
         
-            st.markdown(':house: R. Benedita Amaral Pinto, 538. Jd. Santa Genebra, Campinas-SP')
+            st.markdown(':house: Santa Genebra, Campinas-SP')
         
         st.markdown('---')
 
