@@ -330,7 +330,160 @@ class Pages:
             m.markowitz_inputs(f_mark,anos_cotacoes)
             return pd.DataFrame()
         
-            
+    
+    def curriculo(self):
+        st.set_page_config(layout='wide')
+
+        col1T, col2T,col3T = st.columns(3)
+
+        with col2T:
+        
+            st.title('Bruno Henrique Bariotto')
+        
+            st.markdown(':house: R. Benedita Amaral Pinto, 538. Jd. Santa Genebra, Campinas-SP')
+        
+        st.markdown('---')
+
+        col1P, col2P, col3P, col4P, col5P = st.columns(5)
+        
+        with col1P:
+        
+            st.markdown(':iphone: +55 (19) 98175-8460')
+        
+        with col2P:
+        
+            st.markdown(':email: brunohbariotto@gmail.com')
+        
+        with col3P:
+        
+            st.markdown(':earth_americas: https://brunobariotto.streamlit.app/')
+        
+        with col4P:
+        
+            st.markdown('www.linkedin.com/in/bruno-henrique-bariotto')
+        
+        with col5P:
+        
+            st.markdown('https://github.com/brunobariotto')   
+        
+         
+        
+        st.markdown('---')
+        
+        st.markdown(
+        
+        """
+        
+        - Solid Knowledge in Derivatives, Commodities market and Exotic products;
+        
+        - Experience in Price, Trade, Hedge and book Exotic and hybrid structures, using Portfolio and Risk Management to centralize risk of exotic options / non-linear book
+        
+        - Dynamically hedge in books, to manage the position and preserve the P&L;
+        
+        - Multi-Asset class exposure (Ags, Softs, Energy, FX);
+        
+        - Market-Making on low liquidity markets, offering prices in B3 and Matif Corn Options for brokers and sales;
+        
+        - Execute Prop Trading Strategies on volatility, Future calendar spread and Intermarket spread;
+        
+        - Structuring of controls, reports, quantitative strategies and pricing tools to frame and have the best view on systematic, market, liquidity risks.
+
+        """
+        
+        )
+
+        st.subheader('Skills:')
+        
+        st.markdown('Programming Languages: C, C++, Python, R, JAVA, Matlab, VHDL, VBA, Assembly')
+        
+        st.markdown('Trading: Finance, Derivatives, Risk Management, Pricing, Proprietary, Futures, Options and Greeks')
+        
+         
+        
+        st.markdown('---')
+        
+        st.header('Education')
+        
+
+        st.markdown('''
+        
+        <style>
+        
+        .katex-html {
+        
+            text-align: left;
+        
+        }
+        
+        </style>''',
+        
+        unsafe_allow_html=True
+        
+        )
+        
+        
+        st.latex(r'''
+        
+            \bullet\textbf{ UNICAMP - University of Campinas [Graduated], \text{2014-2019}}
+        
+        ''')
+        
+        st.latex(r'''
+        
+            \text{ B. Sc. In Control and Automation Engineering}
+        
+        ''')
+        
+        st.latex(r'''
+        
+            \bullet\textbf{EPAT in QuantInsti \text{2021-2022}}
+        
+        ''')
+        
+        st.latex(r'''
+        
+            \text{ Executive Programme in Algorithmic Trading}
+        
+        ''')
+        
+        st.latex(r'''
+        
+            \bullet\textbf{ USP/ESALQ - University of São Paulo, \text{2022-2024}}
+        
+        ''')
+        
+        st.latex(r'''
+        
+            \text{ Master of Business Adminstration - MBA In Data Science and Analytics}
+        
+        ''')
+
+        
+        st.markdown('---')
+        
+        st.header('Experience')
+        
+        st.latex(r'''
+        
+            \bullet\textbf{ Senior OTC Derivatives Trader at EDF Man Capital Markets / HedgePoint Global Markets, \text{Jan 2019 - now}}
+        
+        ''')
+        
+        st.markdown(
+        
+        """
+        
+        - During the entire experience, in charge of Ags and Soft books such as Corn, Wheat, Coffee, Sugar, Cotton, etc.
+        
+        - Trading, Dinamic Hedge for OTC Structures (Strips, Barrier, Compo, Spread Option, etc.)
+        
+        - MM on iliquid markets (B3 and Matif Options)
+        
+        - Statistical, regression and quantitative models to find good opportunities for a proprietary trading book and better hedge decisions.
+
+        """
+        
+        )
     
     #relatorio
     # Tela que exibe um relatório com a comparação dos retornos em períodos específicados
