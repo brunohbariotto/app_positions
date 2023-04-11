@@ -340,7 +340,7 @@ class Pages:
         
             st.title('Bruno Bariotto')
         
-            st.markdown(':house: Santa Genebra, Campinas-SP, Brazil')
+            st.markdown(':house: Campinas-SP, Brazil')
         
         st.markdown('---')
 
