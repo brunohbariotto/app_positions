@@ -334,13 +334,13 @@ class Pages:
     def curriculo(self):
         #st.set_page_config(layout='wide')
 
-        col1T, col2T,col3T = st.columns(3)
+        col1T, col2T = st.columns(2)
 
         with col2T:
         
             st.title('Bruno Bariotto')
         
-            st.markdown(':house: R. Benedita Amaral Pinto, 538. Jd. Santa Genebra, Campinas-SP')
+            st.markdown(':house: Jd. Santa Genebra, Campinas-SP')
         
         st.markdown('---')
 
@@ -364,7 +364,7 @@ class Pages:
         
         with col5P:
         
-            st.markdown('https://github.com/brunobariotto')   
+            st.markdown('https://github.com/brunohbariotto')   
         
          
         
