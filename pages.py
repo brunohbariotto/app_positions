@@ -332,7 +332,7 @@ class Pages:
         
     
     def curriculo(self):
-        st.set_page_config(layout='wide')
+        #st.set_page_config(layout='wide')
 
         col1T, col2T,col3T = st.columns(3)
 
