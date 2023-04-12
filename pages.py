@@ -538,6 +538,8 @@ class Pages:
             uploaded_file = st.file_uploader('Escolha um arquivo')
             if uploaded_file is not None:
                 df_input = pd.csv(uploaded_file)
+                
+                
         if tipo == 'Supervised Learning':
             try:
                 st.write(df_input)
@@ -570,7 +572,7 @@ class Pages:
                 st.write('Insira os dados no dataframe acima')
                 
         elif tipo == 'Unsupervised Learning':
-            ml = Ml_models(modelo_ml, pd.DataFrame(), [], [])
+            ml = Ml_models(modelo_ml, df_input, [], [])
             ml.choose_model()
                 
             
