@@ -142,14 +142,16 @@ class Ml_models:
         
         change_type = st.selectbox('PCA sobre ', ['Original', 'Variação %', 'Diferença'])
         
+        df_pca = self.df.copy()
+        
         if change_type == 'Original':
-            df_pca_inp = self.df.copy().astype(float)
+            df_pca_inp = df_pca.astype(float)
             
         elif change_type == 'Variação %':
-            df_pca_inp = self.df.pct_change.astype(float)
+            df_pca_inp = df_pca.pct_change.astype(float)
             
         elif change_type == 'Diferença':
-            df_pca_inp = self.df.copy() - self.df.copy().shift(1)
+            df_pca_inp = df_pca - df_pca.shift(1)
             df_pca_inp.dropna(inplace=True)
             df_pca_inp = df_pca_inp.astype(float)
             
@@ -273,7 +275,7 @@ class Ml_models:
         notas['Ranking'] = 0
 
         for index, item in enumerate(list(tabela_eigen.index)):
-            variancia = tabela_eigen.loc[item]['Variance']
+            variancia = tabela_eigen.loc[item]['Variância']
             notas['Ranking'] = notas['Ranking'] + notas[tabela_eigen.index[index]]*variancia
 
         notas.index = df.index
