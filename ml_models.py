@@ -14,7 +14,8 @@ import statsmodels.api as sm #poisson and binneg family
 from statsmodels.iolib.summary2 import summary_col
 import plotly.graph_objects as go
 import numpy as np
-from factor_analyzer.factor_analyzer import calculate_bartlett_sphericity
+from factor_analyzer.factor_analyzer import calculate_bartlett_sphericity # Teste de esferacidade
+from factor_analyzer import FactorAnalyzer
 #from statstests.tests import overdisp
 
 
@@ -130,6 +131,15 @@ class Ml_models:
             
             
     def description_pca(self):
+        
+        st.write('PCA é um algoritimo de aprendizagem de máquinas não-supervisionado, e portanto, não tem carater preditivo para observações que não estão presentes na amostra original')
+        st.write('No entanto, é possível obter fatores resultantes das observações contidas no dataset')
+        st.write('O PCA **transforma** as variaveis originais em outras variáveis ortogonais (entre si) por **redução de dimensionalidade** e consequentemente redução da variância')
+        st.write('Assim, encontra-se as dimensões com a maior variabilidade explicativa dentre as variáveis originais ')
+        st.write('Podemos aplicar o PCA para transformar os dados para posterior aplicação em algoritmos supervisionados, tais como Regressão ou Classificação')
+        st.write('Com os valores transformados, podemos criar rankings dos fatores obtidos e ordenar para melhor visualização dos dados')
+        st.write('Os Rankings são obtidos em cada fator são multiplicados pela % de variância compartilhada para a realização da ordenação')
+        
         change_type = st.selectbox('PCA sobre ', ['Original', 'Variação %', 'Diferença'])
         
         if change_type == 'Original':
@@ -173,6 +183,105 @@ class Ml_models:
         st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
                                'Variance':[df[y_var].var()]}))
         
+        
+        
+    def PCA(self, df):
+        st.markdown('---')
+        st.header('PCA')
+        fa = FactorAnalyzer()
+        #Treinando o modelo com todos os fatores
+        fa.fit(df)
+        
+        #Autovalores
+        ev, v = fa.get_eigenvalues()
+        st.subheader('Autovalores')
+        st.write(ev)
+        
+        #Critério de Kaizer
+        st.subheader('Critério de Kaiser ou Raizes Latentes')
+        st.write('Apenas fatores cujos Autovalores > 1 devem ser considerados')
+        st.write('Autovalores < 1 podem não ser tão representativos')
+        st.write('Neste caso: {ev[ev > 1]}')
+
+        #Retreinando o modelo com quantidade de fatores selecionados
+        factors = st.number_input('Escolha o número de fatores que serão aplicados (default = Kaiser)', min_value=1, max_value=len(ev), value= len(ev[ev > 1]))
+        fa.set_params(n_factors = factors, method = 'principal', rotation = None)
+        fa.fit(df)
+        
+        #Variancia
+        st.subheader('Variância')
+        st.write('Os autovalores explicam a % de variancia compartilhada entre as variáveis originais que formaram cada fator')
+        st.write('A Variância apresenta a proporção da variabilidade explicada individualmente (e cumulativa) de cada fator')
+
+        eigen_fatores = fa.get_factor_variance()
+        tabela_eigen = pd.DataFrame(eigen_fatores)
+        tabela_eigen.columns = [f"Fator {i+1}" for i, v in enumerate(tabela_eigen.columns)]
+        tabela_eigen.index = ['Autovalores','Variância', 'Variância Acumulada']
+        tabela_eigen = tabela_eigen.T
+
+        st.write(tabela_eigen)
+        
+        #Fatores de carga
+        st.subheader('Fatores de Carga')
+        st.write('Representa a **Correlação de Pearson** entre as variáveis originais e os fatores criados')
+        st.write('Mostra a importância de cada variável original na constituição de cada fator ortogonal criado ')
+        st.write('Quanto maior o fator de carga, maior a influência daquela variável naquele fator')
+        
+        cargas_fatores = fa.loadings_
+        tabela_cargas = pd.DataFrame(cargas_fatores)
+        tabela_cargas.columns = [f"Fator {i+1}" for i, v in enumerate(tabela_cargas.columns)]
+        tabela_cargas.index = df.columns
+
+        st.write(tabela_cargas)
+        
+        #Comunalidades
+        st.subheader('Comunalidades')
+        st.write('Mostra a perda de variância por variável após a exclusão dos fatores (por critério de raízes latentes por exemplo) ')
+        st.write('Variância total compartilhada por cada variavel em todos os fatores extraídos e selecionados. ')
+
+        comunalidades = fa.get_communalities()
+        tabela_comunalidades = pd.DataFrame(comunalidades)
+        tabela_comunalidades.columns = ['Communalities']
+        tabela_comunalidades.index = df.columns
+
+        st.write(tabela_comunalidades)
+        
+        #Transformações
+        st.subheader('Transformações')
+        
+        predict_fatores= pd.DataFrame(fa.transform(df))
+        predict_fatores.columns =  [f"Fator {i+1}" for i, v in enumerate(predict_fatores.columns)]
+
+        st.write(predict_fatores)
+        notas = pd.concat([df.reset_index(drop=True), predict_fatores], axis=1)
+        
+        #Factor Scores
+        st.subheader('Factor Scores')
+        st.write('Parâmetros que relacionam os fatores criados com as variáveis originais, representados em um modelo linear')
+        st.write('Provém dos autovalores e autovetores da matriz de correlação')
+        st.write('Para um dataset com K variáveis, podemos ter até K fatores gerados')
+        
+        scores = fa.weights_
+        tabela_scores = pd.DataFrame(scores)
+        tabela_scores.columns = [f"Fator {i+1}" for i, v in enumerate(tabela_scores.columns)]
+        tabela_scores.index = df.columns
+
+        st.write(tabela_scores)
+        
+        #Ranking
+        st.subheader('Ranking')
+        notas['Ranking'] = 0
+
+        for index, item in enumerate(list(tabela_eigen.index)):
+            variancia = tabela_eigen.loc[item]['Variance']
+            notas['Ranking'] = notas['Ranking'] + notas[tabela_eigen.index[index]]*variancia
+
+        notas.index = df.index
+        st.write(notas)
+        
+        
+
+        
     def spheracity_bartlett(self, df):
         st.markdown('---')
 
@@ -193,7 +302,6 @@ class Ml_models:
         else:
             st.write('A Matriz de correlação não se mostrou significativa estatísticamente, PCA não deve ser aplicado!')
             return False
-
 
         
     def correlation(self, df):
