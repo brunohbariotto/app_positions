@@ -12,6 +12,8 @@ import pandas as pd
 import statsmodels.formula.api as smf #poisson and binneg model
 import statsmodels.api as sm #poisson and binneg family
 from statsmodels.iolib.summary2 import summary_col
+import plotly.graph_objects as go
+import numpy as np
 #from statstests.tests import overdisp
 
 
@@ -104,6 +106,44 @@ class Ml_models:
         elif self.model == "PCA":
             st.markdown('---')
             st.header('**Principal Component Analysis**')
+            
+            change_type = st.selectbox('PCA sobre ' ['Original', 'Variação %', 'Diferença'])
+            
+            if change_type == 'Original':
+                df_pca_inp = self.df.copy().astype(float)
+                
+            elif change_type == 'Variação %':
+                df_pca_inp = self.df.pct_change.astype(float)
+                
+            elif change_type == 'Diferença':
+                df_pca_inp = self.df.copy() - self.df.copy().shift(1)
+                df_pca_inp.dropna(inplace=True)
+                df_pca_inp = df_pca_inp.astype(float)
+                
+            st.write(df_pca_inp)
+            
+            st.markdown('---')
+            st.subheader('Matriz de Correlação')
+            
+            df_corr = df_pca_inp.iloc[:,:].corr()
+            
+            fig_m = go.Figure()
+            fig_m.add_trace(go.Heatmap(
+                x=df_corr.columns,
+                y=df_corr.index,
+                z=np.array(df_corr),
+                text=df_corr.values,
+                texttemplate='%{text:.2f}',
+                colorscale='RdBu'))
+            
+            fig_m.layout.height = 800
+            fig_m.layout.width = 800
+            
+            st.plotly_chart(fig_m)
+                
+                
+            
+            
             
         elif self.model == "Clusterização":
             st.markdown('---')
