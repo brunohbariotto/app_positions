@@ -165,7 +165,7 @@ class Ml_models:
         st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
                                'Variance':[df[y_var].var()]}))
         
-    def correlation(df):
+    def correlation(self, df):
         st.markdown('---')
         st.subheader('Matriz de Correlação')
         
