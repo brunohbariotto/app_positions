@@ -107,7 +107,7 @@ class Ml_models:
             st.markdown('---')
             st.header('**Principal Component Analysis**')
             
-            change_type = st.selectbox('PCA sobre ' ['Original', 'Variação %', 'Diferença'])
+            change_type = st.selectbox('PCA sobre ', ['Original', 'Variação %', 'Diferença'])
             
             if change_type == 'Original':
                 df_pca_inp = self.df.copy().astype(float)
