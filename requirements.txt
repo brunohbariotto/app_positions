@@ -1,3 +1,4 @@
+factor_analyzer
 factor-analyzer
 statsmodels
 seaborn
