@@ -103,52 +103,40 @@ class Ml_models:
             st.markdown('---')
             st.header('**Modelos de Regressão Logística**')
             
+            
+            
         elif self.model == "PCA":
             st.markdown('---')
             st.header('**Principal Component Analysis**')
             
-            change_type = st.selectbox('PCA sobre ', ['Original', 'Variação %', 'Diferença'])
+            df_pca_inp = self.description_pca()
             
-            if change_type == 'Original':
-                df_pca_inp = self.df.copy().astype(float)
-                
-            elif change_type == 'Variação %':
-                df_pca_inp = self.df.pct_change.astype(float)
-                
-            elif change_type == 'Diferença':
-                df_pca_inp = self.df.copy() - self.df.copy().shift(1)
-                df_pca_inp.dropna(inplace=True)
-                df_pca_inp = df_pca_inp.astype(float)
-                
-            st.write(df_pca_inp)
-            
-            st.markdown('---')
-            st.subheader('Matriz de Correlação')
-            
-            df_corr = df_pca_inp.iloc[:,:].corr()
-            
-            fig_m = go.Figure()
-            fig_m.add_trace(go.Heatmap(
-                x=df_corr.columns,
-                y=df_corr.index,
-                z=np.array(df_corr),
-                text=df_corr.values,
-                texttemplate='%{text:.2f}',
-                colorscale='RdBu'))
-            
-            fig_m.layout.height = 800
-            fig_m.layout.width = 800
-            
-            st.plotly_chart(fig_m)
-                
-                
-            
-            
-            
+            self.correlation(df_pca_inp)
+
+
+
+
         elif self.model == "Clusterização":
             st.markdown('---')
             st.header('**Modelos de Clusterização**')
             
+            
+    def description_pca(self):
+        change_type = st.selectbox('PCA sobre ', ['Original', 'Variação %', 'Diferença'])
+        
+        if change_type == 'Original':
+            df_pca_inp = self.df.copy().astype(float)
+            
+        elif change_type == 'Variação %':
+            df_pca_inp = self.df.pct_change.astype(float)
+            
+        elif change_type == 'Diferença':
+            df_pca_inp = self.df.copy() - self.df.copy().shift(1)
+            df_pca_inp.dropna(inplace=True)
+            df_pca_inp = df_pca_inp.astype(float)
+            
+        st.write(df_pca_inp)
+        return df_pca_inp
             
     def description_count(self, df, y_var, x_var):
         st.markdown('---')
@@ -176,6 +164,26 @@ class Ml_models:
         st.subheader('Média e Variância de Y')
         st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
                                'Variance':[df[y_var].var()]}))
+        
+    def correlation(df):
+        st.markdown('---')
+        st.subheader('Matriz de Correlação')
+        
+        df_corr = df.iloc[:,:].corr()
+        
+        fig_m = go.Figure()
+        fig_m.add_trace(go.Heatmap(
+            x=df_corr.columns,
+            y=df_corr.index,
+            z=np.array(df_corr),
+            text=df_corr.values,
+            texttemplate='%{text:.2f}',
+            colorscale='RdBu'))
+        
+        fig_m.layout.height = 800
+        fig_m.layout.width = 800
+        
+        st.plotly_chart(fig_m)
         
         
         
