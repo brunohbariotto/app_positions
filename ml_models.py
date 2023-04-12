@@ -117,7 +117,7 @@ class Ml_models:
             
             if self.spheracity_bartlett(df_pca_inp):
                 #Aplicação do PCA é adequada
-                st.write('.')
+                self.PCA(df_pca_inp)
                 
             else:
                 st.markdown('---')
