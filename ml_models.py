@@ -114,7 +114,12 @@ class Ml_models:
             
             self.correlation(df_pca_inp)
             
-            self.spheracity_bartlett(df_pca_inp)
+            if self.spheracity_bartlett(df_pca_inp):
+                #Aplicação do PCA é adequada
+                st.write('.')
+                
+            else:
+                st.markdown('---')
 
 
 
@@ -175,12 +180,19 @@ class Ml_models:
         st.write('Compara a Matriz de significancia estatística da Correlação com a Matriz Identidade')
         st.write('É esperado que estas sejam **diferentes**, i.e, Correlações estatísticamente significativas para que o **PCA possa ser aplicado** ')
         
-        st.write('Teste de Hipótese: p-value < 0.05 : Rejeição do H0 : PCA é aplicável!')
+        st.write('**Teste de Hipótese:** p-value < 0.05 : Rejeição do H0 : PCA é aplicável!')
         
         bartlett, p_value = calculate_bartlett_sphericity(df)
         
         st.subheader(f'p-value : {round(p_value,5)}')
-
+        
+        if float(p_value) < 0.05:
+            st.write('A Análise por componentes principais é aplicável, podemos prosseguir')
+            return True
+            
+        else:
+            st.write('A Matriz de correlação não se mostrou significativa estatísticamente, PCA não deve ser aplicado!')
+            return False
 
 
         
