@@ -16,6 +16,7 @@ import plotly.graph_objects as go
 import numpy as np
 from factor_analyzer.factor_analyzer import calculate_bartlett_sphericity # Teste de esferacidade
 from factor_analyzer import FactorAnalyzer
+from sklearn.preprocessing import Normalizer
 #from statstests.tests import overdisp
 
 
@@ -152,7 +153,7 @@ class Ml_models:
             df_pca_inp = df_pca_inp.astype(float)
             
         elif change_type == 'Diferença':
-            df_pca_inp = df_pca.iloc[1:,:].sub(df_pca.shift(1), axis='columns')
+            df_pca_inp = df_pca - df_pca.shift(1)
             df_pca_inp.dropna(inplace=True)
             df_pca_inp = df_pca_inp.astype(float)
             
@@ -282,6 +283,93 @@ class Ml_models:
         notas.index = df.index
         st.write(notas)
         
+        #Soma Ponderada
+        st.subheader('Soma Ponderada')
+        p_loadings = []
+        p_scores = []
+
+        for i in range(0, factors):
+            p_scores.append(tabela_eigen.iloc[i,:]['Variância'] * tabela_scores.iloc[:,i])
+
+        p_total_sc = sum(p_scores)
+
+        pca_df = pd.DataFrame(Normalizer(norm='max').fit_transform([p_total_sc]), columns=df.columns)
+
+        st.write(pca_df)
+        
+        #Gráficos
+        st.subheader('Gráficos')
+        fig_box = go.Figure()
+
+        st.write(notas.iloc[:,-(factors+1):])
+
+        for col in notas.iloc[:,-(factors+1):].columns:
+            fig_box.add_trace(go.Box(
+                y=notas[col],
+                name=col))
+
+        fig_box.update_layout(
+            title={'text':'Box PLot PCA Posição'},
+            width=900, height=600,
+            xaxis_title='Fator & Ranking',
+            yaxis_title='Posição',
+            font=dict(
+                family="Courier New, monospace",
+                size=18))
+
+        fig_box.add_trace(go.Scatter(
+            x=notas.iloc[:,-(factors+1):].columns,
+            y=notas.iloc[-1,-(factors+1):]))
+
+        fig_box.update_traces(marker={'size': 15})
+
+        st.plotly_chart(fig_box)
+
+        if factors >= 2:
+            tabela_cargas_chart = tabela_cargas.reset_index()
+            st.write(tabela_cargas_chart)
+
+            fig = plt.figure(figsize=(12,8))
+
+            plt.scatter(tabela_cargas_chart['Fator 1'], tabela_cargas_chart['Fator 2'], s=30)
+
+            def label_point(x, y, val, ax):
+                a = pd.concat({'x': x, 'y': y, 'val': val}, axis=1)
+                for i, point in a.iterrows():
+                    ax.text(point['x'] + 0.05, point['y'], point['val'])
+
+            label_point(x = tabela_cargas_chart['Fator 1'],
+                        y = tabela_cargas_chart['Fator 2'],
+                        val = tabela_cargas_chart['index'],
+                        ax = plt.gca())
+
+            plt.axhline(y=0, color='black', ls='--')
+
+            plt.axvline(x=0, color='black', ls='--')
+
+            plt.ylim([-1.5,1.5])
+
+            plt.xlim([-1.5,1.5])
+
+            plt.title(f"{tabela_eigen.shape[0]} Componentes Principais: Explicando {round(tabela_eigen['Variância'].sum()*100,2)}% da Variância Total", fontsize=14)
+
+            plt.xlabel(f"PC 1: {round(tabela_eigen.iloc[0]['Variância']*100,2)}% da Variância Compartilhada", fontsize=14)
+
+            plt.ylabel(f"PC 2: {round(tabela_eigen.iloc[1]['Variância']*100,2)}% da Variância Compartilhada", fontsize=14)
+
+            st.pyplot(fig)
+
+            # #%% Gráfico da variância acumulada dos componentes principais
+            fig2 = plt.figure(figsize=(12,8))
+            plt.title(f"{tabela_eigen.shape[0]} Componentes Principais: Explicando {round(tabela_eigen['Variância'].sum()*100,2)}% Variância Total", fontsize=14)
+            sns.barplot(x=tabela_eigen.index, y=tabela_eigen['Variância'], data=tabela_eigen, color='green')
+            plt.xlabel("Componentes Principais", fontsize=14)
+            plt.ylabel("% da Variância Compartilhada", fontsize=14)
+
+            st.pyplot(fig2)
+
+        else:
+            st.write('Escolha pelo menos dois Fatores para apresentar a visualização')
         
 
         
