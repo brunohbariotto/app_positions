@@ -538,38 +538,44 @@ class Pages:
             uploaded_file = st.file_uploader('Escolha um arquivo')
             if uploaded_file is not None:
                 df_input = pd.csv(uploaded_file)
-        
-        try:
-            st.write(df_input)
-            
-            list_xy = list()
-            for c in df_input.columns:
-                list_xy.append([c, False, True])
+        if tipo == 'Supervised Learning':
+            try:
+                st.write(df_input)
                 
-            df_xy_in = pd.DataFrame(np.array(list_xy),
-                         columns = ['Variable', 'is_Y', 'is_X']
-                         )
-            
-            df_xy_in['Variable'] = df_xy_in['Variable'].astype('string')
-            df_xy_in['is_X'] = df_xy_in['is_X'].astype('bool')
-            df_xy_in['is_Y'] = df_xy_in['is_Y'].astype('bool')
+                list_xy = list()
+                for c in df_input.columns:
+                    list_xy.append([c, False, True])
+                    
+                df_xy_in = pd.DataFrame(np.array(list_xy),
+                             columns = ['Variable', 'is_Y', 'is_X']
+                             )
                 
-            x_y_df = st.experimental_data_editor(
-                df_xy_in
-                )
-
-            x_var = list(x_y_df[x_y_df.is_X == True]['Variable'].values)
-            y_var = list(x_y_df[x_y_df.is_Y == True]['Variable'].values)
-            
-            st.write(f'Variável Dependente Y: {y_var}')
-            st.write(f'Variáveis Independentes X: {x_var}')
-            
-            ml = Ml_models(modelo_ml, df_input, y_var, x_var )
+                df_xy_in['Variable'] = df_xy_in['Variable'].astype('string')
+                df_xy_in['is_X'] = df_xy_in['is_X'].astype('bool')
+                df_xy_in['is_Y'] = df_xy_in['is_Y'].astype('bool')
+                    
+                x_y_df = st.experimental_data_editor(
+                    df_xy_in
+                    )
+    
+                x_var = list(x_y_df[x_y_df.is_X == True]['Variable'].values)
+                y_var = list(x_y_df[x_y_df.is_Y == True]['Variable'].values)
+                
+                st.write(f'Variável Dependente Y: {y_var}')
+                st.write(f'Variáveis Independentes X: {x_var}')
+                
+                ml = Ml_models(modelo_ml, df_input, y_var, x_var )
+                ml.choose_model()
+            except:
+                st.write('Insira os dados no dataframe acima')
+                
+        elif tipo == 'Unsupervised Learning':
+            ml = Ml_models(modelo_ml, pd.DataFrame(), [], [])
             ml.choose_model()
+                
             
 
-        except:
-            st.write('Insira os dados no dataframe acima')
+        
             
         
             
