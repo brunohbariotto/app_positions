@@ -14,6 +14,7 @@ import statsmodels.api as sm #poisson and binneg family
 from statsmodels.iolib.summary2 import summary_col
 import plotly.graph_objects as go
 import numpy as np
+from factor_analyzer.factor_analyzer import calculate_bartlett_sphericity
 #from statstests.tests import overdisp
 
 
@@ -112,6 +113,8 @@ class Ml_models:
             df_pca_inp = self.description_pca()
             
             self.correlation(df_pca_inp)
+            
+            self.spheracity_bartlett(df_pca_inp)
 
 
 
@@ -164,6 +167,22 @@ class Ml_models:
         st.subheader('Média e Variância de Y')
         st.write(pd.DataFrame({'Mean':[df[y_var].mean()],
                                'Variance':[df[y_var].var()]}))
+        
+    def spheracity_bartlett(self, df):
+        st.markdown('---')
+
+        st.header('**Adequação Global:** Bartellet Teste de Esferacidade')
+        st.write('Compara a Matriz de significancia estatística da Correlação com a Matriz Identidade')
+        st.write('É esperado que estas sejam **diferentes**, i.e, Correlações estatísticamente significativas para que o **PCA possa ser aplicado** ')
+        
+        st.write('Teste de Hipótese: p-value < 0.05 : Rejeição do H0 : PCA é aplicável!')
+        
+        bartlett, p_value = calculate_bartlett_sphericity(df)
+        
+        st.subheader(f'p-value : {round(p_value,5)}')
+
+
+
         
     def correlation(self, df):
         st.markdown('---')

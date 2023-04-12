@@ -1,3 +1,4 @@
+factor-analyzer
 statsmodels
 seaborn
 cvxpy
