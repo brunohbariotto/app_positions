@@ -340,7 +340,7 @@ class Ml_models:
 
             label_point(x = tabela_cargas_chart['Fator 1'],
                         y = tabela_cargas_chart['Fator 2'],
-                        val = tabela_cargas_chart['index'],
+                        val = tabela_cargas_chart.iloc[:,0],
                         ax = plt.gca())
 
             plt.axhline(y=0, color='black', ls='--')
