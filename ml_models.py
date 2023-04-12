@@ -148,10 +148,11 @@ class Ml_models:
             df_pca_inp = df_pca.astype(float)
             
         elif change_type == 'Variação %':
-            df_pca_inp = df_pca.pct_change.astype(float)
+            df_pca_inp = df_pca.pct_change()
+            df_pca_inp = df_pca_inp.astype(float)
             
         elif change_type == 'Diferença':
-            df_pca_inp = df_pca - df_pca.shift(1)
+            df_pca_inp = df_pca.iloc[1:,:].sub(df_pca.shift(1), axis='columns')
             df_pca_inp.dropna(inplace=True)
             df_pca_inp = df_pca_inp.astype(float)
             
