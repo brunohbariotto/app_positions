@@ -16,6 +16,7 @@ import numpy as np
 from ta.trend import SMAIndicator
 import yfinance as yf
 from ml_models import Ml_models
+import requests
 
 
 class Pages:
@@ -574,6 +575,68 @@ class Pages:
         elif tipo == 'Unsupervised Learning':
             ml = Ml_models(modelo_ml, df_input, [], [])
             ml.choose_model()
+            
+    def fundamentos(self):
+        st.header('Fundamentos')
+        st.markdown('---')
+        
+        tipo = st.radio('Escolha o tipo: ', ['Fundos Imobiliários', 'Ações'], key=131554)
+        
+        if tipo == 'Fundos Imobiliários':
+            st.subheader('Fundos Imobiliários')
+            
+            #scrapping the data
+            url="https://www.fundsexplorer.com.br/ranking"
+            response = requests.get(url)
+            
+            if response.status_code == 200:
+                df = pd.read_html(response.content, encoding='utf-8')[0]
+            else:
+                st.markdown('Não foi possível fazer o WebScrapping dos dados!')
+                return
+            
+            st.write(df)
+            
+            df.sort_values('Código do fundo', inplace=True)
+
+            
+            #removendo setores nulos
+            df.drop(df[df['Setor'].isna()].index, inplace=True)
+
+            setores = df['Setor'].unique()
+            
+            #Transformando dados categóricos
+            categorical_columns = ['Código do fundo', 'Setor']
+            df[categorical_columns] = df[categorical_columns].astype('category')
+            
+            #Transformando dados float: todas exceto código e setor
+            col_floats = list(df.iloc[:,2:-1].columns)
+            #preenchendo nan pra zero
+            df[col_floats] = df[col_floats].fillna(value=0)
+            #Separando Patrim. Liquido para replaces
+            col_floats.remove('Patrimônio Líq.')
+            df['PatrimônioLíq.'] = df[['Patrimônio Líq.']].applymap(lambda x: 
+                                                                   str(x).replace('R$','').replace('.','').replace('%','').replace(',','.'))
+                
+            #df['Patrimônio Líq.'] = df['Patrimônio Líq.'].astype('float')
+
+            df[col_floats] = df[col_floats].applymap(lambda x: 
+                                                                   str(x).replace('R$','').replace('.0','').replace('.','').replace('%','').replace(',','.'))
+              
+            df[col_floats] = df[col_floats].astype('float')
+            
+            df['P/VPA'] = df['P/VPA']/100
+            
+            st.markdown('---')
+            st.subheader('Setor:')
+            escolha2 = st.radio('Escolha o Setor para analisar: ', setores, horizontal=True)
+            st.markdown(escolha2)
+            
+            list_funds = list(df[df['Setor'] == escolha2].sort_values('Liquidez Diária', ascending=False)['Código do fundo'].iloc[:10].values)
+            my_new_list = [x + '.SA' for x in list_funds]
+            
+            
+            dict_top = {list_funds[i]: my_new_list[i] for i in range(len(my_new_list))}
                 
             
 

@@ -52,7 +52,7 @@ def show_logout_page():
 def show_main_page():
     st.sidebar.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
 
-    lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning']
+    lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning', 'Fundamentos']
     lista_tipo = ['Ações', 'Fundos Imob.']
     st.sidebar.subheader('Menu Principal')
 
@@ -123,6 +123,9 @@ def show_main_page():
         
     if escolha == 'Machine Learning':
         pg.machine()
+        
+    if escolha == 'Fundamentos':
+        pg.fundamentos()
         
         
 
