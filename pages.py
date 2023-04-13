@@ -651,7 +651,7 @@ class Pages:
                     st.write(count_key)
                     maior_menor = st.selectbox('', ('>', '<'), key=count_key)
                     
-                    count_key = count_key + 1
+                    count_key = count_key + 100
                     metric_value = st.number_input('', 
                                                    value= round(df.groupby('Setor').agg(['mean','std']).loc[setor].loc[i].iloc[0],2), key = count_key)
                     
