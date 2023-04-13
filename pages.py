@@ -642,7 +642,7 @@ class Pages:
                 metric = []
                 equal = []
                 value = []
-                count_key=99
+                count_key=995854
                 
                 st.subheader(f'Encontre Fundos do Setor {setor}:')
                 st.write("Entre com as condições: ")
