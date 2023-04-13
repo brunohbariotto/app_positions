@@ -648,6 +648,7 @@ class Pages:
                 st.write("Entre com as condições: ")
                 for i in metricas:
                     st.markdown(f'**{i}**')
+                    st.write(count_key)
                     maior_menor = st.selectbox('', ('>', '<'), key=count_key)
                     
                     count_key = count_key + 1
