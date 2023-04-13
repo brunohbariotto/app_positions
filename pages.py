@@ -637,6 +637,100 @@ class Pages:
             
             
             dict_top = {list_funds[i]: my_new_list[i] for i in range(len(my_new_list))}
+            
+            def find_fundos(df, media_setor, setor, metricas):
+                metric = []
+                equal = []
+                value = []
+                count_key=99
+                
+                st.subheader(f'Encontre Fundos do Setor {setor}:')
+                st.write("Entre com as condições: ")
+                for i in metricas:
+                    st.markdown(f'**{i}**')
+                    maior_menor = st.selectbox('', ('>', '<'), key=count_key)
+                    
+                    count_key = count_key + 1
+                    metric_value = st.number_input('', 
+                                                   value= round(df.groupby('Setor').agg(['mean','std']).loc[setor].loc[i].iloc[0],2), key = count_key)
+                    
+                    st.markdown(f"_Condição procurada: {i} {maior_menor} {metric_value}_ ")
+                    metric.append(str(i).replace(' ','').replace('.','').replace('(','').replace(')','').replace('/',''))
+                    equal.append(maior_menor)
+                    value.append(metric_value)
+                
+                query = ' and '.join(['{}{}{}'.format(i,j,k) for i, j, k in zip(metric, equal, value)])
+                    
+                st.markdown(f'**Os seguintes fundos do setor {setor} foram encontrados para as condições:**')
+                st.markdown(f"{query}")
+                
+                df.columns = df.columns.str.replace(' ','')
+                df.columns = df.columns.str.replace('.','')
+                df.columns = df.columns.str.replace('(','')
+                df.columns = df.columns.str.replace(')','')
+                df.columns = df.columns.str.replace('/','')
+                    
+                st.dataframe(df.query(query))
+            
+            def stats_fundos(df, setor, metricas, compare='>'):
+                
+                
+                df_setor = df[df['Setor'] == setor]
+                
+                
+                
+                for i in metricas:
+                    media_setor = round(df.groupby('Setor').agg(['mean','std']).loc[setor].loc[i].iloc[0],2)
+                    std_setor = round(df.groupby('Setor').agg(['mean','std']).loc[setor].loc[i].iloc[1],2)
+                    
+                    st.subheader(i)
+                    
+                    st.write(f'A Média de {i} do Setor {setor} é de {media_setor}')
+                    st.write(f'O desvio de {i} do Setor {setor} é de {std_setor}')
+                    
+                    #st.dataframe(df_setor[df_setor[i] >= media_setor] if compare == '>' else df_setor[df_setor[i] <= media_setor])
+                    
+                    
+                    fig = go.Figure()
+                    fig.add_trace(go.Bar(
+                        x=df_setor[i],
+                        y=df_setor['Código do fundo'],
+                        orientation='h'))
+                    fig.add_vline(x=media_setor, line_dash="dot", annotation_text="mean", line_color="red")
+                    fig.update_layout(width=750, height=600)
+                    
+                    st.plotly_chart(fig)
+                    
+                find_fundos(df_setor, media_setor, setor, metricas)
+            
+            
+            def fundamentos_fundos(df, setores, categorical_columns,escolha2):
+                okplot = False
+                st.title('Fundamentos')
+                st.markdown('---')
+
+                st.subheader('Descrição Geral')
+                st.dataframe(df.describe())
+                
+                st.subheader('Média e Desvio-Padrão por Setor')
+                st.dataframe(df.groupby('Setor').agg(['mean','std']))
+
+                st.subheader('Indicadores:')
+                indicadores = categorical_columns
+                multi = st.multiselect("Escolha os indicadores: ", list(df.columns[2:]))
+                #st.markdown(multi)
+                for i in multi:
+                    indicadores.append(i)
+                    okplot = True
+                    
+                
+                df_ind = df.loc[:,indicadores]
+
+                if okplot:
+                    stats_fundos(df_ind, setor=escolha2, metricas=multi, compare='>')
+                    
+                
+                fundamentos_fundos(df,setores, categorical_columns,escolha2)
                 
             
 
