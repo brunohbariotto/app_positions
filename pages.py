@@ -653,7 +653,7 @@ class Pages:
                     
                     count_key = count_key + 100
                     metric_value = st.number_input('', 
-                                                   value= round(df.groupby('Setor').agg(['mean','std']).loc[setor].loc[i].iloc[0],2), key = count_key)
+                                                   value= round(df.groupby('Setor').agg(['mean','std']).loc[setor].loc[i].iloc[0],2), key = count_key+10)
                     
                     st.markdown(f"_Condição procurada: {i} {maior_menor} {metric_value}_ ")
                     metric.append(str(i).replace(' ','').replace('.','').replace('(','').replace(')','').replace('/',''))
