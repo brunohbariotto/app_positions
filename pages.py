@@ -730,7 +730,7 @@ class Pages:
                     stats_fundos(df_ind, setor=escolha2, metricas=multi, compare='>')
                     
                 
-                fundamentos_fundos(df,setores, categorical_columns,escolha2)
+            fundamentos_fundos(df,setores, categorical_columns,escolha2)
                 
             
 
