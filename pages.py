@@ -313,11 +313,7 @@ class Pages:
             
             df_compare = df_send.copy()
             
-            st.write('DF_COMPARE')
-            st.write(df_compare)
-            st.write('DF_OSC')
-            st.write(df_osc)
-            st.write(df_osc[df_osc.columns].values)
+
             
             df_compare['pos_osc_pos'] = df_osc[df_osc.columns]#.values
             
