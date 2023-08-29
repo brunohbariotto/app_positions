@@ -298,7 +298,7 @@ class Pages:
         st.write('Last Prices')
         st.write(df_prices.iloc[-1,:])
         st.write('%')
-        #st.write(df_prices.iloc[-1,:]* list(df.qtdd/(df.qtdd.sum()))
+        st.write((df_prices.iloc[-1]* df.qtdd)/(df.qtdd.sum()))
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
