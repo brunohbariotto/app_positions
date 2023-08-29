@@ -347,20 +347,20 @@ class Pages:
         
         st.subheader('Métricas de Risco')
         df_risk = pd.DataFrame(index=df.ticker)
-        df_risk['var'] = df_returns.dropna().apply(lambda x: x.var())
-        df_risk['std'] = df_returns.dropna().apply(lambda x: x.std()*100)
-        df_risk['std_anual'] = df_returns.dropna().apply(lambda x: x.std()*np.sqrt(246)*100)
-        df_risk['cv'] = df_returns.dropna().apply(lambda x: stats.variation(x))
+        df_risk['var'] = df_returns.apply(lambda x: x.var())
+        df_risk['std'] = df_returns.apply(lambda x: x.std()*100)
+        df_risk['std_anual'] = df_returns.apply(lambda x: x.std()*np.sqrt(246)*100)
+        df_risk['cv'] = df_returns.apply(lambda x: stats.variation(x))
         
         st.write(df_risk)
         
         st.write('Matriz de Correlação')
-        st.write(df_returns.dropna().corr())
+        st.write(df_returns.corr())
         st.write('Matriz de Covariância')
-        st.write(df_returns.dropna().cov())
+        st.write(df_returns.cov())
         
         st.write('Variância da Carteira')
-        var_carteira = (np.dot(pesos, np.dot(df_returns.dropna().cov() , pesos)))
+        var_carteira = (np.dot(pesos, np.dot(df_returns.cov() , pesos)))
         st.write(var_carteira)
         
         st.write('Desvio-Padrão da Carteira')
