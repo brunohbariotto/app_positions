@@ -304,8 +304,7 @@ class Pages:
         
         
         st.write('% Alocação por ativo')
-        st.write( df_prices.iloc[-1].values * df.qtdd.values)
-        st.write((df_prices.iloc[-1].values * df.qtdd.values).sum(axis=0))
+
         df_info['%_aloc'] = df_prices.iloc[-1].values * df.qtdd.values /(df_prices.iloc[-1].values * df.qtdd.values).sum(axis=0)
         st.write(df_info['%_aloc'])
         
@@ -317,7 +316,7 @@ class Pages:
         df_norm = pd.DataFrame(columns=df_prices.columns)
         df_norm = df_prices.apply(lambda x: x/x.iloc[0])
         st.write('DF Normalizado')
-        df_norm['Carteira'] = df_norm.sum(axis=1).values
+        df_norm['Carteira'] = df_norm.sum(axis=1).values/((df['qtdd'] != 0).sum())
         st.write(df_norm)
         
                 
