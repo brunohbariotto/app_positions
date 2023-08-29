@@ -314,7 +314,28 @@ class Pages:
         st.write('DF Normalizado')
         df_norm['Carteira'] = df.sum().values
         st.write(df_norm)
-        df_norm.plot(figsize=(15,7), title='Histórico de Preços Normalizado')
+        
+        fig_box = go.Figure()
+        
+        for col in df_norm.columns:
+            fig_box.add_trace(go.Box(
+                y=df_norm[col],
+                name=col))
+
+        fig_box.update_layout(
+            title={'text':'Preços Normalizados / Retorno'},
+            width=900, height=600,
+            xaxis_title='Date',
+            yaxis_title='Preços Normalizados',
+            font=dict(
+                family="Courier New, monospace",
+                size=18))
+
+        fig_box.update_traces(marker={'size': 15})
+
+        st.plotly_chart(fig_box)
+        
+        #df_norm.plot(figsize=(15,7), title='Histórico de Preços Normalizado')
         
     
     # modelos
