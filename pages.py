@@ -297,9 +297,8 @@ class Pages:
         df_info['Ret_Anual'] = df_returns.mean() * 246 * 100
         st.write(df_info['Ret_Anual'])
         
-        st.write('Last Prices')
+        #Last Price - to define alocation
         df_info['Last_price'] = df_prices.iloc[-1,:]
-        st.write(df_info['Last_price'])
         
         
         st.write('% Alocação por ativo')
