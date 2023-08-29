@@ -284,10 +284,21 @@ class Pages:
         st.header('Carteira')
         st.markdown('---')
         
+        df['ticker'] = df.ticker.apply(lambda l: l+".SA")
+        
         m = Models()
-        df_prices = m.download_prices([l+".SA" for l in list(df.ticker)], per_data, anos_cotacoes, datas_inicio, datas_fim)
+        df_prices = m.download_prices(list(df.ticker).append('BOVA11.SA'), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         df_returns = m.returns(df_prices)
+        
+        st.subheader('Retorno Anual Individual - Base 246 dias úteis [%]')
+        st.write(df_returns.mean() * 246 * 100)
+        
+        st.subheader('Retorno Anual Individual - Base 246 dias úteis [%]')
+        st.write('Last Prices')
+        st.write(df_prices.iloc[-1,:])
+        st.write('%')
+        st.write(df_prices.iloc[-1,:]*df.qtdd/(df.qtdd.sum()))
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador

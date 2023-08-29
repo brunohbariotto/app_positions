@@ -41,8 +41,8 @@ class Models:
     
     def returns(self, df):
         
-        if 'HASH11.SA' in df.columns:
-            df.drop(columns=['HASH11.SA'], inplace=True)
+        #if 'HASH11.SA' in df.columns:
+        #    df.drop(columns=['HASH11.SA'], inplace=True)
             
         return df.pct_change()
     
