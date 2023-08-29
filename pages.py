@@ -291,7 +291,7 @@ class Pages:
         st.write(df_prices)
         df_returns = m.returns(df_prices)
         
-        df_info = pd.DataFrame(index=df_prices.ticker)
+        df_info = pd.DataFrame(index=df.ticker)
         
         st.subheader('Retorno Anual Individual - Base 246 dias úteis [%]')
         df_info['Ret_Anual'] = df_returns.mean() * 246 * 100
