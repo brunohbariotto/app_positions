@@ -302,7 +302,7 @@ class Pages:
         
         
         st.write('% Alocação por ativo')
-        df_info['%_aloc'] = (df_prices.iloc[-1]* df.qtdd)/(df.qtdd.sum())
+        df_info['%_aloc'] = (df_prices.iloc[-1].values* df.qtdd)/(df.qtdd.sum())
         st.write(df_info['%_aloc'])
         
         st.write('Retorno Anual Carteira - Base 246 dias úteis [%]')
@@ -312,7 +312,7 @@ class Pages:
         df_norm = pd.DataFrame(columns=df_prices.columns)
         df_norm = df_prices.apply(lambda x: x/x.iloc[0])
         st.write('DF Normalizado')
-        df_norm['Carteira'] = df.sum().values
+        df_norm['Carteira'] = df_prices.sum().values
         st.write(df_norm)
         
         fig_box = go.Figure()
