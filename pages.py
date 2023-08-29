@@ -293,6 +293,8 @@ class Pages:
         
         df_info = pd.DataFrame(index=df.ticker)
         
+        
+        st.subheader('Métricas de Retorno')
         st.subheader('Retorno Anual Individual - Base 246 dias úteis [%]')
         df_info['Ret_Anual'] = df_returns.mean() * 246 * 100
         st.write(df_info['Ret_Anual'])
@@ -315,6 +317,7 @@ class Pages:
         df_norm['Carteira'] = df_norm.sum().values
         st.write(df_norm)
         
+                
         fig_box = go.Figure()
         
         for col in df_norm.columns:
@@ -336,6 +339,17 @@ class Pages:
         st.plotly_chart(fig_box)
         
         #df_norm.plot(figsize=(15,7), title='Histórico de Preços Normalizado')
+        
+        from scipy import stats
+        
+        st.subheader('Métricas de Risco')
+        df_risk = pd.DataFrame(index=df.ticker)
+        df_risk['var'] = df_returns.dropna().apply(lambda x: x.var())
+        df_risk['std'] = df_returns.dropna().apply(lambda x: x.std())
+        df_risk['cv'] = df_returns.dropna().apply(lambda x: stats.variation(x))
+        
+        st.write(df_risk)
+        
         
     
     # modelos
