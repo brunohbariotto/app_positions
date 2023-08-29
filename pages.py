@@ -325,6 +325,7 @@ class Pages:
         for col in df_norm.columns:
             fig_box.add_trace(go.Scatter(
                 y=df_norm[col],
+                x=df_norm.index,
                 name=col))
 
         fig_box.update_layout(
@@ -363,7 +364,7 @@ class Pages:
         st.write(var_carteira)
         
         st.write('Desvio-Padrão da Carteira')
-        std_carteira = np.sqrt(var_carteira*np.sqrt(246))
+        std_carteira = np.sqrt(var_carteira)*np.sqrt(246)
         st.write(std_carteira)
         
     
