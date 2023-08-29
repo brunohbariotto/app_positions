@@ -280,7 +280,14 @@ class Pages:
             
         
         
+    def carteira(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
+        st.header('Carteira')
+        st.markdown('---')
         
+        m = Models()
+        df_prices = m.download_prices([l+".SA" for l in list(df.ticker)], per_data, anos_cotacoes, datas_inicio, datas_fim)
+        st.write(df_prices)
+        df_returns = m.returns(df_prices)
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador

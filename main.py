@@ -52,7 +52,7 @@ def show_logout_page():
 def show_main_page():
     st.sidebar.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
 
-    lista_menu = ['Controle de Posição', 'Mercado','Modelos', 'Machine Learning', 'Fundamentos']
+    lista_menu = ['Controle de Posição', 'Mercado','Modelos','Carteira', 'Machine Learning', 'Fundamentos']
     lista_tipo = ['Ações', 'Fundos Imob.']
     st.sidebar.subheader('Menu Principal')
 
@@ -120,6 +120,10 @@ def show_main_page():
             if st.button('Atualizar Oscilador?'):
                 st.write('Enviando...')
                 gog.update_spreadsheet('positions_BrunoBariotto', df_tosend)
+                
+    if escolha == 'Carteira':
+        df = gog.read_spreadsheet('acoes_BrunoBariotto')
+        pg.carteira(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
         
     if escolha == 'Machine Learning':
         pg.machine()
