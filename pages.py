@@ -315,7 +315,7 @@ class Pages:
         df_norm = pd.DataFrame(columns=df_prices.columns)
         df_norm = df_prices.apply(lambda x: x/x.iloc[0])
         st.write('DF Normalizado')
-        df_norm['Carteira'] = df_norm.sum().values
+        df_norm['Carteira'] = df_norm.sum(axis=1).values
         st.write(df_norm)
         
                 
