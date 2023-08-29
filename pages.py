@@ -308,7 +308,8 @@ class Pages:
         st.write(df_info['%_aloc'])
         
         st.write('Retorno Anual Carteira - Base 246 dias úteis [%]')
-        st.write(np.dot(df_info['Ret_Anual'] , np.array(list(df_info['%_aloc']))))
+        pesos = np.array(list(df_info['%_aloc']))
+        st.write(np.dot(df_info['Ret_Anual'] , pesos))
         
         st.write('Comparativo Carteira x IBOV')
         df_norm = pd.DataFrame(columns=df_prices.columns)
@@ -351,6 +352,18 @@ class Pages:
         
         st.write(df_risk)
         
+        st.write('Matriz de Correlação')
+        df_returns.dropna().corr()
+        st.write('Matriz de Covariância')
+        df_returns.dropna().cov()
+        
+        st.write('Variância da Carteira')
+        var_carteira = (np.dot(pesos, np.dot(df_returns.dropna().cov() , pesos)))
+        st.write(var_carteira)
+        
+        st.write('Desvio-Padrão da Carteira')
+        std_carteira = np.sqrt(var_carteira*np.sqrt(246))
+        st.write(std_carteira)
         
     
     # modelos
