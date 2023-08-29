@@ -291,14 +291,23 @@ class Pages:
         st.write(df_prices)
         df_returns = m.returns(df_prices)
         
-        st.subheader('Retorno Anual Individual - Base 246 dias úteis [%]')
-        st.write(df_returns.mean() * 246 * 100)
+        df_info = pd.DataFrame(index=df_prices.tickers)
         
         st.subheader('Retorno Anual Individual - Base 246 dias úteis [%]')
+        df_info['Ret_Anual'] = df_returns.mean() * 246 * 100
+        st.write(df_info['Ret_Anual'])
+        
         st.write('Last Prices')
-        st.write(df_prices.iloc[-1,:])
-        st.write('%')
-        st.write((df_prices.iloc[-1]* df.qtdd)/(df.qtdd.sum()))
+        df_info['Last_price'] = df_prices.iloc[-1,:]
+        st.write(df_info['Last_price'])
+        
+        
+        st.write('% Alocação por ativo')
+        df_info['%_aloc'] = (df_prices.iloc[-1]* df.qtdd)/(df.qtdd.sum())
+        st.write(df_info['%_aloc'])
+        
+        st.write('Retorno Anual Carteira - Base 246 dias úteis [%]')
+        st.write(np.dot(df_info['Ret_Anual'] , np.array(list(df_info['%_aloc']))))
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
