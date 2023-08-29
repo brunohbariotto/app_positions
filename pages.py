@@ -304,7 +304,9 @@ class Pages:
         
         
         st.write('% Alocação por ativo')
-        df_info['%_aloc'] = (df_prices.iloc[-1].values* df.qtdd)/(df.qtdd.sum())
+        st.write(df_prices.iloc[-1].values )
+        st.write(df.qtdd)
+        df_info['%_aloc'] = df_prices.iloc[-1].values * df.qtdd/df.qtdd.sum()
         st.write(df_info['%_aloc'])
         
         st.write('Retorno Anual Carteira - Base 246 dias úteis [%]')
@@ -322,7 +324,7 @@ class Pages:
         fig_box = go.Figure()
         
         for col in df_norm.columns:
-            fig_box.add_trace(go.Box(
+            fig_box.add_trace(go.Scatter(
                 y=df_norm[col],
                 name=col))
 
@@ -353,9 +355,9 @@ class Pages:
         st.write(df_risk)
         
         st.write('Matriz de Correlação')
-        df_returns.dropna().corr()
+        st.write(df_returns.dropna().corr())
         st.write('Matriz de Covariância')
-        df_returns.dropna().cov()
+        st.write(df_returns.dropna().cov())
         
         st.write('Variância da Carteira')
         var_carteira = (np.dot(pesos, np.dot(df_returns.dropna().cov() , pesos)))
