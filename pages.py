@@ -308,6 +308,15 @@ class Pages:
         
         st.write('Retorno Anual Carteira - Base 246 dias úteis [%]')
         st.write(np.dot(df_info['Ret_Anual'] , np.array(list(df_info['%_aloc']))))
+        
+        st.write('Comparativo Carteira x IBOV')
+        df_norm = pd.DataFrame(columns=df_prices.columns)
+        df_norm = df_prices.apply(lambda x: x/x.iloc[0])
+        st.write('DF Normalizado')
+        df_norm['Carteira'] = df.sum().values
+        st.write(df_norm)
+        df_norm.plot(figsize=(15,7), title='Histórico de Preços Normalizado')
+        
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
