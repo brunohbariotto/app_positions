@@ -304,9 +304,7 @@ class Pages:
         
         
         st.write('% Alocação por ativo')
-        st.write(df_prices.iloc[-1].values )
-        st.write(df.qtdd)
-        df_info['%_aloc'] = df_prices.iloc[-1].values * df.qtdd.values /df.qtdd.sum()
+        df_info['%_aloc'] = df_prices.iloc[-1].values * df.qtdd.values /(df_prices.iloc[-1].values * df.qtdd.values).sum()
         st.write(df_info['%_aloc'])
         
         st.write('Retorno Anual Carteira - Base 246 dias úteis [%]')
