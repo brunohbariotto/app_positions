@@ -281,6 +281,8 @@ class Pages:
         
         
     def carteira(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
+        
+        df = df.copy()
         st.header('Carteira')
         st.markdown('---')
         
@@ -358,10 +360,13 @@ class Pages:
         st.write(df_returns.corr())
 
         var_carteira = (np.dot(pesos, np.dot(df_returns.cov() , pesos)))
+        var_carteira_2 = (np.dot(pesos, np.dot(df_returns.cov()*246 , pesos)))
         
         st.write('Desvio-Padrão da Carteira [%]')
         std_carteira = np.sqrt(var_carteira)*np.sqrt(246)*100
+        std_carteira_2 = np.sqrt(var_carteira_2)*200
         st.write(np.round(std_carteira,4))
+        st.write(np.round(std_carteira_2,4))
         
     
     # modelos
