@@ -312,7 +312,8 @@ class Pages:
         
         st.write('Retorno Anual Carteira - Base 246 dias úteis [%]')
         pesos = np.array(list(df_info['%_aloc']))
-        st.write(np.dot(df_info['Ret_Anual'] , pesos))
+        ret_esperado = np.dot(df_info['Ret_Anual'] , pesos)
+        st.write(ret_esperado)
         
         st.write('Comparativo Carteira x IBOV')
         df_norm = pd.DataFrame(columns=df_prices.columns)
@@ -360,13 +361,16 @@ class Pages:
         st.write(df_returns.corr())
 
         var_carteira = (np.dot(pesos, np.dot(df_returns.cov() , pesos)))
-        var_carteira_2 = (np.dot(pesos, np.dot(df_returns.cov()*246 , pesos)))
         
         st.write('Desvio-Padrão da Carteira [%]')
         std_carteira = np.sqrt(var_carteira)*np.sqrt(246)*100
-        std_carteira_2 = np.sqrt(var_carteira_2)*200
         st.write(np.round(std_carteira,4))
-        st.write(np.round(std_carteira_2,4))
+        
+        st.subheader('Sharpe Ratio')
+        st.write(f'Retorno Esperado {ret_esperado}')
+        st.write(f'Volatilidade {std_carteira}')
+        st.write('Sem Risco = 8.75%')
+        st.write(f'Sharpe = {ret_esperado - 8.75 / std_carteira}')
         
     
     # modelos
