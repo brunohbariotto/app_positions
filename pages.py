@@ -410,11 +410,10 @@ class Pages:
         df_capm_f = df_capm.T
         df_capm_f['Alfa'] = df_capm_f['Alfa'] * 100
         
-        st.write(df_returns.copy().dropna().mean().T)
         df_capm_f['CAPM_Ret%'] = (0.085 + df_capm_f['Beta'] * (df_returns.copy().dropna().mean().T - 0.085))*100
         st.write('Vol Benchmark IBOV')
-        st.write(df_returns.iloc[:,-1].dropna().std()*np.sqrt(246))
-        df_capm_f['CAPM_Sharpe'] = df_capm_f['CAPM_Ret%'] / (df_returns.iloc[:,-1].dropna().std()*np.sqrt(246) * df_capm_f['Beta'])
+        st.write(np.round(df_returns.iloc[:,-1].dropna().std()*np.sqrt(246),4))
+        df_capm_f['CAPM_Sharpe'] = df_capm_f['CAPM_Ret%'] / (df_returns.iloc[:,-1].dropna().std()*np.sqrt(246) * 100 * df_capm_f['Beta'])
         st.write(df_capm_f)
     
     # modelos
