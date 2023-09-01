@@ -399,10 +399,10 @@ class Pages:
         st.write(r'''
                  $$ 
                  R_m 
-                 $$
-                 : Retorno Risk Free, i.e Tesouro Direto/CDB''')
+                 $$: Retorno Risk Free, i.e Tesouro Direto/CDB''')
                  
         df_capm = df_returns.copy()
+        st.write(df_capm)
         st.write(df_capm.apply(lambda x: np.polyfit(x, df_capm.iloc[:,-1], deg=1)))
     
     # modelos
