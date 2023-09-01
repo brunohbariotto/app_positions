@@ -372,6 +372,15 @@ class Pages:
         st.write('Sem Risco = 8.75%')
         st.write(f'Sharpe = {(ret_esperado - 8.75) / std_carteira}')
         
+        st.header('CAPM')
+        st.write('Comparação dos Riscos e Retornos obtidos por um ativo/carteira comparado a um Benchmark (IBOV)')
+        
+        st.markdown('$ R_i = R_f + \beta * (R_m - R_f) $')
+        st.write('Em que:')
+        st.markdown('$ R_i $ : Retorno CAPM esperado para o ativo/carteira para correr o risco de investir')
+        st.markdown('$ R_f $ : Retorno Benchmark i.e IBOVESPA')
+        st.markdown('$ \beta $ : Comparação do risco, = 1: Forte correlação com IBOV, > 1 : maior de volatilidade, < 1 : menor volatilidade')
+        st.markdown('$ R_m $ : Retorno Risk Free, i.e Tesouro Direto/CDB')
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
