@@ -406,7 +406,13 @@ class Pages:
 
         df_capm = df_capm.apply(lambda x: np.polyfit(df_capm.iloc[:,-1], x , deg=1))
         df_capm.index = ['Beta', 'Alfa']
-        st.write(df_capm.T)
+        df_capm_f = pd.DataFrame()
+        df_capm_f = df_capm.T
+        df_capm_f['Alfa'] = df_capm_f['Alfa'] * 100
+        
+        st.write(df_returns.copy().dropna().mean().T)
+        df['CAPM_Ret'] = 0.085 + df_capm_f['Beta'] * (df_returns.copy().dropna().mean().T - 0.085)
+        st.write(df_capm_f)
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
