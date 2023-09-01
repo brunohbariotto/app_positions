@@ -411,7 +411,7 @@ class Pages:
         df_capm_f['Alfa'] = df_capm_f['Alfa'] * 100
         
         st.write(df_returns.copy().dropna().mean().T)
-        df['CAPM_Ret'] = 0.085 + df_capm_f['Beta'] * (df_returns.copy().dropna().mean().T - 0.085)
+        df_capm_f['CAPM_Ret'] = 0.085 + df_capm_f['Beta'] * (df_returns.copy().dropna().mean().T - 0.085)
         st.write(df_capm_f)
     
     # modelos
