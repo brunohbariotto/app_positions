@@ -403,8 +403,10 @@ class Pages:
                  : Retorno Risk Free, i.e Tesouro Direto/CDB''')
                  
         df_capm = df_returns.copy().dropna()
-        st.write(df_capm)
-        st.write(df_capm.apply(lambda x: np.polyfit(x, df_capm.iloc[:,-1], deg=1)))
+
+        df_capm = df_capm.apply(lambda x: np.polyfit(df_capm.iloc[:,-1], x , deg=1))
+        df_capm.index = ['Beta', 'Alfa']
+        st.write(df_capm.T)
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
