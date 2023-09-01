@@ -401,6 +401,10 @@ class Pages:
                  R_m 
                  $$
                  : Retorno Risk Free, i.e Tesouro Direto/CDB''')
+                 
+        df_capm = df_returns.copy()
+        st.write(df_capm.iloc[:,:-1].apply(lambda x: x.cov()))
+        st.write(df_capm.iloc[:,-1].var())
     
     # modelos
     # Tela que exibe dados dos outputs para os modelos de Markwitz e Oscilador
