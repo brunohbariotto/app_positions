@@ -18,7 +18,7 @@ import warnings
 try:
     import matplotlib.pyplot as plt
 
-    plt.style.use("seaborn-paper")
+    #plt.style.use("seaborn-paper")
 except (ModuleNotFoundError, ImportError):  # pragma: no cover
     raise ImportError("Please install matplotlib via pip or poetry")
 
