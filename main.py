@@ -79,9 +79,9 @@ def show_main_page():
     if escolha == 'Controle de Posição':
         df = gog.read_spreadsheet('positions_BrunoBariotto')
         df2 = gog.read_spreadsheet('2024')
-        pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        #pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.subheader('Posição Começo de 2023')
-        df_posi = df2.drop(['Tick','Null','Taxas','IRRF','Total com corretagem','Preço com corretagem'], axis=1)
+        df_posi = df2.iloc[:,[1,2,4,5,6,9,12,13,14,15]]
         st.write(df_posi.drop_duplicates(subset=['Código'] ,keep='first').dropna())
         st.subheader('Última posição')
         st.write(df_posi.drop_duplicates(subset=['Código'], keep='last').dropna())
