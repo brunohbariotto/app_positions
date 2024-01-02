@@ -80,7 +80,11 @@ def show_main_page():
         df = gog.read_spreadsheet('positions_BrunoBariotto')
         df2 = gog.read_spreadsheet('2024')
         pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
-        st.write(df2)
+        st.subheader('Posição Começo de 2023')
+        st.write(df2.drop_duplicates(keep='first'))
+        st.subheader('Última posição')
+        st.write(df2.drop_duplicates(keep='last'))
+        
         
     if escolha == 'Mercado':
         
