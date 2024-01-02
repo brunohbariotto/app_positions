@@ -78,7 +78,9 @@ def show_main_page():
     # Escolha das páginas
     if escolha == 'Controle de Posição':
         df = gog.read_spreadsheet('positions_BrunoBariotto')
+        df2 = gog.read_spreadsheet('2024')
         pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        st.write(df2)
         
     if escolha == 'Mercado':
         
