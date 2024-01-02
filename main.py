@@ -79,6 +79,9 @@ def show_main_page():
     if escolha == 'Controle de Posição':
         df = gog.read_spreadsheet('positions_BrunoBariotto')
         df2 = gog.read_spreadsheet('2024')
+        df2['Data'] = pd.to_datetime(df2['Data'])
+        df2['Total'] = pd.to_numeric(df2['Total'])
+        df2['Total'] = pd.to_numeric(df2['Gain/Loss'])
         #pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.subheader('Posição Começo de 2023')
         df_posi = df2.iloc[:,[1,2,4,5,6,9,12,13,14,15]]
