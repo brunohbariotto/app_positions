@@ -93,7 +93,7 @@ def show_main_page():
         st.write(df_posi.dtypes)
         st.write(df_posi.groupby(by=['Mês'])['Gain/Loss'].sum())
         
-        st.write(df_posi.groupby(by=[['Operação','Mês']])['Total'].sum())
+        st.write(df_posi.groupby(['Operação','Mês'])['Total'].sum())
         
         
     if escolha == 'Mercado':
