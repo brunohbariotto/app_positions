@@ -81,9 +81,9 @@ def show_main_page():
         df2 = gog.read_spreadsheet('2024')
         pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.subheader('Posição Começo de 2023')
-        st.write(df2.drop_duplicates(keep='first'))
+        st.write(df2.drop_duplicates(subset=['Código'] ,keep='first').dropna())
         st.subheader('Última posição')
-        st.write(df2.drop_duplicates(keep='last'))
+        st.write(df2.drop_duplicates(subset=['Código'], keep='last').dropna())
         
         
     if escolha == 'Mercado':
