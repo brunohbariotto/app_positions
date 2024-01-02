@@ -88,6 +88,9 @@ def show_main_page():
         st.subheader('Última posição')
         st.write(df_posi.drop_duplicates(subset=['Código'], keep='last').dropna())
         
+        st.write(df_posi[(df_posi['Operação'] == 'Venda')].groupby('Código')['Gain/Loss'].sum())
+        st.write(df_posi[(df_posi['Operação'] == 'Venda')].groupby('Código')['Gain/Loss'].transform(lambda x: x/x.shift(1)-1))
+        
         st.header('Gain / Loss por mês')
        
         
