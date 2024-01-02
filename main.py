@@ -93,16 +93,25 @@ def show_main_page():
        
         
         st.subheader('Ações')
+        st.write('O pagamento é obrigatório quando efetuamos operações Day Trade com ganhos ou operações Swing Trade cuja soma das vendas em ações seja superior a R$ 20.000,00')
+        st.write('Tributação: 15% sobre o ganho em operações swing trade e 20% sobre daytrade, DARF Sicalc é o 6015. OBS: Descontar 0.005% (1% para daytrade) retido na fonte (dedo duro)')
+        st.write('Pagamento até o último dia útil do mês seguinte')
+        st.write('Prejuízos em vendas inferiores a 20k mês podem ser usados na compensação e nunca prescrevem.')
+        
         st.write('Vendas Ações')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Ação')].groupby(by=['Mês'])['Total'].sum())
         st.write('Ganho / Prejuízo')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Ação')].groupby(by=['Mês'])['Gain/Loss'].sum())
         
+        st.subheader('ETFs')
+        st.write('Imposto de 15% sobre o lucro em operações comuns e 20% day trade, e não há isenção de até 20 mil reais em vendas')
         st.write('Vendas ETFs')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'ETF')].groupby(by=['Mês'])['Total'].sum())
         st.write('Ganho / Prejuízo')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'ETF')].groupby(by=['Mês'])['Gain/Loss'].sum())
         
+        st.subheader('FIIs')
+        st.write('Imposto de 20% sobre o lucro em operações comuns e day trade, e não há isenção de até 20 mil reais em vendas')
         st.write('Vendas FIIs')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'FII')].groupby(by=['Mês'])['Total'].sum())
         st.write('Ganho / Prejuízo')
