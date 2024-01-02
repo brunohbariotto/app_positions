@@ -91,7 +91,7 @@ def show_main_page():
         
         st.subheader('Gain / Loss por mês')
         st.write(df_posi.dtypes)
-        st.write(df_posi[['Mês','Total','Gain/Loss','Operação']].groupby(by=[['Mês','Operação']]).sum())
+        st.write(df_posi[['Mês','Total','Gain/Loss']].groupby(by=['Mês']).sum())
         
         
     if escolha == 'Mercado':
