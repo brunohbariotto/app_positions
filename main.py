@@ -87,7 +87,7 @@ def show_main_page():
         st.write(df_posi.drop_duplicates(subset=['Código'], keep='last').dropna())
         
         st.subheader('Gain / Loss por mês')
-        st.write(df_posi.dtypes())
+        #st.write(df_posi.dtypes())
         st.write(df_posi['Mês','Total','Gain/Loss'].groupby(by=['Mês']).sum())
         
         
