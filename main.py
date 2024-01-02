@@ -81,13 +81,13 @@ def show_main_page():
         df2 = gog.read_spreadsheet('2024')
         pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.subheader('Posição Começo de 2023')
-        df_posi = df2[['Data','Mês','Código','Qtde','Preço','Total de cotas','Preço médio','Operação','Gain/Loss']].copy()
+        df_posi = df2.drop(['Tick','Null','Taxas','IRRF','Total com corretagem','Preço com corretagem'], axis=1)
         st.write(df_posi.drop_duplicates(subset=['Código'] ,keep='first').dropna())
         st.subheader('Última posição')
         st.write(df_posi.drop_duplicates(subset=['Código'], keep='last').dropna())
         
         st.subheader('Gain / Loss por mês')
-        st.write(df_posi.groupby(level='Mês')['Gain/Loss'].sum())
+        st.write(df_posi.groupby(by=['Mês'])['Gain/Loss'].sum())
         
         
     if escolha == 'Mercado':
