@@ -84,16 +84,29 @@ def show_main_page():
         #df2['Total'] = pd.to_numeric(df2['Gain/Loss'])
         #pg.posicao(df, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.subheader('Posição Começo de 2023')
-        df_posi = df2.iloc[:,[1,2,4,5,6,9,12,13,14,15]]
+        df_posi = df2.iloc[:,[1,2,4,5,6,9,12,13,14,15,16]]
         st.write(df_posi.drop_duplicates(subset=['Código'] ,keep='first').dropna())
         st.subheader('Última posição')
         st.write(df_posi.drop_duplicates(subset=['Código'], keep='last').dropna())
         
-        st.subheader('Gain / Loss por mês')
-        st.write(df_posi.dtypes)
-        st.write(df_posi.groupby(by=['Mês'])['Gain/Loss'].sum())
+        st.header('Gain / Loss por mês')
+       
         
-        st.write(df_posi[df_posi['Operação'] == 'Venda'].groupby(by=['Mês'])['Total'].sum())
+        st.subheader('Ações')
+        st.write('Vendas Ações')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Ação')].groupby(by=['Mês'])['Total'].sum())
+        st.write('Ganho / Prejuízo')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Ação')].groupby(by=['Mês'])['Gain/Loss'].sum())
+        
+        st.write('Vendas ETFs')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'ETF')].groupby(by=['Mês'])['Total'].sum())
+        st.write('Ganho / Prejuízo')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'ETF')].groupby(by=['Mês'])['Gain/Loss'].sum())
+        
+        st.write('Vendas FIIs')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'FII')].groupby(by=['Mês'])['Total'].sum())
+        st.write('Ganho / Prejuízo')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'FIIs')].groupby(by=['Mês'])['Gain/Loss'].sum())
         
         
     if escolha == 'Mercado':
