@@ -732,7 +732,7 @@ class Pages:
             
             ind_df = pd.read_csv('statusinvest-busca-avancada.csv', sep=';')
             
-            setores_df = pd.read_excel('setores.xlsx')
+            setores_df = pd.read_excel('setores.xlsx', engine='openpyxl')
             st.write(setores_df)
             
             ind_df_final = pd.concat([ind_df,setores_df], axis=1, join='inner')
