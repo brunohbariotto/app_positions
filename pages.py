@@ -735,7 +735,7 @@ class Pages:
             setores_df = pd.read_csv('setores.csv',  encoding='latin1')
             st.write(setores_df)
             
-            ind_df_final = pd.concat([ind_df,setores_df], axis=1, join='inner')
+            ind_df_final = pd.concat([ind_df,setores_df], axis=1, on='TICKER' ,join='inner')
             
             st.write(ind_df_final)
             
