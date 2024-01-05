@@ -1,0 +1,602 @@
+SETOR,SUB SETOR,SEGMENTO,CÓDIGO,TICKER
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,AALR,AALR3
+Financeiro,Intermediários Financeiros,Bancos,ABCB,ABCB4
+Consumo não Cíclico,Bebidas,Cervejas e Refrigerantes,ABEV,ABEV3
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,ADHM,ADHM3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,AERI,AERI3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,AESB,AESB3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,AFLT,AFLT3
+Consumo não Cíclico,Agropecuária,Agricultura,AGRO,AGRO3
+Consumo não Cíclico,Agropecuária,Agricultura,AGXY,AGXY3
+Consumo Cíclico,Viagens e Lazer,Produção de Eventos e Shows,AHEB,AHEB3
+Consumo Cíclico,Viagens e Lazer,Produção de Eventos e Shows,AHEB,AHEB5
+Consumo Cíclico,Viagens e Lazer,Produção de Eventos e Shows,AHEB,AHEB6
+Consumo Cíclico,Comércio,Eletrodomésticos,ALLD,ALLD3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Calçados,ALPA,ALPA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Calçados,ALPA,ALPA4
+Bens Industriais,Serviços Diversos,Serviços Diversos,ALPK,ALPK3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,ALSO,ALSO3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ALUP,ALUP11
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ALUP,ALUP3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ALUP,ALUP4
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",AMAR,AMAR3
+Bens Industriais,Serviços Diversos,Serviços Diversos,AMBP,AMBP3
+Consumo Cíclico,Comércio,Produtos Diversos,AMER,AMER3
+Consumo Cíclico,Diversos,Serviços Educacionais,ANIM,ANIM3
+Financeiro,Previdência e Seguros,Corretoras de Seguros,APER,APER3
+Consumo não Cíclico,Agropecuária,Agricultura,APTI,APTI3
+Consumo não Cíclico,Agropecuária,Agricultura,APTI,APTI4
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,ARML,ARML3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",ARZZ,ARZZ3
+Consumo não Cíclico,Comércio e Distribuição,Alimentos,ASAI,ASAI3
+Bens Industriais,Serviços Diversos,Serviços Diversos,ATMP,ATMP3
+Financeiro,Outros,Outros,ATOM,ATOM3
+Materiais Básicos,Mineração,Minerais Metálicos,AURA,AURA33
+Utilidade Pública,Energia Elétrica,Energia Elétrica,AURE,AURE3
+Consumo Cíclico,Construção Civil,Incorporações,AVLL,AVLL3
+Bens Industriais,Construção e Engenharia,Construção Pesada,AZEV,AZEV3
+Bens Industriais,Construção e Engenharia,Construção Pesada,AZEV,AZEV4
+Bens Industriais,Transporte,Transporte Aéreo,AZUL,AZUL4
+Financeiro,Serviços Financeiros Diversos,Serviços Financeiros Diversos,B3SA,B3SA3
+Consumo Cíclico,Diversos,Serviços Educacionais,BAHI,BAHI3
+Saúde,Equipamentos,Equipamentos,BALM,BALM3
+Saúde,Equipamentos,Equipamentos,BALM,BALM4
+Consumo não Cíclico,Alimentos Processados,Carnes e Derivados,BAUH,BAUH4
+Financeiro,Intermediários Financeiros,Bancos,BAZA,BAZA3
+Financeiro,Intermediários Financeiros,Bancos,BBAS,BBAS3
+Financeiro,Intermediários Financeiros,Bancos,BBDC,BBDC3
+Financeiro,Intermediários Financeiros,Bancos,BBDC,BBDC4
+Bens Industriais,Serviços Diversos,Serviços Diversos,BBML,BBML3
+Financeiro,Previdência e Seguros,Seguradoras,BBSE,BBSE3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,BDLL,BDLL3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,BDLL,BDLL4
+Consumo não Cíclico,Alimentos Processados,Carnes e Derivados,BEEF,BEEF3
+Financeiro,Intermediários Financeiros,Bancos,BEES,BEES3
+Financeiro,Intermediários Financeiros,Bancos,BEES,BEES4
+Financeiro,Serviços Financeiros Diversos,Gestão de Recursos e Investimentos,BFRE,BFRE11
+Financeiro,Serviços Financeiros Diversos,Gestão de Recursos e Investimentos,BFRE,BFRE12
+Financeiro,Intermediários Financeiros,Bancos,BGIP,BGIP3
+Financeiro,Intermediários Financeiros,Bancos,BGIP,BGIP4
+Financeiro,Intermediários Financeiros,Bancos,BIDI,BIDI11
+Financeiro,Intermediários Financeiros,Bancos,BIDI,BIDI3
+Financeiro,Intermediários Financeiros,Bancos,BIDI,BIDI4
+Saúde,Medicamentos e Outros Produtos,Medicamentos e Outros Produtos,BIOM,BIOM3
+Consumo Cíclico,Hoteis e Restaurantes,Restaurante e Similares,BKBR,BKBR3
+Saúde,Medicamentos e Outros Produtos,Medicamentos e Outros Produtos,BLAU,BLAU3
+Financeiro,Holdings Diversificadas,Holdings Diversificadas,BLUT,BLUT3
+Financeiro,Holdings Diversificadas,Holdings Diversificadas,BLUT,BLUT4
+Financeiro,Intermediários Financeiros,Bancos,BMEB,BMEB3
+Financeiro,Intermediários Financeiros,Bancos,BMEB,BMEB4
+Financeiro,Intermediários Financeiros,Bancos,BMGB,BMGB4
+Financeiro,Intermediários Financeiros,Bancos,BMIN,BMIN3
+Financeiro,Intermediários Financeiros,Bancos,BMIN,BMIN4
+Consumo Cíclico,Viagens e Lazer,Bicicletas,BMKS,BMKS3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,BMOB,BMOB3
+Financeiro,Intermediários Financeiros,Bancos,BNBR,BNBR3
+Financeiro,Serviços Financeiros Diversos,Serviços Financeiros Diversos,BOAS,BOAS3
+Consumo não Cíclico,Produtos de Uso Pessoal e de Limpeza,Produtos de Limpeza,BOBR,BOBR3
+Consumo não Cíclico,Produtos de Uso Pessoal e de Limpeza,Produtos de Limpeza,BOBR,BOBR4
+Financeiro,Intermediários Financeiros,Bancos,BPAC,BPAC11
+Financeiro,Intermediários Financeiros,Bancos,BPAC,BPAC3
+Financeiro,Intermediários Financeiros,Bancos,BPAC,BPAC5
+Financeiro,Intermediários Financeiros,Bancos,BPAN,BPAN4
+Financeiro,Intermediários Financeiros,Bancos,BPAR,BPAR3
+Financeiro,Intermediários Financeiros,Bancos,BPAT,BPAT33
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,BPHA,BPHA3
+Materiais Básicos,Mineração,Minerais Metálicos,BRAP,BRAP3
+Materiais Básicos,Mineração,Minerais Metálicos,BRAP,BRAP4
+Financeiro,Intermediários Financeiros,Bancos,BRBI,BRBI11
+Financeiro,Intermediários Financeiros,Bancos,BRBI,BRBI3
+Financeiro,Intermediários Financeiros,Bancos,BRBI,BRBI4
+Consumo não Cíclico,Alimentos Processados,Carnes e Derivados,BRFS,BRFS3
+Financeiro,Previdência e Seguros,Seguradoras,BRGE,BRGE11
+Financeiro,Previdência e Seguros,Seguradoras,BRGE,BRGE12
+Financeiro,Previdência e Seguros,Seguradoras,BRGE,BRGE3
+Financeiro,Previdência e Seguros,Seguradoras,BRGE,BRGE5
+Financeiro,Previdência e Seguros,Seguradoras,BRGE,BRGE6
+Financeiro,Previdência e Seguros,Seguradoras,BRGE,BRGE7
+Financeiro,Previdência e Seguros,Seguradoras,BRGE,BRGE8
+Comunicações,Telecomunicações,Telecomunicações,BRIT,BRIT3
+Financeiro,Intermediários Financeiros,Bancos,BRIV,BRIV3
+Financeiro,Intermediários Financeiros,Bancos,BRIV,BRIV4
+Materiais Básicos,Químicos,Petroquímicos,BRKM,BRKM3
+Materiais Básicos,Químicos,Petroquímicos,BRKM,BRKM5
+Materiais Básicos,Químicos,Petroquímicos,BRKM,BRKM6
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,BRML,BRML3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,BRPR,BRPR3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,BRQB,BRQB3
+Financeiro,Intermediários Financeiros,Bancos,BRSR,BRSR3
+Financeiro,Intermediários Financeiros,Bancos,BRSR,BRSR5
+Financeiro,Intermediários Financeiros,Bancos,BRSR,BRSR6
+Consumo não Cíclico,Alimentos Processados,Açucar e Alcool,BSEV,BSEV3
+Financeiro,Intermediários Financeiros,Bancos,BSLI,BSLI3
+Financeiro,Intermediários Financeiros,Bancos,BSLI,BSLI4
+Bens Industriais,Comércio,Material de Transporte,BTTL,BTTL4
+Consumo Cíclico,Construção Civil,Incorporações,CALI,CALI3
+Consumo Cíclico,Construção Civil,Incorporações,CALI,CALI4
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Calçados,CAMB,CAMB3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Calçados,CAMB,CAMB4
+Consumo não Cíclico,Alimentos Processados,Alimentos Diversos,CAML,CAML3
+Bens Industriais,Serviços Diversos,Serviços Diversos,CARD,CARD3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,CASH,CASH3
+Utilidade Pública,Água e Saneamento,Água e Saneamento,CASN,CASN3
+Utilidade Pública,Água e Saneamento,Água e Saneamento,CASN,CASN4
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CATA,CATA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CATA,CATA4
+Materiais Básicos,Mineração,Minerais Metálicos,CBAV,CBAV3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CBEE,CBEE3
+Bens Industriais,Transporte,Exploração de Rodovias,CCRO,CCRO3
+Financeiro,Outros,Outros,CCXC,CCXC3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",CEAB,CEAB3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEBR,CEBR3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEBR,CEBR5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEBR,CEBR6
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CEDO,CEDO3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CEDO,CEDO4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEEB,CEEB3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEEB,CEEB5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEEB,CEEB6
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEED,CEED3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEED,CEED4
+Utilidade Pública,Gás,Gás,CEGR,CEGR3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEPE,CEPE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEPE,CEPE5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CEPE,CEPE6
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CESP,CESP3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CESP,CESP5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CESP,CESP6
+Utilidade Pública,Gás,Gás,CGAS,CGAS3
+Utilidade Pública,Gás,Gás,CGAS,CGAS5
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",CGRA,CGRA3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",CGRA,CGRA4
+Financeiro,Serviços Financeiros Diversos,Serviços Financeiros Diversos,CIEL,CIEL3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,CLSA,CLSA3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CLSC,CLSC3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CLSC,CLSC4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CMIG,CMIG3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CMIG,CMIG4
+Materiais Básicos,Mineração,Minerais Metálicos,CMIN,CMIN3
+Financeiro,Outros,Outros,CMSA,CMSA3
+Financeiro,Outros,Outros,CMSA,CMSA4
+Comunicações,Mídia,Produção e Difusão de Filmes e Programas,CNSY,CNSY3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,COCE,COCE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,COCE,COCE5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,COCE,COCE6
+Consumo Cíclico,Diversos,Serviços Educacionais,COGN,COGN3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,CORR,CORR3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,CORR,CORR4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CPFE,CPFE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CPLE,CPLE11
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CPLE,CPLE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CPLE,CPLE5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CPLE,CPLE6
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CPRE,CPRE3
+Consumo Cíclico,Construção Civil,Incorporações,CRDE,CRDE3
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,CREM,CREM3
+Consumo não Cíclico,Comércio e Distribuição,Alimentos,CRFB,CRFB3
+Financeiro,Intermediários Financeiros,Soc. Crédito e Financiamento,CRIV,CRIV3
+Financeiro,Intermediários Financeiros,Soc. Crédito e Financiamento,CRIV,CRIV4
+Materiais Básicos,Químicos,Químicos Diversos,CRPG,CRPG3
+Materiais Básicos,Químicos,Químicos Diversos,CRPG,CRPG5
+Materiais Básicos,Químicos,Químicos Diversos,CRPG,CRPG6
+Financeiro,Previdência e Seguros,Seguradoras,CSAB,CSAB3
+Financeiro,Previdência e Seguros,Seguradoras,CSAB,CSAB4
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",CSAN,CSAN3
+Consumo Cíclico,Diversos,Serviços Educacionais,CSED,CSED3
+Utilidade Pública,Água e Saneamento,Água e Saneamento,CSMG,CSMG3
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,CSNA,CSNA3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CSRN,CSRN3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CSRN,CSRN5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,CSRN,CSRN6
+Consumo não Cíclico,Agropecuária,Agricultura,CTCA,CTCA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CTKA,CTKA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CTKA,CTKA4
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CTNM,CTNM3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CTNM,CTNM4
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CTSA,CTSA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CTSA,CTSA4
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,CTSA,CTSA8
+Consumo Cíclico,Construção Civil,Incorporações,CURY,CURY3
+Consumo Cíclico,Viagens e Lazer,Viagens e Turismo,CVCB,CVCB3
+Financeiro,Previdência e Seguros,Corretoras de Seguros,CXSE,CXSE3
+Consumo Cíclico,Construção Civil,Incorporações,CYRE,CYRE3
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,DASA,DASA3
+Comunicações,Telecomunicações,Telecomunicações,DESK,DESK3
+Materiais Básicos,Químicos,Petroquímicos,DEXP,DEXP3
+Materiais Básicos,Químicos,Petroquímicos,DEXP,DEXP4
+Consumo Cíclico,Construção Civil,Incorporações,DIRR,DIRR3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",DMMO,DMMO3
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,DMVF,DMVF3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,DOHL,DOHL3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,DOHL,DOHL4
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,DOTZ,DOTZ3
+Bens Industriais,Serviços Diversos,Serviços Diversos,DTCY,DTCY3
+Bens Industriais,Serviços Diversos,Serviços Diversos,DTCY,DTCY4
+Materiais Básicos,Madeira e Papel,Madeira,DXCO,DXCO3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,EALT,EALT3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,EALT,EALT4
+Bens Industriais,Transporte,Exploração de Rodovias,ECOR,ECOR3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,ECPR,ECPR3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,ECPR,ECPR4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EEEL,EEEL3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EEEL,EEEL4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EGIE,EGIE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EKTR,EKTR3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EKTR,EKTR4
+Materiais Básicos,Químicos,Petroquímicos,ELEK,ELEK3
+Materiais Básicos,Químicos,Petroquímicos,ELEK,ELEK4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ELET,ELET3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ELET,ELET5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ELET,ELET6
+Comunicações,Mídia,Publicidade,ELMD,ELMD3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ELPL,ELPL3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EMAE,EMAE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EMAE,EMAE4
+Bens Industriais,Material de Transporte,Material Aeronáutico e de Defesa,EMBR,EMBR3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",ENAT,ENAT3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENBR,ENBR3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENEV,ENEV3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENGI,ENGI11
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENGI,ENGI3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENGI,ENGI4
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,ENJU,ENJU3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENMA,ENMA3B
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENMA,ENMA6B
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENMT,ENMT3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,ENMT,ENMT4
+Financeiro,Holdings Diversificadas,Holdings Diversificadas,EPAR,EPAR3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EQPA,EQPA3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EQPA,EQPA5
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EQPA,EQPA6
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EQPA,EQPA7
+Utilidade Pública,Energia Elétrica,Energia Elétrica,EQTL,EQTL3
+Consumo não Cíclico,Produtos de Uso Pessoal e de Limpeza,Produtos de Uso Pessoal,ESPA,ESPA3
+Consumo Cíclico,Viagens e Lazer,Brinquedos e Jogos,ESTR,ESTR3
+Consumo Cíclico,Viagens e Lazer,Brinquedos e Jogos,ESTR,ESTR4
+Bens Industriais,Construção e Engenharia,Produtos para Construção,ETER,ETER3
+Materiais Básicos,Madeira e Papel,Madeira,EUCA,EUCA3
+Materiais Básicos,Madeira e Papel,Madeira,EUCA,EUCA4
+Consumo Cíclico,Construção Civil,Incorporações,EVEN,EVEN3
+Consumo Cíclico,Construção Civil,Incorporações,EZTC,EZTC3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,FBMC,FBMC3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,FBMC,FBMC4
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,FESA,FESA3
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,FESA,FESA4
+Materiais Básicos,Químicos,Fertilizantes e Defensivos,FHER,FHER3
+Financeiro,Outros,Outros,FIGE,FIGE3
+Financeiro,Outros,Outros,FIGE,FIGE4
+Comunicações,Telecomunicações,Telecomunicações,FIQE,FIQE3
+Bens Industriais,Serviços Diversos,Serviços Diversos,FLEX,FLEX3
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,FLRY,FLRY3
+Financeiro,Intermediários Financeiros,Soc. Crédito e Financiamento,FNCN,FNCN3
+Bens Industriais,Material de Transporte,Material Rodoviário,FRAS,FRAS3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,FRIO,FRIO3
+Consumo não Cíclico,Agropecuária,Agricultura,FRTA,FRTA3
+Financeiro,Outros,Outros,FTRT,FTRT3B
+Financeiro,Serviços Financeiros Diversos,Gestão de Recursos e Investimentos,G2DI,G2DI33
+Saúde,Medicamentos e Outros Produtos,Medicamentos e Outros Produtos,GBIO,GBIO33
+Utilidade Pública,Energia Elétrica,Energia Elétrica,GEPA,GEPA3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,GEPA,GEPA4
+Financeiro,Serviços Financeiros Diversos,Serviços Financeiros Diversos,GETT,GETT11
+Financeiro,Serviços Financeiros Diversos,Serviços Financeiros Diversos,GETT,GETT3
+Financeiro,Serviços Financeiros Diversos,Serviços Financeiros Diversos,GETT,GETT4
+Consumo Cíclico,Construção Civil,Incorporações,GFSA,GFSA3
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,GGBR,GGBR3
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,GGBR,GGBR4
+Bens Industriais,Transporte,Logística,GGPS,GGPS3
+Consumo não Cíclico,Comércio e Distribuição,Alimentos,GMAT,GMAT3
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,GNDI,GNDI3
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,GOAU,GOAU3
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,GOAU,GOAU4
+Bens Industriais,Transporte,Transporte Aéreo,GOLL,GOLL4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,GPAR,GPAR3
+Financeiro,Serviços Financeiros Diversos,Gestão de Recursos e Investimentos,GPIV,GPIV33
+Consumo não Cíclico,Agropecuária,Agricultura,GRAO,GRAO3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Calçados,GRND,GRND3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,GSHP,GSHP3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",GUAR,GUAR3
+Bens Industriais,Construção e Engenharia,Produtos para Construção,HAGA,HAGA3
+Bens Industriais,Construção e Engenharia,Produtos para Construção,HAGA,HAGA4
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,HAPV,HAPV3
+Consumo Cíclico,Construção Civil,Incorporações,HBOR,HBOR3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,HBRE,HBRE3
+Bens Industriais,Transporte,Transporte Hidroviário,HBSA,HBSA3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,HBTS,HBTS5
+Consumo Cíclico,Utilidades Domésticas,Utensílios Domésticos,HETA,HETA3
+Consumo Cíclico,Utilidades Domésticas,Utensílios Domésticos,HETA,HETA4
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Vestuário,HGTX,HGTX3
+Consumo Cíclico,Hoteis e Restaurantes,Hotelaria,HOOT,HOOT3
+Consumo Cíclico,Hoteis e Restaurantes,Hotelaria,HOOT,HOOT4
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,HYPE,HYPE3
+Financeiro,Intermediários Financeiros,Bancos,IDVL,IDVL3
+Financeiro,Intermediários Financeiros,Bancos,IDVL,IDVL4
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,IFCM,IFCM3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,IGBR,IGBR3
+Utilidade Pública,Água e Saneamento,Água e Saneamento,IGSN,IGSN3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,IGTA,IGTA3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,IGTI,IGTI11
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,IGTI,IGTI3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,IGTI,IGTI4
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,INEP,INEP3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,INEP,INEP4
+Consumo Cíclico,Construção Civil,Incorporações,INNT,INNT3
+Tecnologia da Informação,Computadores e Equipamentos,Computadores e Equipamentos,INTB,INTB3
+Financeiro,Previdência e Seguros,Seguradoras,IRBR,IRBR3
+Tecnologia da Informação,Computadores e Equipamentos,Computadores e Equipamentos,ITEC,ITEC3
+Financeiro,Intermediários Financeiros,Bancos,ITSA,ITSA3
+Financeiro,Intermediários Financeiros,Bancos,ITSA,ITSA4
+Financeiro,Intermediários Financeiros,Bancos,ITUB,ITUB3
+Financeiro,Intermediários Financeiros,Bancos,ITUB,ITUB4
+Consumo não Cíclico,Alimentos Processados,Açucar e Alcool,JALL,JALL3
+Consumo não Cíclico,Alimentos Processados,Carnes e Derivados,JBSS,JBSS3
+Consumo Cíclico,Construção Civil,Incorporações,JFEN,JFEN3
+Consumo Cíclico,Construção Civil,Incorporações,JHSF,JHSF3
+Consumo não Cíclico,Alimentos Processados,Alimentos Diversos,JOPA,JOPA3
+Consumo não Cíclico,Alimentos Processados,Alimentos Diversos,JOPA,JOPA4
+Bens Industriais,Transporte,Transporte Rodoviário,JSLG,JSLG3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,KEPL,KEPL3
+Materiais Básicos,Madeira e Papel,Papel e Celulose,KLBN,KLBN11
+Materiais Básicos,Madeira e Papel,Papel e Celulose,KLBN,KLBN3
+Materiais Básicos,Madeira e Papel,Papel e Celulose,KLBN,KLBN4
+Saúde,Serv. Méd. Hospit. Análises e Diagnóstico,Serv. Méd. Hospit. Análises e Diagnóstico,KRSA,KRSA3
+Consumo Cíclico,Comércio,Produtos Diversos,LAME,LAME3
+Consumo Cíclico,Comércio,Produtos Diversos,LAME,LAME4
+Consumo não Cíclico,Agropecuária,Agricultura,LAND,LAND3
+Consumo Cíclico,Construção Civil,Incorporações,LAVV,LAVV3
+Consumo Cíclico,Diversos,Aluguel de carros,LCAM,LCAM3
+Consumo Cíclico,Automóveis e Motocicletas,Automóveis e Motocicletas,LEVE,LEVE3
+Financeiro,Outros,Outros,LHER,LHER3
+Financeiro,Outros,Outros,LHER,LHER4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,LIGT,LIGT3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,LINX,LINX3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,LIPR,LIPR3
+Consumo Cíclico,Comércio,Produtos Diversos,LJQQ,LJQQ3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",LLIS,LLIS3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,LOGG,LOGG3
+Bens Industriais,Transporte,Transporte Hidroviário,LOGN,LOGN3
+Financeiro,Exploração de Imóveis,Intermediação Imobiliária,LPSB,LPSB3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",LREN,LREN3
+Materiais Básicos,Mineração,Minerais Metálicos,LTEL,LTEL3B
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis",Equipamentos e Serviços,LUPA,LUPA3
+Bens Industriais,Transporte,Transporte Hidroviário,LUXM,LUXM3
+Bens Industriais,Transporte,Transporte Hidroviário,LUXM,LUXM4
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,LVTC,LVTC3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,LWSA,LWSA3
+Financeiro,Outros,Outros,MAPT,MAPT3
+Financeiro,Outros,Outros,MAPT,MAPT4
+Saúde,Serv. Méd. Hospit. Análises e Diagnóstico,Serv. Méd. Hospit. Análises e Diagnóstico,MATD,MATD3
+Consumo Cíclico,Comércio,Produtos Diversos,MBLY,MBLY3
+Consumo não Cíclico,Alimentos Processados,Alimentos Diversos,MDIA,MDIA3
+Consumo Cíclico,Construção Civil,Incorporações,MDNE,MDNE3
+Consumo Cíclico,Hoteis e Restaurantes,Restaurante e Similares,MEAL,MEAL3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,MEGA,MEGA3
+Consumo Cíclico,Construção Civil,Incorporações,MELK,MELK3
+Financeiro,Intermediários Financeiros,Soc. Crédito e Financiamento,MERC,MERC3
+Financeiro,Intermediários Financeiros,Soc. Crédito e Financiamento,MERC,MERC4
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,MGEL,MGEL3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,MGEL,MGEL4
+Consumo Cíclico,Comércio,Eletrodomésticos,MGLU,MGLU3
+Bens Industriais,Construção e Engenharia,Serviços Diversos,MILS,MILS3
+Tecnologia da Informação,Computadores e Equipamentos,Computadores e Equipamentos,MLAS,MLAS3
+Materiais Básicos,Mineração,Minerais Metálicos,MMXM,MMXM3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Acessórios,MNDL,MNDL3
+Consumo não Cíclico,Alimentos Processados,Carnes e Derivados,MNPR,MNPR3
+Financeiro,Holdings Diversificadas,Holdings Diversificadas,MOAR,MOAR3
+Financeiro,Intermediários Financeiros,Bancos,MODL,MODL11
+Financeiro,Intermediários Financeiros,Bancos,MODL,MODL3
+Financeiro,Intermediários Financeiros,Bancos,MODL,MODL4
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,MOSI,MOSI3
+Consumo Cíclico,Diversos,Aluguel de carros,MOVI,MOVI3
+Consumo não Cíclico,Alimentos Processados,Carnes e Derivados,MRFG,MRFG3
+Bens Industriais,Transporte,Transporte Ferroviário,MRSA,MRSA3B
+Bens Industriais,Transporte,Transporte Ferroviário,MRSA,MRSA5B
+Bens Industriais,Transporte,Transporte Ferroviário,MRSA,MRSA6B
+Consumo Cíclico,Construção Civil,Incorporações,MRVE,MRVE3
+Materiais Básicos,Madeira e Papel,Papel e Celulose,MSPA,MSPA3
+Materiais Básicos,Madeira e Papel,Papel e Celulose,MSPA,MSPA4
+Consumo Cíclico,Diversos,Aluguel de carros,MSRO,MSRO3
+Materiais Básicos,Embalagens,Embalagens,MTIG,MTIG3
+Materiais Básicos,Embalagens,Embalagens,MTIG,MTIG4
+Consumo Cíclico,Construção Civil,Incorporações,MTRE,MTRE3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Construção e Agrícolas,MTSA,MTSA3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Construção e Agrícolas,MTSA,MTSA4
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,MULT,MULT3
+Bens Industriais,Material de Transporte,Material Rodoviário,MWET,MWET3
+Bens Industriais,Material de Transporte,Material Rodoviário,MWET,MWET4
+Consumo Cíclico,Automóveis e Motocicletas,Automóveis e Motocicletas,MYPK,MYPK3
+Consumo Cíclico,Utilidades Domésticas,Utensílios Domésticos,NAFG,NAFG3
+Consumo Cíclico,Utilidades Domésticas,Utensílios Domésticos,NAFG,NAFG4
+Materiais Básicos,Madeira e Papel,Papel e Celulose,NEMO,NEMO3
+Materiais Básicos,Madeira e Papel,Papel e Celulose,NEMO,NEMO5
+Materiais Básicos,Madeira e Papel,Papel e Celulose,NEMO,NEMO6
+Utilidade Pública,Energia Elétrica,Energia Elétrica,NEOE,NEOE3
+Financeiro,Exploração de Imóveis,Intermediação Imobiliária,NEXP,NEXP3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,NGRD,NGRD3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,NINJ,NINJ3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,NORD,NORD3
+Saúde,Medicamentos e Outros Produtos,Medicamentos e Outros Produtos,NRTQ,NRTQ3
+Consumo não Cíclico,Produtos de Uso Pessoal e de Limpeza,Produtos de Uso Pessoal,NTCO,NTCO3
+Materiais Básicos,Químicos,Fertilizantes e Defensivos,NUTR,NUTR3
+Consumo não Cíclico,Alimentos Processados,Alimentos Diversos,ODER,ODER4
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,ODPV,ODPV3
+Saúde,Medicamentos e Outros Produtos,Medicamentos e Outros Produtos,OFSA,OFSA3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",OGXP,OGXP3
+Comunicações,Telecomunicações,Telecomunicações,OIBR,OIBR3
+Comunicações,Telecomunicações,Telecomunicações,OIBR,OIBR4
+Utilidade Pública,Energia Elétrica,Energia Elétrica,OMGE,OMGE3
+Saúde,Serv. Méd. Hospit. Análises e Diagnóstico,Serv. Méd. Hospit. Análises e Diagnóstico,ONCO,ONCO3
+Bens Industriais,Transporte,Transporte Hidroviário,OPCT,OPCT3
+Utilidade Pública,Água e Saneamento,Água e Saneamento,ORVR,ORVR3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis",Equipamentos e Serviços,OSXB,OSXB3
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,PARD,PARD3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,PATI,PATI3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,PATI,PATI4
+Consumo não Cíclico,Comércio e Distribuição,Alimentos,PCAR,PCAR3
+Consumo não Cíclico,Comércio e Distribuição,Alimentos,PCAR,PCAR4
+Consumo Cíclico,Construção Civil,Incorporações,PDGR,PDGR3
+Financeiro,Serviços Financeiros Diversos,Gestão de Recursos e Investimentos,PDTC,PDTC3
+Financeiro,Holdings Diversificadas,Holdings Diversificadas,PEAB,PEAB3
+Financeiro,Holdings Diversificadas,Holdings Diversificadas,PEAB,PEAB4
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",PETR,PETR3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",PETR,PETR4
+Consumo Cíclico,Comércio,Produtos Diversos,PETZ,PETZ3
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,PFRM,PFRM3
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,PGMN,PGMN3
+Financeiro,Intermediários Financeiros,Bancos,PINE,PINE3
+Financeiro,Intermediários Financeiros,Bancos,PINE,PINE4
+Consumo Cíclico,Automóveis e Motocicletas,Automóveis e Motocicletas,PLAS,PLAS3
+Consumo Cíclico,Construção Civil,Incorporações,PLPL,PLPL3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Cobre,PMAM,PMAM3
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,PNVL,PNVL3
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,PNVL,PNVL4
+Bens Industriais,Material de Transporte,Material Rodoviário,POMO,POMO3
+Bens Industriais,Material de Transporte,Material Rodoviário,POMO,POMO4
+Bens Industriais,Transporte,Serviços de Apoio e Armazenagem,PORT,PORT3
+Tecnologia da Informação,Computadores e Equipamentos,Computadores e Equipamentos,POSI,POSI3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,POWE,POWE3
+Financeiro,Outros,Outros,PPAR,PPAR3
+Financeiro,Serviços Financeiros Diversos,Gestão de Recursos e Investimentos,PPLA,PPLA11
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",PRIO,PRIO3
+Bens Industriais,Serviços Diversos,Serviços Diversos,PRNR,PRNR3
+Financeiro,Previdência e Seguros,Seguradoras,PSSA,PSSA3
+Bens Industriais,Construção e Engenharia,Produtos para Construção,PTBL,PTBL3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,PTCA,PTCA11
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,PTCA,PTCA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,PTNT,PTNT3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,PTNT,PTNT4
+Saúde,Análises e Diagnósticos,Análises e Diagnósticos,QUAL,QUAL3
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,QUSW,QUSW3
+Financeiro,Outros,Outros,QVQP,QVQP3B
+Saúde,Comércio e Distribuição,Medicamentos e Outros Produtos,RADL,RADL3
+Bens Industriais,Transporte,Transporte Ferroviário,RAIL,RAIL3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",RAIZ,RAIZ4
+Materiais Básicos,Madeira e Papel,Papel e Celulose,RANI,RANI3
+Materiais Básicos,Madeira e Papel,Papel e Celulose,RANI,RANI4
+Bens Industriais,Material de Transporte,Material Rodoviário,RAPT,RAPT3
+Bens Industriais,Material de Transporte,Material Rodoviário,RAPT,RAPT4
+Bens Industriais,Material de Transporte,Material Rodoviário,RCSL,RCSL3
+Bens Industriais,Material de Transporte,Material Rodoviário,RCSL,RCSL4
+Consumo Cíclico,Construção Civil,Incorporações,RDNI,RDNI3
+Saúde,Serv. Méd. Hospit. Análises e Diagnóstico,Serv. Méd. Hospit. Análises e Diagnóstico,RDOR,RDOR3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",RECV,RECV3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,REDE,REDE3
+Consumo Cíclico,Diversos,Aluguel de carros,RENT,RENT3
+Bens Industriais,Transporte,Transporte Ferroviário,RLOG,RLOG3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,RNEW,RNEW11
+Utilidade Pública,Energia Elétrica,Energia Elétrica,RNEW,RNEW3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,RNEW,RNEW4
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Industriais,ROMI,ROMI3
+Financeiro,Intermediários Financeiros,Bancos,RPAD,RPAD3
+Financeiro,Intermediários Financeiros,Bancos,RPAD,RPAD5
+Financeiro,Intermediários Financeiros,Bancos,RPAD,RPAD6
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",RPMG,RPMG3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",RRRP,RRRP3
+Consumo Cíclico,Construção Civil,Incorporações,RSID,RSID3
+Bens Industriais,Material de Transporte,Material Rodoviário,RSUL,RSUL3
+Bens Industriais,Material de Transporte,Material Rodoviário,RSUL,RSUL4
+Financeiro,Intermediários Financeiros,Bancos,SANB,SANB11
+Financeiro,Intermediários Financeiros,Bancos,SANB,SANB3
+Financeiro,Intermediários Financeiros,Bancos,SANB,SANB4
+Utilidade Pública,Água e Saneamento,Água e Saneamento,SAPR,SAPR11
+Utilidade Pública,Água e Saneamento,Água e Saneamento,SAPR,SAPR3
+Utilidade Pública,Água e Saneamento,Água e Saneamento,SAPR,SAPR4
+Consumo Cíclico,Comércio,Produtos Diversos,SBFG,SBFG3
+Utilidade Pública,Água e Saneamento,Água e Saneamento,SBSP,SBSP3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,SCAR,SCAR3
+Consumo Cíclico,Diversos,Serviços Educacionais,SEDU,SEDU3
+Consumo Cíclico,Diversos,Serviços Educacionais,SEER,SEER3
+Bens Industriais,Transporte,Logística,SEQL,SEQL3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,SGPS,SGPS3
+Consumo Cíclico,Viagens e Lazer,Produção de Eventos e Shows,SHOW,SHOW3
+Bens Industriais,Máquinas e Equipamentos,"Motores, Compressores e Outros",SHUL,SHUL3
+Bens Industriais,Máquinas e Equipamentos,"Motores, Compressores e Outros",SHUL,SHUL4
+Financeiro,Holdings Diversificadas,Holdings Diversificadas,SIMH,SIMH3
+Consumo não Cíclico,Agropecuária,Agricultura,SLCE,SLCE3
+Consumo Cíclico,Comércio,Produtos Diversos,SLED,SLED3
+Consumo Cíclico,Comércio,Produtos Diversos,SLED,SLED4
+Consumo Cíclico,Viagens e Lazer,Atividades Esportivas,SMFT,SMFT3
+Consumo Cíclico,Diversos,Programas de Fidelização,SMLS,SMLS3
+Consumo não Cíclico,Alimentos Processados,Açucar e Alcool,SMTO,SMTO3
+Materiais Básicos,Materiais Diversos,Materiais Diversos,SNSY,SNSY3
+Materiais Básicos,Materiais Diversos,Materiais Diversos,SNSY,SNSY5
+Materiais Básicos,Materiais Diversos,Materiais Diversos,SNSY,SNSY6
+Consumo não Cíclico,Agropecuária,Agricultura,SOJA,SOJA3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",SOMA,SOMA3
+Bens Industriais,Construção e Engenharia,Engenharia Consultiva,SOND,SOND3
+Bens Industriais,Construção e Engenharia,Engenharia Consultiva,SOND,SOND5
+Bens Industriais,Construção e Engenharia,Engenharia Consultiva,SOND,SOND6
+Financeiro,Outros,Outros,SPRT,SPRT3B
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,SQIA,SQIA3
+Bens Industriais,Transporte,Serviços de Apoio e Armazenagem,STBP,STBP3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,STKF,STKF3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Construção e Agrícolas,STTR,STTR3
+Financeiro,Previdência e Seguros,Seguradoras,SULA,SULA11
+Financeiro,Previdência e Seguros,Seguradoras,SULA,SULA3
+Financeiro,Previdência e Seguros,Seguradoras,SULA,SULA4
+Materiais Básicos,Madeira e Papel,Papel e Celulose,SUZB,SUZB3
+Financeiro,Exploração de Imóveis,Exploração de Imóveis,SYNE,SYNE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TAEE,TAEE11
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TAEE,TAEE3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TAEE,TAEE4
+Bens Industriais,Máquinas e Equipamentos,Armas e Munições,TASA,TASA3
+Bens Industriais,Máquinas e Equipamentos,Armas e Munições,TASA,TASA4
+Bens Industriais,Construção e Engenharia,Engenharia Consultiva,TCNO,TCNO3
+Bens Industriais,Construção e Engenharia,Engenharia Consultiva,TCNO,TCNO4
+Consumo Cíclico,Construção Civil,Incorporações,TCSA,TCSA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Acessórios,TECN,TECN3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,TEKA,TEKA3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,TEKA,TEKA4
+Comunicações,Telecomunicações,Telecomunicações,TELB,TELB3
+Comunicações,Telecomunicações,Telecomunicações,TELB,TELB4
+Consumo Cíclico,Construção Civil,Incorporações,TEND,TEND3
+Consumo não Cíclico,Agropecuária,Agricultura,TESA,TESA3
+Consumo Cíclico,Comércio,"Tecidos, Vestuário e Calçados",TFCO,TFCO4
+Bens Industriais,Transporte,Transporte Rodoviário,TGMA,TGMA3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TIET,TIET11
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TIET,TIET3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TIET,TIET4
+Comunicações,Telecomunicações,Telecomunicações,TIMS,TIMS3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,TKNO,TKNO3
+Materiais Básicos,Siderurgia e Metalurgia,Artefatos de Ferro e Aço,TKNO,TKNO4
+Tecnologia da Informação,Programas e Serviços,Programas e Serviços,TOTS,TOTS3
+Consumo Cíclico,Viagens e Lazer,Brinquedos e Jogos,TOYB,TOYB3
+Consumo Cíclico,Viagens e Lazer,Brinquedos e Jogos,TOYB,TOYB4
+Bens Industriais,Transporte,Exploração de Rodovias,TPIS,TPIS3
+Tecnologia da Informação,Computadores e Equipamentos,Computadores e Equipamentos,TRAD,TRAD3
+Consumo Cíclico,Construção Civil,Incorporações,TRIS,TRIS3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TRPL,TRPL3
+Utilidade Pública,Energia Elétrica,Energia Elétrica,TRPL,TRPL4
+Consumo não Cíclico,Agropecuária,Agricultura,TTEN,TTEN3
+Bens Industriais,Material de Transporte,Material Rodoviário,TUPY,TUPY3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,TXRX,TXRX3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Fios e Tecidos,TXRX,TXRX4
+Consumo Cíclico,Utilidades Domésticas,Móveis,UCAS,UCAS3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",UGPA,UGPA3
+Materiais Básicos,Químicos,Químicos Diversos,UNIP,UNIP3
+Materiais Básicos,Químicos,Químicos Diversos,UNIP,UNIP5
+Materiais Básicos,Químicos,Químicos Diversos,UNIP,UNIP6
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,USIM,USIM3
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,USIM,USIM5
+Materiais Básicos,Siderurgia e Metalurgia,Siderurgia,USIM,USIM6
+Materiais Básicos,Mineração,Minerais Metálicos,VALE,VALE3
+Bens Industriais,Máquinas e Equipamentos,Máq. e Equip. Construção e Agrícolas,VAMO,VAMO3
+"Petróleo, Gás e Biocombustíveis","Petróleo, Gás e Biocombustíveis","Exploração, Refino e Distribuição",VBBR,VBBR3
+Consumo Cíclico,Comércio,Eletrodomésticos,VIIA,VIIA3
+Materiais Básicos,Químicos,Fertilizantes e Defensivos,VITT,VITT3
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Acessórios,VIVA,VIVA3
+Consumo Cíclico,Construção Civil,Incorporações,VIVR,VIVR3
+Comunicações,Telecomunicações,Telecomunicações,VIVT,VIVT3
+Comunicações,Telecomunicações,Telecomunicações,VIVT,VIVT4
+Bens Industriais,Serviços Diversos,Serviços Diversos,VLID,VLID3
+Bens Industriais,Transporte,Transporte Ferroviário,VSPT,VSPT3
+Bens Industriais,Transporte,Transporte Ferroviário,VSPT,VSPT4
+Consumo Cíclico,"Tecidos, Vestuário e Calçados",Calçados,VULC,VULC3
+Saúde,Serv. Méd. Hospit. Análises e Diagnóstico,Serv. Méd. Hospit. Análises e Diagnóstico,VVEO,VVEO3
+Bens Industriais,Máquinas e Equipamentos,"Motores, Compressores e Outros",WEGE,WEGE3
+Consumo não Cíclico,Comércio,Produtos Diversos,WEST,WEST3
+Consumo Cíclico,Utilidades Domésticas,Eletrodomésticos,WHRL,WHRL3
+Consumo Cíclico,Utilidades Domésticas,Eletrodomésticos,WHRL,WHRL4
+Financeiro,Previdência e Seguros,Corretoras de Seguros,WIZS,WIZS3
+Bens Industriais,Comércio,Material de Transporte,WLMM,WLMM3
+Bens Industriais,Comércio,Material de Transporte,WLMM,WLMM4
+Consumo Cíclico,Diversos,Serviços Educacionais,YDUQ,YDUQ3
