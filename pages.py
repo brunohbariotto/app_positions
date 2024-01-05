@@ -729,7 +729,14 @@ class Pages:
             st.write(os.getcwd())
             st.write('Salvar a planilha em C:/Users/Dell inspiron/app_positions')
             
-            st.write(pd.read_csv('statusinvest-busca-avancada.csv', sep=';'))
+            ind_df = pd.read_csv('statusinvest-busca-avancada.csv', sep=';')
+            
+            setores_df = pd.read_excel('setores.xlsx')
+            st.write(setores_df)
+            
+            ind_df_final = pd.concat([ind_df,setores_df], axis=1, join='inner')
+            
+            st.write(ind_df_final)
             
             
             
