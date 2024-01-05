@@ -89,7 +89,7 @@ def show_main_page():
         st.write(df_posi.drop_duplicates(subset=['Código'], keep='last').dropna())
         
         st.write(df_posi[(df_posi['Operação'] == 'Venda')].groupby('Código')['Gain/Loss'].sum())
-        st.write(df_posi[(df_posi['Operação'] == 'Venda')].groupby('Código')['Gain/Loss'].transform(lambda x: x/x.shift(1)-1))
+
         
         st.header('Gain / Loss por mês')
        
@@ -118,6 +118,13 @@ def show_main_page():
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'FII')].groupby(by=['Mês'])['Total'].sum())
         st.write('Ganho / Prejuízo')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'FIIs')].groupby(by=['Mês'])['Gain/Loss'].sum())
+        
+        st.subheader('USDCoin')
+        st.write('Isenção de IR para vendas mensais de até 35 mil reais. ')
+        st.write('Vendas USDCoin')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Cripto')].groupby(by=['Mês'])['Total'].sum())
+        st.write('Ganho / Prejuízo')
+        st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Cripto')].groupby(by=['Mês'])['Gain/Loss'].sum())
         
         
     if escolha == 'Mercado':

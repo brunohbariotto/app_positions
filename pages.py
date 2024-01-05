@@ -717,7 +717,23 @@ class Pages:
         st.header('Fundamentos')
         st.markdown('---')
         
-        tipo = st.radio('Escolha o tipo: ', ['Fundos Imobiliários', 'Ações'], key=131554)
+        tipo = st.radio('Escolha o tipo: ', ['Ações', 'Fundos Imobiliários'], key=131554)
+        
+        if tipo == 'Ações':
+            st.title('Fundamento de Ações')
+            
+            st.header('Indicadores mais recentes')
+            
+            st.write('Atualizar: acessar https://statusinvest.com.br/acoes/busca-avancada , clicar em buscar e fazer download do csv')
+            import os
+            st.write(os.getcwd())
+            st.write('Salvar a planilha em C:/Users/Dell inspiron/app_positions')
+            
+            st.write(pd.read_csv('statusinvest-busca-avancada.csv', sep=';'))
+            
+            
+            
+            
         
         if tipo == 'Fundos Imobiliários':
             st.subheader('Fundos Imobiliários')
