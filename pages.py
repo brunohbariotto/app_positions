@@ -726,6 +726,7 @@ class Pages:
             
             st.write('Atualizar: acessar https://statusinvest.com.br/acoes/busca-avancada , clicar em buscar e fazer download do csv')
             import os
+            import openpyxl
             st.write(os.getcwd())
             st.write('Salvar a planilha em C:/Users/Dell inspiron/app_positions')
             
