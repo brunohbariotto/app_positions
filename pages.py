@@ -739,7 +739,11 @@ class Pages:
             
             st.write(ind_df_final)
             
-            
+            for c in list(ind_df_final.columns[5:]):
+                ind_df_final[c] = ind_df_final[c].fillna(0).apply(lambda x: pd.to_numeric(str(x).replace('.','').replace(',','.')))
+                
+            st.write(ind_df_final)
+                
             
             
         
