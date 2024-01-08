@@ -750,7 +750,7 @@ class Pages:
             
             todas = ind_df_final[(ind_df_final['SEGMENTO']==setor)]['TICKER'].unique()
             
-            empresas = st.checkbox('Selecione as empresas', todas)
+            empresas = st.multiselect('Selecione as empresas', todas,todas)
             
             st.write(ind_df_final[(ind_df_final['SEGMENTO']==setor) & (ind_df_final[ind_df_final['TICKER'].isin(empresas)])].iloc[:,4:])
                 
