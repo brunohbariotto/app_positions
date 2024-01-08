@@ -744,7 +744,7 @@ class Pages:
                 
             st.write(ind_df_final)
             
-            setor = st.selectbox('Escolha o Segmento:', ind_df_final['SEGMENTO'].unique)
+            setor = st.selectbox('Escolha o Segmento:', ind_df_final['SEGMENTO'].unique())
             
             st.write(ind_df_final[ind_df_final['SEGMENTO']==setor])
                 
