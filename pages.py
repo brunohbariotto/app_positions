@@ -752,6 +752,8 @@ class Pages:
             
             empresas = st.multiselect('Selecione as empresas', todas,todas)
             
+            st.write(ind_df_final[ind_df_final['TICKER'].isin(empresas)])
+            
             st.write(ind_df_final[(ind_df_final['SEGMENTO']==setor) & (ind_df_final[ind_df_final['TICKER'].isin(empresas)])].iloc[:,4:])
                 
             
