@@ -746,6 +746,8 @@ class Pages:
             
             setor = st.selectbox('Escolha o Segmento:', ind_df_final['SEGMENTO'].unique())
             
+            st.write(ind_df_final[(ind_df_final['SEGMENTO']==setor)]['TICKER'].unique())
+            
             todas = ind_df_final[(ind_df_final['SEGMENTO']==setor)]['TICKER'].unique()
             
             empresas = st.checkbox('Selecione as empresas', todas)
