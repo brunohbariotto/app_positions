@@ -778,7 +778,7 @@ class Pages:
                 st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento][['MARGEM EBIT','ROIC','MARGEM BRUTA','MARG. LIQUIDA','ROE','ROA']])
                 
                 st.subheader('Indicadores de Endividamento: DIVIDA LIQUIDA / EBIT, LIQ. CORRENTE')
-                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento][['TICKER','DIVIDA LIQUIDA/EBIT','LIQ.CORRENTE',' LIQUIDEZ MEDIA DIARIA']])
+                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento][['TICKER','DIVIDA LIQUIDA / EBIT','LIQ. CORRENTE',' LIQUIDEZ MEDIA DIARIA']])
 
                     
             
