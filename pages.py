@@ -787,7 +787,10 @@ class Pages:
                 
                 st.subheader('Indicadores de Valuation: P/EBIT e DY')
                 val_df = ind_df_final[ind_df_final['SEGMENTO'] == segmento][['TICKER','P/EBIT','DY','P/L','P/VP','P/ATIVOS']]
-                st.write(val_df[(val_df['P/EBIT'] >= 0) & (val_df['P/L'] >= 0) & (val_df['P/VP'] >= 0) & (val_df['P/ATIVOS'] >= 0) ])
+                filter_df = val_df[(val_df['P/EBIT'] >= 0) & (val_df['P/L'] >= 0) & (val_df['P/VP'] >= 0) & (val_df['P/ATIVOS'] >= 0) ]
+                st.write(filter_df)
+                st.write(filter_df.rank(method='max'))
+                
                 
                 st.subheader('Indicadores de Rentabilidade: Margem EBIT e ROIC')
                 st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento][['TICKER','MARGEM EBIT','ROIC','MARGEM BRUTA','MARG. LIQUIDA','ROE','ROA']])
