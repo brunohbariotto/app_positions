@@ -790,11 +790,11 @@ class Pages:
                 filter_df = val_df[(val_df['P/EBIT'] >= 0) & (val_df['P/L'] >= 0) & (val_df['P/VP'] >= 0) & (val_df['P/ATIVOS'] >= 0) ]
                 st.write(filter_df)
                 filter_df['P/EBIT_rank'] = filter_df['P/EBIT'].rank()
-                filter_df['DY_rank'] =  filter_df['DY'].rank()
+                filter_df['DY_rank'] =  filter_df['DY'].rank(ascending=False)
                 filter_df['P/L_rank'] =  filter_df['P/L'].rank()
                 filter_df['P/VP_rank'] =   filter_df['P/VP'].rank()
                 filter_df['P/ATIVOS_rank'] =   filter_df['P/ATIVOS'].rank()
-                filter_df['rank_sum'] = filter_df['P/EBIT_rank'] + filter_df['P/L_rank'] + filter_df['P/VP_rank'] + filter_df['P/ATIVOS_rank'] - filter_df['DY_rank'] 
+                filter_df['rank_sum'] = filter_df['P/EBIT_rank'] + filter_df['P/L_rank'] + filter_df['P/VP_rank'] + filter_df['P/ATIVOS_rank'] + filter_df['DY_rank'] 
                 st.write(filter_df[['TICKER','P/EBIT_rank','DY_rank','P/L_rank','P/VP_rank','P/ATIVOS_rank','rank_sum']].sort_values('rank_sum', ascending = True))
                 #st.write(filter_df[['P/EBIT','P/L','P/VP','P/ATIVOS']].apply(tuple, axis=1).rank(method='dense', ascending=False).astype(int))
 
