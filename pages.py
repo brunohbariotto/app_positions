@@ -789,7 +789,8 @@ class Pages:
                 val_df = ind_df_final[ind_df_final['SEGMENTO'] == segmento][['TICKER','P/EBIT','DY','P/L','P/VP','P/ATIVOS']]
                 filter_df = val_df[(val_df['P/EBIT'] >= 0) & (val_df['P/L'] >= 0) & (val_df['P/VP'] >= 0) & (val_df['P/ATIVOS'] >= 0) ]
                 st.write(filter_df)
-                st.write(filter_df.apply(lambda x : x[['P/EBIT','P/L','P/VP','P/ATIVOS']].rank(method='max')))
+                st.write(filter_df[['P/EBIT','P/L','P/VP','P/ATIVOS']].apply(tuple, axis=1).rank(method='dense', ascending=False).astype(int))
+                #st.write(filter_df.apply(lambda x : x[['P/EBIT','P/L','P/VP','P/ATIVOS']].rank(method='max')))
                 #st.write(filter_df)
                 #st.write(filter_df.rank(method='max'))
                 
