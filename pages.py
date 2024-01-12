@@ -764,12 +764,21 @@ class Pages:
                 segmento = ind_df_final[(ind_df_final['TICKER']==empresa)]['SEGMENTO'].iloc[0]
                 st.write(segmento)
                 
-                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento])
+                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento].iloc[:,4:])
                 
-                #todas = ind_df_final[(ind_df_final['TICKER']==empresa)]['SEGMENTO']
+                st.header('Curso')
+                st.write(ind_df_final.columns)
+                st.write('Filtro 1) Margem EBIT > 0 para garantir que Div Liq/Ebit menor melhor')
                 
+                st.subheader('Indicadores de Valuation: P/EBIT e DY')
+                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento][['TICKER','P/EBIT','DY','P/L','P/VP','P/ATIVOS']])
                 
-                #st.write(ind_df_final[ind_df_final['TICKER'].isin(empresas)].iloc[:,4:])
+                st.subheader('Indicadores de Rentabilidade: Margem EBIT e ROIC')
+                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento][['MARGEM EBIT','ROIC','MARGEM BRUTA','MARG. LIQUIDA','ROE','ROA']])
+                
+                st.subheader('Indicadores de Endividamento: DIVIDA LIQUIDA / EBIT, LIQ. CORRENTE')
+                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento][['TICKER','DIVIDA LIQUIDA/EBIT','LIQ.CORRENTE','LIQUIDEZ MEDIA DIARIA']])
+
                     
             
             
