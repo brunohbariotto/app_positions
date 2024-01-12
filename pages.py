@@ -761,7 +761,7 @@ class Pages:
             if radio == 'Empresas':
                 empresa = st.selectbox('Escolha a Empresa:', ind_df_final['TICKER'].unique())
                 
-                segmento = ind_df_final[(ind_df_final['TICKER']==empresa)]['SEGMENTO'][0]
+                segmento = ind_df_final[(ind_df_final['TICKER']==empresa)]['SEGMENTO'].iloc[0]
                 st.write(segmento)
                 
                 st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento])
