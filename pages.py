@@ -744,16 +744,33 @@ class Pages:
                 
             st.write(ind_df_final)
             
-            setor = st.selectbox('Escolha o Segmento:', ind_df_final['SEGMENTO'].unique())
+            radio = st.radio('Analise por Setor ou Empresas semelhantes?', ['Setor','Empresas'])
             
-            st.write(ind_df_final[(ind_df_final['SEGMENTO']==setor)]['TICKER'].unique())
-            
-            todas = ind_df_final[(ind_df_final['SEGMENTO']==setor)]['TICKER'].unique()
-            
-            empresas = st.multiselect('Selecione as empresas', todas)
-            
-            st.write(ind_df_final[ind_df_final['TICKER'].isin(empresas)].iloc[:,4:])
+            if radio == 'Setor':
+                setor = st.selectbox('Escolha o Segmento:', ind_df_final['SEGMENTO'].unique())
                 
+                st.write(ind_df_final[(ind_df_final['SEGMENTO']==setor)]['TICKER'].unique())
+                
+                todas = ind_df_final[(ind_df_final['SEGMENTO']==setor)]['TICKER'].unique()
+                
+                empresas = st.multiselect('Selecione as empresas', todas)
+                
+                st.write(ind_df_final[ind_df_final['TICKER'].isin(empresas)].iloc[:,4:])
+                
+                
+            if radio == 'Empresas':
+                empresa = st.selectbox('Escolha a Empresa:', ind_df_final['TICKER'].unique())
+                
+                segmento = ind_df_final[(ind_df_final['TICKER']==empresa)]['SEGMENTO'][0]
+                st.write(segmento)
+                
+                st.write(ind_df_final[ind_df_final['SEGMENTO'] == segmento])
+                
+                #todas = ind_df_final[(ind_df_final['TICKER']==empresa)]['SEGMENTO']
+                
+                
+                #st.write(ind_df_final[ind_df_final['TICKER'].isin(empresas)].iloc[:,4:])
+                    
             
             
         
