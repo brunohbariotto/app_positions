@@ -39,7 +39,8 @@ class Models:
                 cotacoes.columns = ativos 
         st.write(cotacoes)
         if 'HASH11.SA' in cotacoes.columns:
-            cotacoes.drop(columns=['HASH11.SA'], inplace=True)
+            cotacoes['HASH11.SA'] = cotacoes['BTC-USD']
+            #cotacoes.drop(columns=['HASH11.SA'], inplace=True)
         st.write(cotacoes)
         return cotacoes.dropna().fillna(method='ffill')
     
