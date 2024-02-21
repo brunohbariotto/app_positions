@@ -38,6 +38,9 @@ class Models:
                 cotacoes = pd.concat([yf.download(tick, period='max')['Adj Close'] for tick in ativos], axis=1)
                 cotacoes.columns = ativos 
         st.write(cotacoes)
+        if 'HASH11.SA' in cotacoes.columns:
+            cotacoes.drop(columns=['HASH11.SA'], inplace=True)
+        st.write(cotacoes)
         return cotacoes.dropna().fillna(method='ffill')
     
     def returns(self, df):
