@@ -37,7 +37,7 @@ class Models:
             if per_data == 'Máx':
                 cotacoes = pd.concat([yf.download(tick, period='max')['Adj Close'] for tick in ativos], axis=1)
                 cotacoes.columns = ativos 
-        return cotacoes.fillna(method='ffill')
+        return cotacoes.dropna().fillna(method='ffill')
     
     def returns(self, df):
         
