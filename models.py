@@ -20,23 +20,190 @@ from pypfopt import plotting
 # from PyPortfolioOpt import HRPOpt
 # from PyPortfolioOpt import plotting
 import matplotlib.pyplot as plt
+import time
 
 class Models:
     def __init__(self):
         pass
+
+    def download_prices_novo(self, ativos, per_data, anos_cotacoes, datas_inicio, datas_fim):
+        tickers = [str(t).strip() for t in ativos if str(t).strip()]
+        if not tickers:
+            return pd.DataFrame()
+
+        if per_data == 'Períodos':
+            data = yf.download(
+                tickers,
+                period=f'{anos_cotacoes}y',
+                group_by="column",
+                auto_adjust=False,
+                progress=False,
+                threads=False,
+            )
+        elif per_data == 'Data':
+            data = yf.download(
+                tickers,
+                start=datas_inicio,
+                end=datas_fim,
+                group_by="column",
+                auto_adjust=False,
+                progress=False,
+                threads=False,
+            )
+        else:
+            data = yf.download(
+                tickers,
+                period='max',
+                group_by="column",
+                auto_adjust=False,
+                progress=False,
+                threads=False,
+            )
+
+        if not isinstance(data, pd.DataFrame) or data.empty:
+            return pd.DataFrame()
+
+        if isinstance(data.columns, pd.MultiIndex):
+            if 'Adj Close' in data.columns.get_level_values(0):
+                adj = data['Adj Close']
+            elif 'Close' in data.columns.get_level_values(0):
+                adj = data['Close']
+            else:
+                return pd.DataFrame()
+        else:
+            if 'Adj Close' in data.columns:
+                adj = data[['Adj Close']].copy()
+                adj.columns = [tickers[0]]
+            elif 'Close' in data.columns:
+                adj = data[['Close']].copy()
+                adj.columns = [tickers[0]]
+            else:
+                return pd.DataFrame()
+
+        return adj.dropna(how='all').ffill()
     
     def download_prices(self, ativos,per_data, anos_cotacoes, datas_inicio, datas_fim):
         cotacoes = pd.DataFrame()
+
+        def _normalize_ticker(tick):
+            if tick is None:
+                return None
+            t = str(tick).strip()
+            if not t or t.lower() == 'nan':
+                return None
+            t = t.replace(' ', '').upper()
+            if ('.' not in t) and ('=' not in t) and ('-' not in t) and (not t.startswith('^')):
+                t = f"{t}.SA"
+            return t
+
+        def _extract_series_from_df(data, tick):
+            if not isinstance(data, pd.DataFrame) or data.empty:
+                return None
+
+            cols = data.columns
+            if isinstance(cols, pd.MultiIndex):
+                if 'Adj Close' in cols.get_level_values(0):
+                    series = data['Adj Close'][tick] if tick in data['Adj Close'] else None
+                elif 'Close' in cols.get_level_values(0):
+                    series = data['Close'][tick] if tick in data['Close'] else None
+                else:
+                    series = None
+            else:
+                series = data['Adj Close'] if 'Adj Close' in data else data.get('Close')
+
+            if isinstance(series, pd.Series) and series.notna().any():
+                return series
+            return None
+
+        def _download_all(tickers):
+            last_err = None
+            for attempt in range(3):
+                try:
+                    if per_data == 'Períodos':
+                        data = yf.download(
+                            tickers,
+                            period=f'{anos_cotacoes}y',
+                            progress=False,
+                            threads=False,
+                            group_by="column",
+                        )
+                    elif per_data == 'Data':
+                        data = yf.download(
+                            tickers,
+                            start=datas_inicio,
+                            end=datas_fim,
+                            progress=False,
+                            threads=False,
+                            group_by="column",
+                        )
+                    else:
+                        data = yf.download(
+                            tickers,
+                            period='max',
+                            progress=False,
+                            threads=False,
+                            group_by="column",
+                        )
+
+                    if isinstance(data, pd.DataFrame) and not data.empty:
+                        return data
+                except Exception as exc:
+                    last_err = exc
+                time.sleep(0.5 * (attempt + 1))
+
+            if last_err:
+                st.warning(f"Falha ao baixar lista de tickers: {last_err}")
+            return pd.DataFrame()
+
         with st.spinner('Baixando Cotações...'):
-            if per_data == 'Períodos':
-                cotacoes = pd.concat([yf.download(tick , period=f'{anos_cotacoes}y')['Adj Close'] for tick in ativos], axis=1)
-                cotacoes.columns = ativos
-            if per_data == 'Data':
-                cotacoes = pd.concat([yf.download(tick, start=datas_inicio , end=datas_fim)['Adj Close'] for tick in ativos], axis=1)
-                cotacoes.columns = ativos
-            if per_data == 'Máx':
-                cotacoes = pd.concat([yf.download(tick, period='max')['Adj Close'] for tick in ativos], axis=1)
-                cotacoes.columns = ativos 
+            series_list = []
+            tickers = []
+            for tick in ativos:
+                nt = _normalize_ticker(tick)
+                if nt:
+                    tickers.append(nt)
+                else:
+                    st.warning(f"Ticker inválido ignorado: {tick}")
+
+            bulk_df = _download_all(tickers)
+            if not bulk_df.empty:
+                valid_series = []
+                valid_ticks = []
+                for tick in tickers:
+                    series = _extract_series_from_df(bulk_df, tick)
+                    if series is not None:
+                        valid_series.append(series)
+                        valid_ticks.append(tick)
+                    else:
+                        st.warning(f"Sem dados para {tick} no período selecionado.")
+
+                if valid_series:
+                    cotacoes = pd.concat(valid_series, axis=1)
+                    cotacoes.columns = valid_ticks
+            else:
+                # Fallback individual via Ticker.history
+                for tick in tickers:
+                    try:
+                        t = yf.Ticker(tick)
+                        if per_data == 'Períodos':
+                            hist = t.history(period=f'{anos_cotacoes}y', auto_adjust=False)
+                        elif per_data == 'Data':
+                            hist = t.history(start=datas_inicio, end=datas_fim, auto_adjust=False)
+                        else:
+                            hist = t.history(period='max', auto_adjust=False)
+
+                        series = _extract_series_from_df(hist, tick)
+                        if series is None:
+                            st.warning(f"Sem dados para {tick} no período selecionado.")
+                            continue
+                        series_list.append(series)
+                    except Exception as exc:
+                        st.warning(f"Falha ao baixar {tick}: {exc}")
+
+                if series_list:
+                    cotacoes = pd.concat(series_list, axis=1)
+                    cotacoes.columns = [s.name for s in series_list]
+
         st.write(cotacoes)
         if 'HASH11.SA' in cotacoes.columns:
             cotacoes['HASH11.SA'] = cotacoes['BTC-USD']

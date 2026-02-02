@@ -52,7 +52,7 @@ def show_logout_page():
 def show_main_page():
     st.sidebar.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
 
-    lista_menu = ['Controle de Posição', 'Mercado','Modelos','Carteira', 'Machine Learning', 'Fundamentos']
+    lista_menu = ['Controle de Posição', 'Novo Controle de Posição', 'Mercado','Modelos','Carteira', 'Machine Learning', 'Fundamentos']
     lista_tipo = ['Ações', 'Fundos Imob.']
     st.sidebar.subheader('Menu Principal')
 
@@ -126,6 +126,10 @@ def show_main_page():
         st.write('Ganho / Prejuízo')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Cripto')].groupby(by=['Mês'])['Gain/Loss'].sum())
         
+        
+    if escolha == 'Novo Controle de Posição':
+        df_novo = gog.read_spreadsheet('positions_BrunoBariotto')
+        pg.novo_controle_posicao(df_novo, per_data, anos_cotacoes, datas_inicio, datas_fim, gog)
         
     if escolha == 'Mercado':
         

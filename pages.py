@@ -34,7 +34,7 @@ class Pages:
         #st.dataframe(df)
         
         m = Models()
-        df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        df_prices = m.download_prices_novo(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         
         #Pizza da posição atual
@@ -114,6 +114,290 @@ class Pages:
         st.write(ultimo_preco)
         
         
+    def novo_controle_posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim, gog):
+        st.title('Novo Controle de Posição')
+        st.markdown('---')
+        st.write(df)
+
+        m = Models()
+        tickers = list(df.Acao)
+        df_prices = m.download_prices_novo(tickers, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        st.subheader('Adj Close')
+        st.write(df_prices)
+
+        required_cols = {'Acao', 'pos_atual'}
+        if not required_cols.issubset(set(df.columns)):
+            st.warning("Colunas obrigatórias não encontradas: 'Acao' e 'pos_atual'.")
+            return
+
+        if df_prices.empty:
+            st.warning('Sem preços disponíveis para calcular alocações.')
+            return
+
+        last_prices = df_prices.ffill().iloc[-1]
+        df_calc = df[['Acao', 'pos_atual']].copy()
+        df_calc['Acao'] = df_calc['Acao'].astype('string').str.strip()
+        df_calc['pos_atual'] = pd.to_numeric(df_calc['pos_atual'], errors='coerce').fillna(0)
+        df_calc['Ultimo_Preco'] = df_calc['Acao'].map(last_prices)
+        df_calc['Valor'] = df_calc['Ultimo_Preco'] * df_calc['pos_atual']
+
+        us_ticker = 'IVVB11.SA'
+        gold_ticker = 'GOLD11.SA'
+        crypto_ticker = 'HASH11.SA'
+        is_br_acoes = df_calc['Acao'].str.endswith('.SA', na=False) & ~df_calc['Acao'].isin([us_ticker, gold_ticker, crypto_ticker])
+
+        valor_us = df_calc.loc[df_calc['Acao'] == us_ticker, 'Valor'].sum()
+        valor_gold = df_calc.loc[df_calc['Acao'] == gold_ticker, 'Valor'].sum()
+        valor_crypto = df_calc.loc[df_calc['Acao'] == crypto_ticker, 'Valor'].sum()
+        valor_br_acoes = df_calc.loc[is_br_acoes, 'Valor'].sum()
+
+        st.subheader('Alocação por Categoria')
+
+        categorias = [
+            'Renda Fixa Brasil (Tesouro curto)',
+            'Ações Brasil',
+            'US – IVVB11',
+            'Ouro – GOLD11',
+            'Crypto – HASH11',
+        ]
+
+        saved_df = None
+        try:
+            saved_df = gog.read_spreadsheet('Alocacao_Total')
+        except Exception:
+            saved_df = None
+
+        def _get_saved_value(cat, col, default):
+            if saved_df is None or col not in saved_df.columns or 'Categoria' not in saved_df.columns:
+                return default
+            row = saved_df[saved_df['Categoria'] == cat]
+            if row.empty:
+                return default
+            return pd.to_numeric(row.iloc[0][col], errors='coerce') if col in row.columns else default
+
+        renda_fixa_saved = _get_saved_value(categorias[0], 'Valor_Salvo', 0.0)
+
+        valores_atual_display = {
+            'Renda Fixa Brasil (Tesouro curto)': renda_fixa_saved,
+            'Ações Brasil': valor_br_acoes,
+            'US – IVVB11': valor_us,
+            'Ouro – GOLD11': valor_gold,
+            'Crypto – HASH11': valor_crypto,
+        }
+
+        target_mean = {
+            'Renda Fixa Brasil (Tesouro curto)': 60.0,
+            'Ações Brasil': 15.0,
+            'US – IVVB11': 15.0,
+            'Ouro – GOLD11': 5.0,
+            'Crypto – HASH11': 5.0,
+        }
+        ranges = {
+            'Renda Fixa Brasil (Tesouro curto)': (50.0, 70.0),
+            'Ações Brasil': (10.0, 20.0),
+            'US – IVVB11': (10.0, 20.0),
+            'Ouro – GOLD11': (0.0, 10.0),
+            'Crypto – HASH11': (0.0, 10.0),
+        }
+
+        def _clamp(value, min_v, max_v):
+            try:
+                v = float(value)
+            except Exception:
+                v = min_v
+            return max(min_v, min(max_v, v))
+
+        ratio_defaults = {
+            cat: _get_saved_value(cat, 'Ratio_Alvo', target_mean[cat]) for cat in categorias
+        }
+
+        saved_map = {c: _get_saved_value(c, 'Valor_Salvo', valores_atual_display[c]) for c in categorias}
+        total_saved = _get_saved_value(categorias[0], 'Total_Investimento', None)
+        display_total = float(total_saved) if pd.notna(total_saved) else float(sum(saved_map.values()))
+
+        df_resumo = pd.DataFrame({
+            'Categoria': categorias,
+            'Valor_Atual': [valores_atual_display[c] for c in categorias],
+            'Valor_Salvo': [saved_map[c] for c in categorias],
+            'Ratio_Alvo': [ratio_defaults[c] for c in categorias],
+        })
+        if display_total > 0:
+            df_resumo['% Alocado'] = (df_resumo['Valor_Salvo'] / display_total) * 100
+            df_resumo['% Ideal'] = df_resumo['Ratio_Alvo']
+            df_resumo['Dif. %'] = df_resumo['% Alocado'] - df_resumo['% Ideal']
+            df_resumo['Dif. R$'] = df_resumo['Valor_Salvo'] - (df_resumo['% Ideal'] / 100 * display_total)
+        else:
+            df_resumo['% Alocado'] = 0.0
+            df_resumo['% Ideal'] = df_resumo['Ratio_Alvo']
+            df_resumo['Dif. %'] = 0.0
+            df_resumo['Dif. R$'] = 0.0
+
+        st.metric('Total Investimento (salvo)', f'R$ {display_total:,.2f}')
+        st.dataframe(df_resumo, use_container_width=True)
+
+        st.markdown('---')
+        st.subheader('Editar Alocação')
+
+        with st.form('alocacao_form', clear_on_submit=True):
+            renda_fixa_input = st.number_input(
+                'Renda Fixa Brasil (Tesouro curto) - Valor manual',
+                min_value=0.0,
+                value=float(renda_fixa_saved) if pd.notna(renda_fixa_saved) else 0.0,
+                step=100.0,
+                format="%.2f",
+                key='renda_fixa_input',
+            )
+
+            st.subheader('Parâmetros de Alocação')
+            col1, col2, col3, col4, col5 = st.columns(5)
+
+            ratio_vals = {}
+            with col1:
+                rmin, rmax = ranges[categorias[0]]
+                st.markdown('Renda Fixa')
+                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
+                ratio_vals[categorias[0]] = st.number_input(
+                    '%',
+                    min_value=rmin,
+                    max_value=rmax,
+                    value=_clamp(ratio_defaults[categorias[0]], rmin, rmax),
+                    step=1.0,
+                    label_visibility='collapsed',
+                    key='ratio_rf'
+                )
+            with col2:
+                rmin, rmax = ranges[categorias[1]]
+                st.markdown('Ações BR')
+                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
+                ratio_vals[categorias[1]] = st.number_input(
+                    '%',
+                    min_value=rmin,
+                    max_value=rmax,
+                    value=_clamp(ratio_defaults[categorias[1]], rmin, rmax),
+                    step=1.0,
+                    label_visibility='collapsed',
+                    key='ratio_br'
+                )
+            with col3:
+                rmin, rmax = ranges[categorias[2]]
+                st.markdown('US – IVVB11')
+                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
+                ratio_vals[categorias[2]] = st.number_input(
+                    '%',
+                    min_value=rmin,
+                    max_value=rmax,
+                    value=_clamp(ratio_defaults[categorias[2]], rmin, rmax),
+                    step=1.0,
+                    label_visibility='collapsed',
+                    key='ratio_us'
+                )
+            with col4:
+                rmin, rmax = ranges[categorias[3]]
+                st.markdown('Ouro – GOLD11')
+                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
+                ratio_vals[categorias[3]] = st.number_input(
+                    '%',
+                    min_value=rmin,
+                    max_value=rmax,
+                    value=_clamp(ratio_defaults[categorias[3]], rmin, rmax),
+                    step=1.0,
+                    label_visibility='collapsed',
+                    key='ratio_gold'
+                )
+            with col5:
+                rmin, rmax = ranges[categorias[4]]
+                st.markdown('Crypto – HASH11')
+                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
+                ratio_vals[categorias[4]] = st.number_input(
+                    '%',
+                    min_value=rmin,
+                    max_value=rmax,
+                    value=_clamp(ratio_defaults[categorias[4]], rmin, rmax),
+                    step=1.0,
+                    label_visibility='collapsed',
+                    key='ratio_crypto'
+                )
+
+            ratio_sum = sum(ratio_vals.values())
+            if abs(ratio_sum - 100.0) > 0.01:
+                st.warning(f'A soma dos ratios é {ratio_sum:.2f}%. O ideal é 100%.')
+
+            valores_atual_form = {
+                'Renda Fixa Brasil (Tesouro curto)': renda_fixa_input,
+                'Ações Brasil': valor_br_acoes,
+                'US – IVVB11': valor_us,
+                'Ouro – GOLD11': valor_gold,
+                'Crypto – HASH11': valor_crypto,
+            }
+
+            df_edit = pd.DataFrame({
+                'Categoria': categorias,
+                'Valor_Atual': [valores_atual_form[c] for c in categorias],
+                'Valor_Salvo': [saved_map[c] for c in categorias],
+                'Ratio_Alvo': [ratio_vals[c] for c in categorias],
+            })
+
+            df_edit = st.data_editor(
+                df_edit,
+                use_container_width=True,
+                num_rows="fixed",
+                column_config={
+                    'Categoria': st.column_config.TextColumn(disabled=True),
+                    'Valor_Atual': st.column_config.NumberColumn(format="%.2f", disabled=True),
+                    'Valor_Salvo': st.column_config.NumberColumn(format="%.2f"),
+                    'Ratio_Alvo': st.column_config.NumberColumn(format="%.2f", disabled=True),
+                },
+                key='alocacao_editor',
+            )
+
+            base_sum = pd.to_numeric(df_edit['Valor_Salvo'], errors='coerce').fillna(0).sum()
+            total_default = float(total_saved) if pd.notna(total_saved) else float(base_sum)
+            total_invest = st.number_input(
+                'Valor Total Investido (pode incluir aporte do mês)',
+                min_value=0.0,
+                value=total_default,
+                step=100.0,
+                format="%.2f",
+                key='total_invest_input',
+            )
+
+            if total_invest < base_sum:
+                st.warning('O total investido está menor que a soma de Valor_Salvo.')
+            elif total_invest > base_sum:
+                st.info(f'Aporte considerado no mês: R$ {total_invest - base_sum:,.2f}')
+
+            submitted = st.form_submit_button('Salvar página')
+
+        if submitted:
+            if total_invest > 0:
+                df_resumo_save = df_edit.copy()
+                df_resumo_save['% Alocado'] = (df_resumo_save['Valor_Salvo'] / total_invest) * 100
+                df_resumo_save['% Ideal'] = df_resumo_save['Ratio_Alvo']
+                df_resumo_save['Dif. %'] = df_resumo_save['% Alocado'] - df_resumo_save['% Ideal']
+                df_resumo_save['Dif. R$'] = df_resumo_save['Valor_Salvo'] - (df_resumo_save['% Ideal'] / 100 * total_invest)
+            else:
+                df_resumo_save = df_edit.copy()
+                df_resumo_save['% Alocado'] = 0.0
+                df_resumo_save['% Ideal'] = df_resumo_save['Ratio_Alvo']
+                df_resumo_save['Dif. %'] = 0.0
+                df_resumo_save['Dif. R$'] = 0.0
+
+            df_save = df_resumo_save[['Categoria', 'Valor_Atual', 'Valor_Salvo', 'Ratio_Alvo']].copy()
+            for idx, row in df_save.iterrows():
+                cat = row['Categoria']
+                valor_salvo = pd.to_numeric(row['Valor_Salvo'], errors='coerce')
+                valor_atual = pd.to_numeric(row['Valor_Atual'], errors='coerce')
+                saved_prev = pd.to_numeric(saved_map.get(cat), errors='coerce')
+
+                # Se o usuário mexeu em Valor_Atual e não ajustou Valor_Salvo,
+                # considera o Valor_Atual como valor a persistir.
+                if pd.notna(valor_atual) and (pd.isna(valor_salvo) or valor_salvo == saved_prev):
+                    df_save.at[idx, 'Valor_Salvo'] = valor_atual
+
+            df_save['Total_Investimento'] = total_invest
+            gog.update_spreadsheet('Alocacao_Total', df_save)
+            st.success('Alocações salvas na planilha Alocacao_Total.')
+            st.rerun()
         
         
         
@@ -171,7 +455,7 @@ class Pages:
             lista_acoes = ['^BVSP','^MERV','^GSPC','^DJI','NQ=F','^FTSE','^HSI','^N225', '^RUT','BOVA11.SA','SMAL11.SA','IFIX.SA','SPXI11.SA', 'XINA11.SA'] # A fazer
             
         #Puxando os preços
-        df_prices = m.download_prices(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        df_prices = m.download_prices_novo(lista_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
         
         st.write(df_prices)
         st.markdown('---')
@@ -289,7 +573,7 @@ class Pages:
         df['ticker'] = df.ticker.apply(lambda l: l+".SA")
         
         m = Models()
-        df_prices = m.download_prices(list(df.ticker), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        df_prices = m.download_prices_novo(list(df.ticker), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         df_returns = m.returns(df_prices)
         
@@ -424,7 +708,7 @@ class Pages:
         st.markdown('---')
         
         m = Models()
-        df_prices = m.download_prices(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        df_prices = m.download_prices_novo(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         df_returns = m.returns(df_prices)
         #st.write(df_returns)
