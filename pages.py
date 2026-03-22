@@ -17,11 +17,39 @@ from ta.trend import SMAIndicator
 import yfinance as yf
 from ml_models import Ml_models
 import requests
+import unicodedata
 
 
 class Pages:
     def __init__(self):
         pass
+
+    def _normalize_positions_df(self, df):
+        df = df.copy()
+        df.columns = [str(c).strip() for c in df.columns]
+
+        def _norm(s):
+            s = str(s)
+            s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
+            return s.strip().lower().replace(" ", "").replace("_", "")
+
+        col_map = {_norm(c): c for c in df.columns}
+
+        def _rename_if_missing(target, aliases):
+            if target in df.columns:
+                return
+            for a in aliases:
+                na = _norm(a)
+                if na in col_map:
+                    df.rename(columns={col_map[na]: target}, inplace=True)
+                    return
+
+        _rename_if_missing('Acao', ['Ação', 'Acao', 'Ativo', 'Ativos', 'Ticker', 'Código', 'Codigo', 'Cod', 'Asset'])
+        _rename_if_missing('pos_atual', ['Posição Atual', 'Pos Atual', 'PosicaoAtual', 'PosAtual', 'Quantidade', 'Qtde', 'Qtd', 'Qtdade', 'Pos'])
+        _rename_if_missing('pos_markw', ['pos_markw', 'pos_markowitz', 'Markowitz', 'PosMark', 'Pos_Mark'])
+        _rename_if_missing('pos_osc', ['pos_osc', 'osc', 'PosOsc', 'Pos_Osc', 'Oscilador'])
+
+        return df
         
     # posicao
     # Tela que exibe a posição atual real bem como sua comparação com a posição de Markwitz e Oscilator
@@ -32,6 +60,14 @@ class Pages:
         #image = Image.open('alocation2.jpg')
         #st.image(image, caption='Alocação',width=400)
         #st.dataframe(df)
+
+        df = self._normalize_positions_df(df)
+        required_cols = {'Acao', 'pos_atual', 'pos_markw', 'pos_osc'}
+        missing = required_cols.difference(set(df.columns))
+        if missing:
+            st.warning(f"Colunas obrigatórias ausentes: {', '.join(sorted(missing))}")
+            st.write('Colunas encontradas:', list(df.columns))
+            return
         
         m = Models()
         df_prices = m.download_prices_novo(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
@@ -53,7 +89,11 @@ class Pages:
         
         #markowitz_usd = 0
         #alterar aqui
-        markowitz_usd = 30120*df[df['Acao'] == 'USDBRL=X']['pos_osc']/100
+        usd_mask = df['Acao'] == 'USDBRL=X'
+        if usd_mask.any():
+            markowitz_usd = 30120 * df.loc[usd_mask, 'pos_osc'] / 100
+        else:
+            markowitz_usd = pd.Series([0.0])
         #st.write('USD-BRL MarkxOsc')
         #st.write(markowitz_usd)
         #e aqui
@@ -70,8 +110,21 @@ class Pages:
         
         #st.write()
         
-        df.loc[(df['Acao']=='HASH11.SA'),['pos_markw']] = df.loc[df['Acao']=='HASH11.SA','pos_markw'].iloc[0] + ((markowitz_btc)/(df_prices['HASH11.SA'].iloc[-1])).iloc[0]
-        df.loc[(df['Acao']=='IVVB11.SA'),['pos_markw']] = df.loc[df['Acao']=='IVVB11.SA','pos_markw'].iloc[0] + ((markowitz_spx)/(df_prices['IVVB11.SA'].iloc[-1])).iloc[0]
+        if ('HASH11.SA' in df['Acao'].values) and ('HASH11.SA' in df_prices.columns):
+            df.loc[(df['Acao'] == 'HASH11.SA'), ['pos_markw']] = (
+                df.loc[df['Acao'] == 'HASH11.SA', 'pos_markw'].iloc[0]
+                + ((markowitz_btc) / (df_prices['HASH11.SA'].iloc[-1])).iloc[0]
+            )
+        else:
+            st.warning('HASH11.SA não encontrado na planilha ou nos preços.')
+
+        if ('IVVB11.SA' in df['Acao'].values) and ('IVVB11.SA' in df_prices.columns):
+            df.loc[(df['Acao'] == 'IVVB11.SA'), ['pos_markw']] = (
+                df.loc[df['Acao'] == 'IVVB11.SA', 'pos_markw'].iloc[0]
+                + ((markowitz_spx) / (df_prices['IVVB11.SA'].iloc[-1])).iloc[0]
+            )
+        else:
+            st.warning('IVVB11.SA não encontrado na planilha ou nos preços.')
         
         
         df['pos_oscxmark'] = df.pos_osc*df.pos_markw/100
@@ -112,23 +165,51 @@ class Pages:
         ultimo_preco = df_prices.iloc[-1,:]
         st.write('Referencia dos Preços')
         st.write(ultimo_preco)
+
+        st.markdown('---')
+        st.subheader('Alocação Necessária (PosxOsc x Último Preço)')
+
+        df_alloc = df[['Acao', 'PosxOsc']].copy()
+        df_alloc['Ultimo_Preco'] = df_alloc['Acao'].map(ultimo_preco)
+        df_alloc['Valor_Alocacao'] = df_alloc['PosxOsc'] * df_alloc['Ultimo_Preco']
+
+        if df_alloc['Ultimo_Preco'].isna().any():
+            st.warning('Alguns tickers não possuem preço disponível no último dia.')
+
+        st.dataframe(df_alloc.set_index('Acao').round({'PosxOsc': 2, 'Ultimo_Preco': 2, 'Valor_Alocacao': 2}))
+
+        total_alocacao = df_alloc['Valor_Alocacao'].sum()
+        st.metric('Total de Alocação Necessária (R$)', f"{total_alocacao:,.2f}")
+
+        fig_alloc = go.Figure(
+            data=[go.Bar(x=df_alloc['Acao'], y=df_alloc['Valor_Alocacao'])]
+        )
+        fig_alloc.update_layout(
+            title={'text': 'Valor de Alocação Necessária por Ticker'},
+            xaxis_title='Ticker',
+            yaxis_title='R$',
+            font=dict(family="Courier New, monospace", size=12),
+            height=600,
+        )
+        st.plotly_chart(fig_alloc)
         
         
     def novo_controle_posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim, gog):
         st.title('Novo Controle de Posição')
         st.markdown('---')
+        df = self._normalize_positions_df(df)
         st.write(df)
+
+        required_cols = {'Acao', 'pos_atual'}
+        if not required_cols.issubset(set(df.columns)):
+            st.warning("Colunas obrigatórias não encontradas: 'Acao' e 'pos_atual'.")
+            return
 
         m = Models()
         tickers = list(df.Acao)
         df_prices = m.download_prices_novo(tickers, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.subheader('Adj Close')
         st.write(df_prices)
-
-        required_cols = {'Acao', 'pos_atual'}
-        if not required_cols.issubset(set(df.columns)):
-            st.warning("Colunas obrigatórias não encontradas: 'Acao' e 'pos_atual'.")
-            return
 
         if df_prices.empty:
             st.warning('Sem preços disponíveis para calcular alocações.')

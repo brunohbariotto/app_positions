@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 import numpy as np
 import pypfopt
 from pypfopt import plotting
+import requests
 # from PyPortfolioOpt import expected_returns
 # from PyPortfolioOpt import risk_models
 # from PyPortfolioOpt import EfficientFrontier
@@ -210,6 +211,35 @@ class Models:
             #cotacoes.drop(columns=['HASH11.SA'], inplace=True)
         st.write(cotacoes)
         return cotacoes.dropna().fillna(method='ffill')
+
+    def _load_selic_bcb(self, url, selic_aa):
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                          "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+            "Accept": "application/json, text/plain, */*",
+        }
+        try:
+            resp = requests.get(url, headers=headers, timeout=10)
+            resp.raise_for_status()
+            data = resp.json()
+            if not data:
+                raise ValueError("Resposta vazia do BCB")
+            df = pd.DataFrame(data)
+            df['data'] = pd.to_datetime(df['data'], dayfirst=True, errors='coerce')
+            df = df.dropna(subset=['data'])
+            df.set_index('data', inplace=True)
+            df = df['1996-01-01':]
+            if 'valor' in df.columns:
+                df['valor'] = pd.to_numeric(df['valor'].astype(str).str.replace(',', '.'), errors='coerce')
+                df['Selic'] = ((1 + df['valor'] / 100) ** 252 - 1) * 100
+            else:
+                df['Selic'] = selic_aa * 100
+            return df
+        except Exception as exc:
+            st.warning(f"Não foi possível obter a Selic do BCB ({exc}). Usando taxa fixa.")
+            df = pd.DataFrame({'data': [pd.Timestamp.today()], 'Selic': [selic_aa * 100]})
+            df.set_index('data', inplace=True)
+            return df
     
     def returns(self, df):
         
@@ -438,14 +468,8 @@ class Models:
                          , span=100, selic_aa=0.02
                          , span_cov=100, cash=100000):
         
-        url = 'http://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json'
-        df = pd.read_json(url)
-        
-        df['data'] = pd.to_datetime(df['data'], dayfirst=True)
-        df.set_index('data', inplace=True)
-        df = df['1996-01-01':]
-        
-        df['Selic'] = ((1+df['valor'].iloc[:]/100)**(252) -1)*100
+        url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json'
+        df = self._load_selic_bcb(url, selic_aa)
         selic_diaria = (1+selic_aa)**(1/252) -1
         
         #retorno anualizado
@@ -476,7 +500,7 @@ class Models:
         if exp_return_type == 'capm':
         #retorno CAPM - retorno benchmark (IBOV) > CAPM = Rf + beta*(Rm-Rf)
             
-            ibov = pd.DataFrame(yf.download('^BVSP', period='f{anos_cotacoes}y')['Adj Close'])
+            ibov = pd.DataFrame(yf.download('^BVSP', period=f'{anos_cotacoes}y')['Adj Close'])
             mu = pypfopt.expected_returns.capm_return(precos, market_prices=ibov, risk_free_rate=df['Selic'].mean())
         
         #'CovarianceShrinkage', 'sample_cov', 'semicovariance', 'exp_cov'
@@ -531,7 +555,6 @@ class Models:
             fig = plt.figure()
             plotting.plot_dendrogram(hrp_portfolio)
             st.pyplot(fig)
-            st.set_option('deprecation.showPyplotGlobalUse', True)
             
         if otimizador != 'RiskParity':
             cleaned_weights = mv.clean_weights()
