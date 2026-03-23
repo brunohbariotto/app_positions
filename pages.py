@@ -787,6 +787,12 @@ class Pages:
     def modelos(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.header('Modelos')
         st.markdown('---')
+
+        df = self._normalize_positions_df(df)
+        if 'Acao' not in df.columns:
+            st.warning("Coluna obrigatória não encontrada: 'Acao'.")
+            st.write('Colunas encontradas:', list(df.columns))
+            return pd.DataFrame()
         
         m = Models()
         df_prices = m.download_prices_novo(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
