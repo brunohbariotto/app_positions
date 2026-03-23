@@ -30,6 +30,7 @@ class Pages:
 
         def _norm(s):
             s = str(s)
+            s = s.replace('\ufeff', '')
             s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode("ascii")
             return s.strip().lower().replace(" ", "").replace("_", "")
 
@@ -69,8 +70,15 @@ class Pages:
             st.write('Colunas encontradas:', list(df.columns))
             return
         
+        acao_col = df.get('Acao')
+        if acao_col is None:
+            st.warning("Coluna obrigatória não encontrada: 'Acao'.")
+            st.write('Colunas encontradas:', list(df.columns))
+            return pd.DataFrame()
+
         m = Models()
-        df_prices = m.download_prices_novo(list(df.Acao), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        tickers = [str(t).strip() for t in acao_col if str(t).strip()]
+        df_prices = m.download_prices_novo(tickers, per_data, anos_cotacoes, datas_inicio, datas_fim)
         st.write(df_prices)
         
         #Pizza da posição atual
