@@ -52,7 +52,7 @@ def show_logout_page():
 def show_main_page():
     st.sidebar.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
 
-    lista_menu = ['Controle de Posição', 'Novo Controle de Posição', 'Mercado','Modelos','Carteira', 'Machine Learning', 'Fundamentos']
+    lista_menu = ['Alocação por Ativo', 'Controle de Posição', 'Mercado','Modelos','Carteira', 'Machine Learning', 'Fundamentos']
     lista_tipo = ['Ações', 'Fundos Imob.']
     st.sidebar.subheader('Menu Principal')
 
@@ -76,6 +76,11 @@ def show_main_page():
 
 
     # Escolha das páginas
+    if escolha == 'Alocação por Ativo':
+        df_aloc = gog.read_spreadsheet('Alocacao_Asset')
+        df_posicoes = gog.read_spreadsheet('positions_BrunoBariotto')
+        pg.alocacao_por_ativo(df_aloc, df_posicoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
+
     if escolha == 'Controle de Posição':
         df = gog.read_spreadsheet('positions_BrunoBariotto')
         df2 = gog.read_spreadsheet('2024')
@@ -126,10 +131,6 @@ def show_main_page():
         st.write('Ganho / Prejuízo')
         st.write(df_posi[(df_posi['Operação'] == 'Venda') & (df_posi['Type'] == 'Cripto')].groupby(by=['Mês'])['Gain/Loss'].sum())
         
-        
-    if escolha == 'Novo Controle de Posição':
-        df_novo = gog.read_spreadsheet('positions_BrunoBariotto')
-        pg.novo_controle_posicao(df_novo, per_data, anos_cotacoes, datas_inicio, datas_fim, gog)
         
     if escolha == 'Mercado':
         

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 """
 Created on Sat Feb 18 14:34:08 2023
 
@@ -11,6 +11,7 @@ from models import Models
 from PIL import Image
 import investpy as inv
 import pandas as pd
+import io
 from datetime import datetime, date
 import numpy as np
 from ta.trend import SMAIndicator
@@ -51,10 +52,326 @@ class Pages:
         _rename_if_missing('pos_osc', ['pos_osc', 'osc', 'PosOsc', 'Pos_Osc', 'Oscilador'])
 
         return df
-        
-    # posicao
-    # Tela que exibe a posição atual real bem como sua comparação com a posição de Markwitz e Oscilator
-    #
+
+    def _download_fred_series(self, series_id, column_name, start_date=None, end_date=None):
+        url = f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
+        try:
+            resp = requests.get(url, timeout=15)
+            resp.raise_for_status()
+            df = pd.read_csv(io.StringIO(resp.text))
+        except Exception as exc:
+            st.warning(f"Falha ao buscar FRED ({series_id}): {exc}")
+            return pd.DataFrame(columns=[column_name])
+
+        if df.empty:
+            return pd.DataFrame(columns=[column_name])
+
+        date_col = 'DATE' if 'DATE' in df.columns else df.columns[0]
+        value_col = series_id if series_id in df.columns else df.columns[-1]
+
+        df[date_col] = pd.to_datetime(df[date_col], errors='coerce').dt.normalize()
+        df[value_col] = pd.to_numeric(df[value_col], errors='coerce')
+        df = df.dropna(subset=[date_col]).set_index(date_col).sort_index()
+
+        if start_date is not None:
+            df = df[df.index >= pd.Timestamp(start_date)]
+        if end_date is not None:
+            df = df[df.index <= pd.Timestamp(end_date)]
+
+        df = df.rename(columns={value_col: column_name})[[column_name]]
+        return df
+
+    def alocacao_por_ativo(self, df_asset, df_positions, per_data, anos_cotacoes, datas_inicio, datas_fim):
+        st.title('Alocacao por Classes de Ativos')
+        st.markdown('---')
+        df_asset = self._normalize_positions_df(df_asset)
+        required_cols = {'Acao', 'pos_atual', 'pos_markw'}
+        missing = required_cols.difference(set(df_asset.columns))
+        if missing:
+            st.warning(f"Colunas obrigatorias ausentes na aba Alocacao_Asset: {', '.join(sorted(missing))}")
+            st.write('Colunas encontradas:', list(df_asset.columns))
+            return
+        for col in ['pos_atual', 'pos_markw']:
+            df_asset[col] = pd.to_numeric(df_asset[col], errors='coerce').fillna(0.0)
+        df_asset['Acao'] = df_asset['Acao'].astype(str).str.strip()
+        if per_data == 'Períodos':
+            start_date = pd.Timestamp(datetime.now()) - pd.DateOffset(years=anos_cotacoes)
+            end_date = pd.Timestamp(datetime.now())
+        elif per_data == 'Data':
+            start_date = pd.Timestamp(datas_inicio)
+            end_date = pd.Timestamp(datas_fim)
+        else:
+            start_date = None
+            end_date = None
+        m = Models()
+        ticker_map = {
+            '^BVSP.SA': '^BVSP',
+            'SMAL11.SA': 'SMAL11.SA',
+            'USDBRL=X': 'USDBRL=X',
+            'IVVB11.SA': 'IVVB11.SA',
+            'GOLD11.SA': 'GOLD11.SA',
+            'HASH11.SA': 'HASH11.SA',
+        }
+        df_yahoo = m.download_prices_novo(list(dict.fromkeys(ticker_map.values())), per_data, anos_cotacoes, datas_inicio, datas_fim)
+        if not df_yahoo.empty:
+            inverse_map = {yf_ticker: label for label, yf_ticker in ticker_map.items()}
+            df_yahoo = df_yahoo.rename(columns=inverse_map)
+            for col in ticker_map.keys():
+                if col not in df_yahoo.columns:
+                    df_yahoo[col] = np.nan
+            df_yahoo = df_yahoo[list(ticker_map.keys())]
+        df_fred = self._download_fred_series('INTGSTBRM193N', 'Taxa_Juros_Brasil', start_date=start_date, end_date=end_date)
+        df_consolidado = pd.concat([df_fred, df_yahoo], axis=1, join='outer').sort_index()
+        if df_consolidado.empty:
+            st.warning('Nao foi possivel consolidar os dados de FRED e Yahoo para o periodo selecionado.')
+            return
+        daily_index = pd.date_range(df_consolidado.index.min(), df_consolidado.index.max(), freq='D')
+        df_consolidado = df_consolidado.reindex(daily_index).ffill()
+        first_dates = []
+        for col in ticker_map.keys():
+            if col in df_consolidado.columns:
+                first_valid = df_consolidado[col].first_valid_index()
+                if first_valid is not None:
+                    first_dates.append(first_valid)
+        if first_dates:
+            data_inicio_exibicao = max(first_dates)
+            df_consolidado = df_consolidado[df_consolidado.index >= data_inicio_exibicao]
+        df_consolidado.index.name = 'Data'
+        taxa_ref_series = pd.to_numeric(df_consolidado.get('Taxa_Juros_Brasil'), errors='coerce')
+        if isinstance(taxa_ref_series, pd.Series) and taxa_ref_series.notna().any():
+            taxa_juros_brasil_ult = float(taxa_ref_series.dropna().iloc[-1])
+        else:
+            taxa_juros_brasil_ult = 2.0
+        selic_aa_markowitz = taxa_juros_brasil_ult / 100.0
+        tab_classes, tab_ibov = st.tabs(['Classe de Ativos', 'Acoes IBOV'])
+        df_asset_plot = pd.DataFrame()
+        with tab_classes:
+            st.caption('Consolidacao diaria sem filtro de business day para preservar publicacoes do FRED em fins de semana.')
+            if first_dates:
+                st.caption(f'Exibicao iniciada em {data_inicio_exibicao:%Y-%m-%d}, data do ultimo ativo com historico disponivel.')
+            st.dataframe(df_consolidado, use_container_width=True)
+            st.markdown('---')
+            st.subheader('Oscilador')
+            df_pos_osc = pd.DataFrame(columns=['Ticker', 'pos_osc'])
+            ativos_osc = [a for a in list(df_asset['Acao']) if a in df_consolidado.columns]
+            if not ativos_osc:
+                st.warning('Nenhum ticker da aba Alocacao_Asset foi encontrado na consolidacao de precos.')
+            else:
+                df_prices_osc = df_consolidado[ativos_osc].copy().ffill().dropna(how='all')
+                df_pos_osc = m.oscilador(df_prices_osc).copy()
+                if not df_pos_osc.empty:
+                    if 'pos_osc' not in df_pos_osc.columns:
+                        df_pos_osc.columns = ['pos_osc']
+                    df_pos_osc = df_pos_osc.reindex(ativos_osc).rename_axis('Ticker').reset_index()
+                    df_pos_osc['pos_osc'] = pd.to_numeric(df_pos_osc['pos_osc'], errors='coerce')
+                    st.subheader('pos_osc por Ticker')
+                    st.dataframe(df_pos_osc[['Ticker', 'pos_osc']], use_container_width=True)
+            st.markdown('---')
+            st.subheader('Comparacao entre as Posicoes: Markowitz, Oscilator e Atual')
+            df_asset_plot = df_asset.copy()
+            if 'pos_osc' in df_asset_plot.columns:
+                df_asset_plot = df_asset_plot.drop(columns=['pos_osc'])
+            if not df_pos_osc.empty:
+                df_asset_plot = df_asset_plot.merge(df_pos_osc.rename(columns={'Ticker': 'Acao'}), on='Acao', how='left')
+            else:
+                df_asset_plot['pos_osc'] = np.nan
+            df_asset_plot['pos_osc'] = pd.to_numeric(df_asset_plot['pos_osc'], errors='coerce').fillna(0.0)
+            df_asset_plot['pos_oscxmark'] = df_asset_plot['pos_osc'] * df_asset_plot['pos_markw'] / 100
+            fig = go.Figure(data=[
+                go.Bar(name='Pos. Markowitz', x=df_asset_plot['Acao'], y=df_asset_plot['pos_markw']),
+                go.Bar(name='Pos. Oscilator', x=df_asset_plot['Acao'], y=df_asset_plot['pos_oscxmark']),
+                go.Bar(name='Pos. Atual', x=df_asset_plot['Acao'], y=df_asset_plot['pos_atual'])
+            ])
+            fig.update_layout(title={'text': 'Comparacao entre as Posicoes: Markowitz, Oscilator e Atual'}, xaxis_title='Ativos', yaxis_title='Quantidade', font=dict(family='Courier New, monospace', size=12), height=700, width=800)
+            st.plotly_chart(fig)
+            st.markdown('---')
+            st.subheader('Distribuicao por Ativo - Pizzas Comparativas')
+            total_markw = float(df_asset_plot['pos_markw'].sum())
+            total_osc = float(df_asset_plot['pos_oscxmark'].sum())
+            total_atual = float(df_asset_plot['pos_atual'].sum())
+            for title, values in [(f'Posicao Markowitz - Soma Total: {total_markw:,.2f}', df_asset_plot['pos_markw']), (f'Posicao Oscilator - Soma Total: {total_osc:,.2f}', df_asset_plot['pos_oscxmark']), (f'Posicao Atual - Soma Total: {total_atual:,.2f}', df_asset_plot['pos_atual'])]:
+                fig_p = go.Figure(data=[go.Pie(labels=df_asset_plot['Acao'], values=values, textinfo='label+value+percent')])
+                fig_p.update_layout(title={'text': title}, font=dict(family='Courier New, monospace', size=12), height=680, legend=dict(orientation='h', yanchor='top', y=-0.08, xanchor='center', x=0.5))
+                st.plotly_chart(fig_p, use_container_width=True)
+            csv_data = df_consolidado.reset_index().to_csv(index=False).encode('utf-8-sig')
+            st.download_button('Baixar dados consolidados (CSV)', data=csv_data, file_name='alocacao_por_ativo_consolidado.csv', mime='text/csv')
+            st.markdown('---')
+            st.subheader('Tabela Comparativa por Ticker')
+            df_comp = pd.DataFrame({'Ticker': df_asset_plot['Acao'], 'Posicao Atual': pd.to_numeric(df_asset_plot['pos_atual'], errors='coerce').fillna(0.0), 'Posicao Markowitz': pd.to_numeric(df_asset_plot['pos_markw'], errors='coerce').fillna(0.0), 'Posicao Oscilator': pd.to_numeric(df_asset_plot['pos_oscxmark'], errors='coerce').fillna(0.0)})
+            df_comp['Posicao Atual - Markowitz'] = df_comp['Posicao Atual'] - df_comp['Posicao Markowitz']
+            df_comp['Posicao Final - Posicao Oscilator'] = df_comp['Posicao Atual'] - df_comp['Posicao Oscilator']
+            total_row = {'Ticker': 'TOTAL'}
+            for col in df_comp.columns:
+                if col != 'Ticker':
+                    total_row[col] = pd.to_numeric(df_comp[col], errors='coerce').fillna(0.0).sum()
+            df_comp = pd.concat([df_comp, pd.DataFrame([total_row])], ignore_index=True)
+            st.dataframe(df_comp, use_container_width=True)
+            valor_osc_bvsp = 0.0
+            row_bvsp = df_asset_plot[df_asset_plot['Acao'] == '^BVSP.SA']
+            if not row_bvsp.empty:
+                valor_osc_bvsp = float(pd.to_numeric(row_bvsp['pos_oscxmark'], errors='coerce').fillna(0.0).iloc[0])
+            st.session_state['aloc_ibov_valor'] = valor_osc_bvsp * 1000
+        with tab_ibov:
+            st.markdown('---')
+            st.subheader('Alocacao por Acoes')
+            valor_alocar_acoes = float(st.session_state.get('aloc_ibov_valor', 0.0))
+            st.metric('Valor para alocar em Acoes (Pos. Oscilator de ^BVSP.SA)', f'R$ {valor_alocar_acoes:,.2f}')
+            df_positions = self._normalize_positions_df(df_positions)
+            if 'Acao' not in df_positions.columns:
+                st.warning("Coluna obrigatoria nao encontrada em positions_BrunoBariotto: 'Acao'.")
+                return
+            df_positions['Acao'] = df_positions['Acao'].astype(str).str.strip()
+            ativos_mapeados = set(df_asset['Acao'].astype(str).str.strip())
+            ativos_acoes = sorted({t for t in df_positions['Acao'] if t and t.lower() != 'nan' and t not in ativos_mapeados})
+            if not ativos_acoes:
+                st.info('Nenhum novo ticker encontrado em positions_BrunoBariotto apos excluir os ativos mapeados.')
+                return
+            st.caption(f'{len(ativos_acoes)} tickers para analise de acoes (fora da tabela Alocacao_Asset).')
+            df_prices_acoes = m.download_prices_novo(ativos_acoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
+            if df_prices_acoes.empty:
+                st.warning('Nao foi possivel obter precos no Yahoo Finance para os tickers de acoes selecionados.')
+                return
+            st.subheader('Precos das Acoes (Yahoo Finance)')
+            st.dataframe(df_prices_acoes, use_container_width=True)
+            ultimos_precos_tela = pd.to_numeric(df_prices_acoes.ffill().iloc[-1], errors='coerce')
+            st.markdown('---')
+            st.subheader('Alocacao Markowitz para Acoes')
+            valor_total_markowitz = valor_alocar_acoes
+            st.metric('Valor Total para Markowitz (Pos. Oscilator ^BVSP.SA x 1000)', f'R$ {valor_total_markowitz:,.2f}')
+            if valor_total_markowitz <= 0:
+                st.warning('Valor total para Markowitz menor ou igual a zero. Ajuste a posicao de ^BVSP.SA.')
+                return
+            df_prices_mk = df_prices_acoes.copy().ffill().dropna(how='all')
+            if df_prices_mk.empty:
+                st.warning('Sem dados validos para executar Markowitz.')
+                return
+            if len(df_prices_mk.columns) == 1:
+                ticker_unico = df_prices_mk.columns[0]
+                ultimo_preco = float(pd.to_numeric(ultimos_precos_tela.get(ticker_unico), errors='coerce'))
+                if pd.isna(ultimo_preco):
+                    ultimo_preco = float(pd.to_numeric(df_prices_mk[ticker_unico], errors='coerce').dropna().iloc[-1])
+                df_mark = pd.DataFrame(
+                    {
+                        'Pesos %': [100.0],
+                        'Valor Alocado (R$)': [valor_total_markowitz],
+                        'Ult. Preco': [ultimo_preco],
+                        'Quantidade de Acoes': [int(np.floor(valor_total_markowitz / ultimo_preco)) if ultimo_preco > 0 else 0],
+                    },
+                    index=[ticker_unico],
+                )
+            else:
+                volatility_mk = np.log(df_prices_mk.ffill()).diff().ewm(com=32).std()
+                try:
+                    _, _, df_mark_raw, _, _, _ = m.markowitz(df_prices_mk.copy(), volatility_mk, anos_cotacoes, 'RiskParity', 'CovarianceShrinkage', 'Sim', 'Sim', 'ema_historical_return', span=100, selic_aa=selic_aa_markowitz, cash=valor_total_markowitz, use_bcb=False)
+                except Exception as exc:
+                    st.warning(f'Nao foi possivel executar Markowitz para a cesta de acoes: {exc}')
+                    return
+                df_mark = df_mark_raw.iloc[:, :2].copy()
+                df_mark.columns = ['Pesos %', 'Ult. Preco']
+                # Garante o mesmo "Ult. Preco" mostrado na tabela de preços exibida na tela.
+                df_mark['Ult. Preco'] = pd.to_numeric(df_mark.index.to_series().map(ultimos_precos_tela), errors='coerce').fillna(
+                    pd.to_numeric(df_mark['Ult. Preco'], errors='coerce')
+                )
+                df_mark['Valor Alocado (R$)'] = valor_total_markowitz * (pd.to_numeric(df_mark['Pesos %'], errors='coerce').fillna(0.0) / 100)
+                df_mark['Quantidade de Acoes'] = np.where(
+                    pd.to_numeric(df_mark['Ult. Preco'], errors='coerce').fillna(0.0) > 0,
+                    np.floor(df_mark['Valor Alocado (R$)'] / pd.to_numeric(df_mark['Ult. Preco'], errors='coerce').fillna(0.0)),
+                    0,
+                )
+                df_mark['Quantidade de Acoes'] = pd.to_numeric(df_mark['Quantidade de Acoes'], errors='coerce').fillna(0).astype(int)
+                df_mark = df_mark[['Pesos %', 'Valor Alocado (R$)', 'Ult. Preco', 'Quantidade de Acoes']]
+            df_mark_alloc = df_mark.copy()
+            total_row_mk = {'Pesos %': 0.0, 'Valor Alocado (R$)': 0.0, 'Ult. Preco': 0.0, 'Quantidade de Acoes': 0}
+            for col in total_row_mk.keys():
+                total_row_mk[col] = pd.to_numeric(df_mark[col], errors='coerce').fillna(0).sum()
+            df_mark = pd.concat([df_mark, pd.DataFrame([total_row_mk], index=['TOTAL'])])
+            st.dataframe(df_mark.round({'Pesos %': 2, 'Valor Alocado (R$)': 2, 'Ult. Preco': 2}), use_container_width=True)
+            st.markdown('---')
+            st.subheader('Oscilador para Acoes')
+            df_prices_osc_acoes = df_prices_acoes.copy().ffill().dropna(how='all')
+            if df_prices_osc_acoes.empty:
+                st.warning('Sem dados validos para executar Oscilador nas acoes.')
+                return
+            df_pos_osc_acoes = m.oscilador(df_prices_osc_acoes).copy()
+            if not df_pos_osc_acoes.empty:
+                if 'pos_osc' not in df_pos_osc_acoes.columns:
+                    df_pos_osc_acoes.columns = ['pos_osc']
+                df_pos_osc_acoes = df_pos_osc_acoes.reindex(df_prices_osc_acoes.columns).rename_axis('Ticker').reset_index()
+                df_pos_osc_acoes['pos_osc'] = pd.to_numeric(df_pos_osc_acoes['pos_osc'], errors='coerce').fillna(0.0)
+            else:
+                df_pos_osc_acoes = pd.DataFrame({'Ticker': list(df_prices_osc_acoes.columns), 'pos_osc': 0.0})
+                st.warning('Oscilador nao retornou posicoes. Valores de pos_osc considerados como 0.')
+            st.subheader('pos_osc por Ticker (Acoes)')
+            st.dataframe(df_pos_osc_acoes[['Ticker', 'pos_osc']], use_container_width=True)
+            st.markdown('---')
+            st.subheader('Comparacao entre as Posicoes: Markowitz, Oscilator e Atual (Acoes)')
+            if 'pos_atual' not in df_positions.columns:
+                st.warning("Coluna obrigatoria nao encontrada em positions_BrunoBariotto: 'pos_atual'.")
+                return
+            df_pos_atual_acoes = df_positions[df_positions['Acao'].isin(ativos_acoes)][['Acao', 'pos_atual']].copy()
+            df_pos_atual_acoes['pos_atual'] = pd.to_numeric(df_pos_atual_acoes['pos_atual'], errors='coerce').fillna(0.0)
+            df_pos_atual_acoes.rename(columns={'Acao': 'Ticker', 'pos_atual': 'Posicao Atual'}, inplace=True)
+            df_mark_cmp = df_mark_alloc.reset_index().rename(columns={'index': 'Ticker', 'Quantidade de Acoes': 'Posicao Markowitz', 'Ult. Preco': 'Ultimo Preco'})
+            df_mark_cmp = df_mark_cmp[['Ticker', 'Posicao Markowitz', 'Ultimo Preco']]
+            df_mark_cmp['Posicao Markowitz'] = pd.to_numeric(df_mark_cmp['Posicao Markowitz'], errors='coerce').fillna(0.0)
+            df_mark_cmp['Ultimo Preco'] = pd.to_numeric(df_mark_cmp['Ultimo Preco'], errors='coerce').fillna(0.0)
+            df_osc_cmp = df_pos_osc_acoes[['Ticker', 'pos_osc']].copy()
+            df_osc_cmp['pos_osc'] = pd.to_numeric(df_osc_cmp['pos_osc'], errors='coerce').fillna(0.0)
+            df_comp_acoes = pd.DataFrame({'Ticker': ativos_acoes})
+            df_comp_acoes = df_comp_acoes.merge(df_pos_atual_acoes, on='Ticker', how='left')
+            df_comp_acoes = df_comp_acoes.merge(df_mark_cmp, on='Ticker', how='left')
+            df_comp_acoes = df_comp_acoes.merge(df_osc_cmp, on='Ticker', how='left')
+            df_comp_acoes['Posicao Atual'] = pd.to_numeric(df_comp_acoes['Posicao Atual'], errors='coerce').fillna(0.0)
+            df_comp_acoes['Posicao Markowitz'] = pd.to_numeric(df_comp_acoes['Posicao Markowitz'], errors='coerce').fillna(0.0)
+            df_comp_acoes['Ultimo Preco'] = pd.to_numeric(df_comp_acoes['Ultimo Preco'], errors='coerce').fillna(0.0)
+            df_comp_acoes['pos_osc'] = pd.to_numeric(df_comp_acoes['pos_osc'], errors='coerce').fillna(0.0)
+            df_comp_acoes['Posicao Oscilator'] = df_comp_acoes['pos_osc'] * df_comp_acoes['Posicao Markowitz'] / 100
+            df_comp_acoes['Valor Atual (R$)'] = df_comp_acoes['Posicao Atual'] * df_comp_acoes['Ultimo Preco']
+            df_comp_acoes['Valor Markowitz (R$)'] = df_comp_acoes['Posicao Markowitz'] * df_comp_acoes['Ultimo Preco']
+            df_comp_acoes['Valor Oscilator (R$)'] = df_comp_acoes['Posicao Oscilator'] * df_comp_acoes['Ultimo Preco']
+            fig_comp_acoes = go.Figure(data=[go.Bar(name='Pos. Markowitz', x=df_comp_acoes['Ticker'], y=df_comp_acoes['Posicao Markowitz']), go.Bar(name='Pos. Oscilator', x=df_comp_acoes['Ticker'], y=df_comp_acoes['Posicao Oscilator']), go.Bar(name='Pos. Atual', x=df_comp_acoes['Ticker'], y=df_comp_acoes['Posicao Atual'])])
+            fig_comp_acoes.update_layout(title={'text': 'Comparacao entre as Posicoes: Markowitz, Oscilator e Atual (Acoes)'}, xaxis_title='Acoes', yaxis_title='Quantidade', font=dict(family='Courier New, monospace', size=12), height=650)
+            st.plotly_chart(fig_comp_acoes, use_container_width=True)
+            st.markdown('---')
+            st.subheader('Distribuicao por Acoes - Pizzas Comparativas (R$)')
+            total_mark_acoes = float(df_comp_acoes['Valor Markowitz (R$)'].sum())
+            total_osc_acoes = float(df_comp_acoes['Valor Oscilator (R$)'].sum())
+            total_atual_acoes = float(df_comp_acoes['Valor Atual (R$)'].sum())
+            for title, values in [(f'Posicao Markowitz - Soma Total: {total_mark_acoes:,.2f}', df_comp_acoes['Valor Markowitz (R$)']), (f'Posicao Oscilator - Soma Total: {total_osc_acoes:,.2f}', df_comp_acoes['Valor Oscilator (R$)']), (f'Posicao Atual - Soma Total: {total_atual_acoes:,.2f}', df_comp_acoes['Valor Atual (R$)'])]:
+                fig_p = go.Figure(data=[go.Pie(labels=df_comp_acoes['Ticker'], values=values, textinfo='label+value+percent')])
+                fig_p.update_layout(title={'text': title}, font=dict(family='Courier New, monospace', size=12), height=620, legend=dict(orientation='h', yanchor='top', y=-0.08, xanchor='center', x=0.5))
+                st.plotly_chart(fig_p, use_container_width=True)
+            st.markdown('---')
+            st.subheader('Tabela Comparativa por Ticker (Acoes)')
+            df_tab_acoes = df_comp_acoes[['Ticker', 'Posicao Atual', 'Posicao Markowitz', 'Posicao Oscilator']].copy()
+            df_tab_acoes['Posicao Atual - Markowitz'] = df_tab_acoes['Posicao Atual'] - df_tab_acoes['Posicao Markowitz']
+            df_tab_acoes['Posicao Final - Posicao Oscilator'] = df_tab_acoes['Posicao Atual'] - df_tab_acoes['Posicao Oscilator']
+            total_row_acoes = {'Ticker': 'TOTAL'}
+            for col in df_tab_acoes.columns:
+                if col != 'Ticker':
+                    total_row_acoes[col] = pd.to_numeric(df_tab_acoes[col], errors='coerce').fillna(0.0).sum()
+            df_tab_acoes = pd.concat([df_tab_acoes, pd.DataFrame([total_row_acoes])], ignore_index=True)
+            st.dataframe(df_tab_acoes, use_container_width=True)
+
+            st.markdown('---')
+            st.subheader('Tabela Comparativa por Ticker (Acoes) - Valores em R$')
+            df_tab_acoes_rs = pd.DataFrame({
+                'Ticker': df_comp_acoes['Ticker'],
+                'Valor Atual (R$)': pd.to_numeric(df_comp_acoes['Valor Atual (R$)'], errors='coerce').fillna(0.0),
+                'Valor Markowitz (R$)': pd.to_numeric(df_comp_acoes['Valor Markowitz (R$)'], errors='coerce').fillna(0.0),
+                'Valor Oscilator (R$)': pd.to_numeric(df_comp_acoes['Valor Oscilator (R$)'], errors='coerce').fillna(0.0),
+            })
+            df_tab_acoes_rs['Valor Atual - Markowitz (R$)'] = df_tab_acoes_rs['Valor Atual (R$)'] - df_tab_acoes_rs['Valor Markowitz (R$)']
+            df_tab_acoes_rs['Valor Final - Oscilator (R$)'] = df_tab_acoes_rs['Valor Atual (R$)'] - df_tab_acoes_rs['Valor Oscilator (R$)']
+
+            total_row_acoes_rs = {'Ticker': 'TOTAL'}
+            for col in df_tab_acoes_rs.columns:
+                if col != 'Ticker':
+                    total_row_acoes_rs[col] = pd.to_numeric(df_tab_acoes_rs[col], errors='coerce').fillna(0.0).sum()
+
+            df_tab_acoes_rs = pd.concat([df_tab_acoes_rs, pd.DataFrame([total_row_acoes_rs])], ignore_index=True)
+            st.dataframe(df_tab_acoes_rs.round(2), use_container_width=True)
+
     def posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim):
         st.title('Controle de Posição')
         st.markdown('---')
@@ -202,295 +519,6 @@ class Pages:
         st.plotly_chart(fig_alloc)
         
         
-    def novo_controle_posicao(self, df, per_data, anos_cotacoes, datas_inicio, datas_fim, gog):
-        st.title('Novo Controle de Posição')
-        st.markdown('---')
-        df = self._normalize_positions_df(df)
-        st.write(df)
-
-        required_cols = {'Acao', 'pos_atual'}
-        if not required_cols.issubset(set(df.columns)):
-            st.warning("Colunas obrigatórias não encontradas: 'Acao' e 'pos_atual'.")
-            return
-
-        m = Models()
-        tickers = list(df.Acao)
-        df_prices = m.download_prices_novo(tickers, per_data, anos_cotacoes, datas_inicio, datas_fim)
-        st.subheader('Adj Close')
-        st.write(df_prices)
-
-        if df_prices.empty:
-            st.warning('Sem preços disponíveis para calcular alocações.')
-            return
-
-        last_prices = df_prices.ffill().iloc[-1]
-        df_calc = df[['Acao', 'pos_atual']].copy()
-        df_calc['Acao'] = df_calc['Acao'].astype('string').str.strip()
-        df_calc['pos_atual'] = pd.to_numeric(df_calc['pos_atual'], errors='coerce').fillna(0)
-        df_calc['Ultimo_Preco'] = df_calc['Acao'].map(last_prices)
-        df_calc['Valor'] = df_calc['Ultimo_Preco'] * df_calc['pos_atual']
-
-        us_ticker = 'IVVB11.SA'
-        gold_ticker = 'GOLD11.SA'
-        crypto_ticker = 'HASH11.SA'
-        is_br_acoes = df_calc['Acao'].str.endswith('.SA', na=False) & ~df_calc['Acao'].isin([us_ticker, gold_ticker, crypto_ticker])
-
-        valor_us = df_calc.loc[df_calc['Acao'] == us_ticker, 'Valor'].sum()
-        valor_gold = df_calc.loc[df_calc['Acao'] == gold_ticker, 'Valor'].sum()
-        valor_crypto = df_calc.loc[df_calc['Acao'] == crypto_ticker, 'Valor'].sum()
-        valor_br_acoes = df_calc.loc[is_br_acoes, 'Valor'].sum()
-
-        st.subheader('Alocação por Categoria')
-
-        categorias = [
-            'Renda Fixa Brasil (Tesouro curto)',
-            'Ações Brasil',
-            'US – IVVB11',
-            'Ouro – GOLD11',
-            'Crypto – HASH11',
-        ]
-
-        saved_df = None
-        try:
-            saved_df = gog.read_spreadsheet('Alocacao_Total')
-        except Exception:
-            saved_df = None
-
-        def _get_saved_value(cat, col, default):
-            if saved_df is None or col not in saved_df.columns or 'Categoria' not in saved_df.columns:
-                return default
-            row = saved_df[saved_df['Categoria'] == cat]
-            if row.empty:
-                return default
-            return pd.to_numeric(row.iloc[0][col], errors='coerce') if col in row.columns else default
-
-        renda_fixa_saved = _get_saved_value(categorias[0], 'Valor_Salvo', 0.0)
-
-        valores_atual_display = {
-            'Renda Fixa Brasil (Tesouro curto)': renda_fixa_saved,
-            'Ações Brasil': valor_br_acoes,
-            'US – IVVB11': valor_us,
-            'Ouro – GOLD11': valor_gold,
-            'Crypto – HASH11': valor_crypto,
-        }
-
-        target_mean = {
-            'Renda Fixa Brasil (Tesouro curto)': 60.0,
-            'Ações Brasil': 15.0,
-            'US – IVVB11': 15.0,
-            'Ouro – GOLD11': 5.0,
-            'Crypto – HASH11': 5.0,
-        }
-        ranges = {
-            'Renda Fixa Brasil (Tesouro curto)': (50.0, 70.0),
-            'Ações Brasil': (10.0, 20.0),
-            'US – IVVB11': (10.0, 20.0),
-            'Ouro – GOLD11': (0.0, 10.0),
-            'Crypto – HASH11': (0.0, 10.0),
-        }
-
-        def _clamp(value, min_v, max_v):
-            try:
-                v = float(value)
-            except Exception:
-                v = min_v
-            return max(min_v, min(max_v, v))
-
-        ratio_defaults = {
-            cat: _get_saved_value(cat, 'Ratio_Alvo', target_mean[cat]) for cat in categorias
-        }
-
-        saved_map = {c: _get_saved_value(c, 'Valor_Salvo', valores_atual_display[c]) for c in categorias}
-        total_saved = _get_saved_value(categorias[0], 'Total_Investimento', None)
-        display_total = float(total_saved) if pd.notna(total_saved) else float(sum(saved_map.values()))
-
-        df_resumo = pd.DataFrame({
-            'Categoria': categorias,
-            'Valor_Atual': [valores_atual_display[c] for c in categorias],
-            'Valor_Salvo': [saved_map[c] for c in categorias],
-            'Ratio_Alvo': [ratio_defaults[c] for c in categorias],
-        })
-        if display_total > 0:
-            df_resumo['% Alocado'] = (df_resumo['Valor_Salvo'] / display_total) * 100
-            df_resumo['% Ideal'] = df_resumo['Ratio_Alvo']
-            df_resumo['Dif. %'] = df_resumo['% Alocado'] - df_resumo['% Ideal']
-            df_resumo['Dif. R$'] = df_resumo['Valor_Salvo'] - (df_resumo['% Ideal'] / 100 * display_total)
-        else:
-            df_resumo['% Alocado'] = 0.0
-            df_resumo['% Ideal'] = df_resumo['Ratio_Alvo']
-            df_resumo['Dif. %'] = 0.0
-            df_resumo['Dif. R$'] = 0.0
-
-        st.metric('Total Investimento (salvo)', f'R$ {display_total:,.2f}')
-        st.dataframe(df_resumo, use_container_width=True)
-
-        st.markdown('---')
-        st.subheader('Editar Alocação')
-
-        with st.form('alocacao_form', clear_on_submit=True):
-            renda_fixa_input = st.number_input(
-                'Renda Fixa Brasil (Tesouro curto) - Valor manual',
-                min_value=0.0,
-                value=float(renda_fixa_saved) if pd.notna(renda_fixa_saved) else 0.0,
-                step=100.0,
-                format="%.2f",
-                key='renda_fixa_input',
-            )
-
-            st.subheader('Parâmetros de Alocação')
-            col1, col2, col3, col4, col5 = st.columns(5)
-
-            ratio_vals = {}
-            with col1:
-                rmin, rmax = ranges[categorias[0]]
-                st.markdown('Renda Fixa')
-                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
-                ratio_vals[categorias[0]] = st.number_input(
-                    '%',
-                    min_value=rmin,
-                    max_value=rmax,
-                    value=_clamp(ratio_defaults[categorias[0]], rmin, rmax),
-                    step=1.0,
-                    label_visibility='collapsed',
-                    key='ratio_rf'
-                )
-            with col2:
-                rmin, rmax = ranges[categorias[1]]
-                st.markdown('Ações BR')
-                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
-                ratio_vals[categorias[1]] = st.number_input(
-                    '%',
-                    min_value=rmin,
-                    max_value=rmax,
-                    value=_clamp(ratio_defaults[categorias[1]], rmin, rmax),
-                    step=1.0,
-                    label_visibility='collapsed',
-                    key='ratio_br'
-                )
-            with col3:
-                rmin, rmax = ranges[categorias[2]]
-                st.markdown('US – IVVB11')
-                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
-                ratio_vals[categorias[2]] = st.number_input(
-                    '%',
-                    min_value=rmin,
-                    max_value=rmax,
-                    value=_clamp(ratio_defaults[categorias[2]], rmin, rmax),
-                    step=1.0,
-                    label_visibility='collapsed',
-                    key='ratio_us'
-                )
-            with col4:
-                rmin, rmax = ranges[categorias[3]]
-                st.markdown('Ouro – GOLD11')
-                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
-                ratio_vals[categorias[3]] = st.number_input(
-                    '%',
-                    min_value=rmin,
-                    max_value=rmax,
-                    value=_clamp(ratio_defaults[categorias[3]], rmin, rmax),
-                    step=1.0,
-                    label_visibility='collapsed',
-                    key='ratio_gold'
-                )
-            with col5:
-                rmin, rmax = ranges[categorias[4]]
-                st.markdown('Crypto – HASH11')
-                st.caption(f'({rmin:.0f}-{rmax:.0f})%')
-                ratio_vals[categorias[4]] = st.number_input(
-                    '%',
-                    min_value=rmin,
-                    max_value=rmax,
-                    value=_clamp(ratio_defaults[categorias[4]], rmin, rmax),
-                    step=1.0,
-                    label_visibility='collapsed',
-                    key='ratio_crypto'
-                )
-
-            ratio_sum = sum(ratio_vals.values())
-            if abs(ratio_sum - 100.0) > 0.01:
-                st.warning(f'A soma dos ratios é {ratio_sum:.2f}%. O ideal é 100%.')
-
-            valores_atual_form = {
-                'Renda Fixa Brasil (Tesouro curto)': renda_fixa_input,
-                'Ações Brasil': valor_br_acoes,
-                'US – IVVB11': valor_us,
-                'Ouro – GOLD11': valor_gold,
-                'Crypto – HASH11': valor_crypto,
-            }
-
-            df_edit = pd.DataFrame({
-                'Categoria': categorias,
-                'Valor_Atual': [valores_atual_form[c] for c in categorias],
-                'Valor_Salvo': [saved_map[c] for c in categorias],
-                'Ratio_Alvo': [ratio_vals[c] for c in categorias],
-            })
-
-            df_edit = st.data_editor(
-                df_edit,
-                use_container_width=True,
-                num_rows="fixed",
-                column_config={
-                    'Categoria': st.column_config.TextColumn(disabled=True),
-                    'Valor_Atual': st.column_config.NumberColumn(format="%.2f", disabled=True),
-                    'Valor_Salvo': st.column_config.NumberColumn(format="%.2f"),
-                    'Ratio_Alvo': st.column_config.NumberColumn(format="%.2f", disabled=True),
-                },
-                key='alocacao_editor',
-            )
-
-            base_sum = pd.to_numeric(df_edit['Valor_Salvo'], errors='coerce').fillna(0).sum()
-            total_default = float(total_saved) if pd.notna(total_saved) else float(base_sum)
-            total_invest = st.number_input(
-                'Valor Total Investido (pode incluir aporte do mês)',
-                min_value=0.0,
-                value=total_default,
-                step=100.0,
-                format="%.2f",
-                key='total_invest_input',
-            )
-
-            if total_invest < base_sum:
-                st.warning('O total investido está menor que a soma de Valor_Salvo.')
-            elif total_invest > base_sum:
-                st.info(f'Aporte considerado no mês: R$ {total_invest - base_sum:,.2f}')
-
-            submitted = st.form_submit_button('Salvar página')
-
-        if submitted:
-            if total_invest > 0:
-                df_resumo_save = df_edit.copy()
-                df_resumo_save['% Alocado'] = (df_resumo_save['Valor_Salvo'] / total_invest) * 100
-                df_resumo_save['% Ideal'] = df_resumo_save['Ratio_Alvo']
-                df_resumo_save['Dif. %'] = df_resumo_save['% Alocado'] - df_resumo_save['% Ideal']
-                df_resumo_save['Dif. R$'] = df_resumo_save['Valor_Salvo'] - (df_resumo_save['% Ideal'] / 100 * total_invest)
-            else:
-                df_resumo_save = df_edit.copy()
-                df_resumo_save['% Alocado'] = 0.0
-                df_resumo_save['% Ideal'] = df_resumo_save['Ratio_Alvo']
-                df_resumo_save['Dif. %'] = 0.0
-                df_resumo_save['Dif. R$'] = 0.0
-
-            df_save = df_resumo_save[['Categoria', 'Valor_Atual', 'Valor_Salvo', 'Ratio_Alvo']].copy()
-            for idx, row in df_save.iterrows():
-                cat = row['Categoria']
-                valor_salvo = pd.to_numeric(row['Valor_Salvo'], errors='coerce')
-                valor_atual = pd.to_numeric(row['Valor_Atual'], errors='coerce')
-                saved_prev = pd.to_numeric(saved_map.get(cat), errors='coerce')
-
-                # Se o usuário mexeu em Valor_Atual e não ajustou Valor_Salvo,
-                # considera o Valor_Atual como valor a persistir.
-                if pd.notna(valor_atual) and (pd.isna(valor_salvo) or valor_salvo == saved_prev):
-                    df_save.at[idx, 'Valor_Salvo'] = valor_atual
-
-            df_save['Total_Investimento'] = total_invest
-            gog.update_spreadsheet('Alocacao_Total', df_save)
-            st.success('Alocações salvas na planilha Alocacao_Total.')
-            st.rerun()
-        
-        
-        
-    
     # mercado
     # Tela que exibe informações de mercado das ações selecionadas: Gráficos de Preço e Volatilidade 
     # E parâmetros de carteira (Atual e de Markowitz): Vol, Retorno, Sharpe, Drawdown
@@ -1353,3 +1381,4 @@ class Pages:
     
         
         
+

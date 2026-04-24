@@ -318,23 +318,57 @@ class Models:
         pos_fast_q.loc['q2',:] = pos_fast.median()
         pos_fast_q.loc['q1',:] = pos_fast.quantile(.25)
         
-        pos_slow_p.iloc[:,:] = np.where(pos_slow.iloc[:,:] >= pos_slow_q.loc['q3',:], 0,
+        pos_slow_p.iloc[:,:] = np.where(pos_slow.iloc[:,:] >= pos_slow_q.loc['q3',:], 10,
                           np.where( (pos_slow.iloc[:,:] >= pos_slow_q.loc['q2',:]) & (pos_slow.iloc[:,:] < pos_slow_q.loc['q3',:]), 20,
-                          np.where( (pos_slow.iloc[:,:] >= pos_slow_q.loc['q1',:]) & (pos_slow.iloc[:,:] < pos_slow_q.loc['q2',:]), 35, 55 )))
+                          np.where( (pos_slow.iloc[:,:] >= pos_slow_q.loc['q1',:]) & (pos_slow.iloc[:,:] < pos_slow_q.loc['q2',:]), 35, 50 )))
         
         #st.write('Posição Lenta')
         #st.write(pos_slow_p)
         
-        pos_medium_p.iloc[:,:] = np.where(pos_medium.iloc[:,:] >= pos_medium_q.loc['q3',:], 0,
+        pos_medium_p.iloc[:,:] = np.where(pos_medium.iloc[:,:] >= pos_medium_q.loc['q3',:], 7.5,
                           np.where( (pos_medium.iloc[:,:] >= pos_medium_q.loc['q2',:]) & (pos_medium.iloc[:,:] < pos_medium_q.loc['q3',:]), 15,
-                          np.where( (pos_medium.iloc[:,:] >= pos_medium_q.loc['q1',:]) & (pos_medium.iloc[:,:] < pos_medium_q.loc['q2',:]), 30, 50 )))
+                          np.where( (pos_medium.iloc[:,:] >= pos_medium_q.loc['q1',:]) & (pos_medium.iloc[:,:] < pos_medium_q.loc['q2',:]), 30, 40 )))
 
         #st.write('Posição Média')
         #st.write(pos_medium_p)
         
-        pos_fast_p.iloc[:,:] = np.where(pos_fast.iloc[:,:] >= pos_fast_q.loc['q3',:], 0,
+        pos_fast_p.iloc[:,:] = np.where(pos_fast.iloc[:,:] >= pos_fast_q.loc['q3',:], 5,
                           np.where( (pos_fast.iloc[:,:] >= pos_fast_q.loc['q2',:]) & (pos_fast.iloc[:,:] < pos_fast_q.loc['q3',:]), 10,
-                          np.where( (pos_fast.iloc[:,:] >= pos_fast_q.loc['q1',:]) & (pos_fast.iloc[:,:] < pos_fast_q.loc['q2',:]), 25, 45 )))
+                          np.where( (pos_fast.iloc[:,:] >= pos_fast_q.loc['q1',:]) & (pos_fast.iloc[:,:] < pos_fast_q.loc['q2',:]), 25, 35 )))
+
+        # Para juros Brasil, a lógica é invertida:
+        # quanto maior o valor/sinal, maior deve ser a posição.
+        if 'Taxa_Juros_Brasil' in pos_slow.columns:
+            t = 'Taxa_Juros_Brasil'
+            pos_slow_p.loc[:, t] = np.where(
+                pos_slow[t] >= pos_slow_q.loc['q3', t], 50,
+                np.where(
+                    (pos_slow[t] >= pos_slow_q.loc['q2', t]) & (pos_slow[t] < pos_slow_q.loc['q3', t]), 35,
+                    np.where(
+                        (pos_slow[t] >= pos_slow_q.loc['q1', t]) & (pos_slow[t] < pos_slow_q.loc['q2', t]), 20, 10
+                    ),
+                ),
+            )
+
+            pos_medium_p.loc[:, t] = np.where(
+                pos_medium[t] >= pos_medium_q.loc['q3', t], 40,
+                np.where(
+                    (pos_medium[t] >= pos_medium_q.loc['q2', t]) & (pos_medium[t] < pos_medium_q.loc['q3', t]), 30,
+                    np.where(
+                        (pos_medium[t] >= pos_medium_q.loc['q1', t]) & (pos_medium[t] < pos_medium_q.loc['q2', t]), 15, 7.5
+                    ),
+                ),
+            )
+
+            pos_fast_p.loc[:, t] = np.where(
+                pos_fast[t] >= pos_fast_q.loc['q3', t], 35,
+                np.where(
+                    (pos_fast[t] >= pos_fast_q.loc['q2', t]) & (pos_fast[t] < pos_fast_q.loc['q3', t]), 25,
+                    np.where(
+                        (pos_fast[t] >= pos_fast_q.loc['q1', t]) & (pos_fast[t] < pos_fast_q.loc['q2', t]), 10, 5
+                    ),
+                ),
+            )
         
         #st.write('Posição Rápida')
         #st.write(pos_fast_p)
@@ -454,22 +488,22 @@ class Models:
         st.write(pos_fast_p + pos_medium_p + pos_slow_p)
         
 
-        if 'BTC-USD' in df_prices.columns.get_level_values(0):
-            st.write('Entrou')
+        # Quando o histórico for calculado com BTC-USD, replica o percentual para HASH11.SA.
+        if 'BTC-USD' in final_pos_osc.index and 'HASH11.SA' not in final_pos_osc.index:
             final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
-        else:
-            st.write('Insira BTC-USD para ponderar HASH11')
-        #final_pos_osc.loc['HASH11.SA'] = final_pos_osc.loc['BTC-USD']
-        
-        return final_pos_osc.to_frame()
+
+        return final_pos_osc.to_frame(name='pos_osc')
     
     def markowitz(self, precos, volatilidade ,anos_cotacoes, otimizador, cov_type, is_longOnly, regul_zeros, exp_return_type,
                   vol_effic=0.2, ret_effic=0.2
                          , span=100, selic_aa=0.02
-                         , span_cov=100, cash=100000):
+                         , span_cov=100, cash=100000, use_bcb=True):
         
-        url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json'
-        df = self._load_selic_bcb(url, selic_aa)
+        if use_bcb:
+            url = 'https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json'
+            df = self._load_selic_bcb(url, selic_aa)
+        else:
+            df = pd.DataFrame({'Selic': [selic_aa * 100]}, index=[pd.Timestamp.today()])
         selic_diaria = (1+selic_aa)**(1/252) -1
         
         #retorno anualizado
@@ -550,7 +584,7 @@ class Models:
         if otimizador == 'RiskParity':
             hrp_portfolio = pypfopt.HRPOpt(pypfopt.expected_returns.returns_from_prices(precos))
             cleaned_weights = hrp_portfolio.optimize()
-            model_ret = hrp_portfolio.portfolio_performance(verbose=True, risk_free_rate= (1+df['Selic'].iloc[-1])**(1/252) -1 )
+            model_ret = hrp_portfolio.portfolio_performance(verbose=True, risk_free_rate=(1 + df['Selic'].iloc[-1] / 100) ** (1/252) - 1)
             #st.write(hrp_portfolio)
             fig = plt.figure()
             plotting.plot_dendrogram(hrp_portfolio)
