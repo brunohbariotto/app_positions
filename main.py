@@ -8,10 +8,24 @@ Created on Fri Feb 17 19:25:17 2023
 import streamlit as st
 import yfinance as yf
 import pandas as pd
-from pages import Pages
 from plangoogle import PlanGoogle
 from datetime import datetime, date
 import base64
+import importlib.util
+from pathlib import Path
+
+
+def _load_local_pages_class():
+    pages_file = Path(__file__).resolve().parent / "pages.py"
+    spec = importlib.util.spec_from_file_location("app_local_pages", pages_file)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Nao foi possivel carregar modulo local: {pages_file}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.Pages
+
+
+Pages = _load_local_pages_class()
 
 
 loginSection = st.container()
