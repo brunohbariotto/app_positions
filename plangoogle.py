@@ -9,6 +9,8 @@ from google.oauth2 import service_account
 from gspread_pandas import Spread, Client
 import streamlit as st
 import pandas as pd
+from gspread.exceptions import WorksheetNotFound
+from oscillator_optimization import SHEET, merge_saved, saved_windows
 
 class PlanGoogle:
     def __init__(self):
@@ -37,6 +39,21 @@ class PlanGoogle:
         worksheet = sh.worksheet(tabname)
         df = pd.DataFrame(worksheet.get_all_records())
         return df
+
+    def read_oscillator_windows(self):
+        try:
+            return self.read_spreadsheet(SHEET)
+        except WorksheetNotFound:
+            return pd.DataFrame()
+
+    def save_oscillator_windows(self, results):
+        # Re-read immediately before upsert; never replace the position worksheets.
+        _, errors = saved_windows(results)
+        if errors:
+            raise ValueError('; '.join(errors))
+        merged = merge_saved(self.read_oscillator_windows(), results)
+        spread = Spread(self.spreadsheetname, client=self.client)
+        spread.df_to_sheet(merged.fillna(''), sheet=SHEET, index=False, replace=True)
 
     # @st.cache(ttl=600)
     # def worksheet_names():

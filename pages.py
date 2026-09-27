@@ -81,7 +81,8 @@ class Pages:
         df = df.rename(columns={value_col: column_name})[[column_name]]
         return df
 
-    def alocacao_por_ativo(self, df_asset, df_positions, per_data, anos_cotacoes, datas_inicio, datas_fim):
+    def alocacao_por_ativo(self, df_asset, df_positions, per_data, anos_cotacoes, datas_inicio, datas_fim,
+                         optimized_windows=None):
         st.title('Alocacao por Classes de Ativos')
         st.markdown('---')
         df_asset = self._normalize_positions_df(df_asset)
@@ -104,6 +105,11 @@ class Pages:
             start_date = None
             end_date = None
         m = Models()
+        def oscillator_for_allocation(prices):
+            if optimized_windows is None or optimized_windows.empty:
+                return m.oscilador(prices)
+            from optimization_page import allocation_with_saved_windows
+            return allocation_with_saved_windows(m, prices, optimized_windows, as_of=end_date)
         ticker_map = {
             '^BVSP.SA': '^BVSP',
             'SMAL11.SA': 'SMAL11.SA',
@@ -158,7 +164,7 @@ class Pages:
                 st.warning('Nenhum ticker da aba Alocacao_Asset foi encontrado na consolidacao de precos.')
             else:
                 df_prices_osc = df_consolidado[ativos_osc].copy().ffill().dropna(how='all')
-                df_pos_osc = m.oscilador(df_prices_osc).copy()
+                df_pos_osc = oscillator_for_allocation(df_prices_osc).copy()
                 if not df_pos_osc.empty:
                     if 'pos_osc' not in df_pos_osc.columns:
                         df_pos_osc.columns = ['pos_osc']
@@ -292,7 +298,7 @@ class Pages:
             if df_prices_osc_acoes.empty:
                 st.warning('Sem dados validos para executar Oscilador nas acoes.')
                 return
-            df_pos_osc_acoes = m.oscilador(df_prices_osc_acoes).copy()
+            df_pos_osc_acoes = oscillator_for_allocation(df_prices_osc_acoes).copy()
             if not df_pos_osc_acoes.empty:
                 if 'pos_osc' not in df_pos_osc_acoes.columns:
                     df_pos_osc_acoes.columns = ['pos_osc']

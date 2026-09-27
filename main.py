@@ -66,7 +66,7 @@ def show_logout_page():
 def show_main_page():
     st.sidebar.success('Logged In as {}'.format(str(df_senha.iloc[0,0])))
 
-    lista_menu = ['Alocação por Ativo', 'Controle de Posição', 'Mercado','Modelos','Carteira', 'Machine Learning', 'Fundamentos']
+    lista_menu = ['Alocação por Ativo', 'Otimização de Janelas', 'Controle de Posição', 'Mercado','Modelos','Carteira', 'Machine Learning', 'Fundamentos']
     lista_tipo = ['Ações', 'Fundos Imob.']
     st.sidebar.subheader('Menu Principal')
 
@@ -93,7 +93,26 @@ def show_main_page():
     if escolha == 'Alocação por Ativo':
         df_aloc = gog.read_spreadsheet('Alocacao_Asset')
         df_posicoes = gog.read_spreadsheet('positions_BrunoBariotto')
-        pg.alocacao_por_ativo(df_aloc, df_posicoes, per_data, anos_cotacoes, datas_inicio, datas_fim)
+        use_optimized = st.checkbox('Usar janelas otimizadas por ativo', value=True,
+                                    key='use_optimized_windows',
+                                    help='Usa as janelas salvas no Position_Control. Sem configuração válida, mantém a regra atual.')
+        window_config = None
+        if use_optimized:
+            try:
+                window_config = gog.read_oscillator_windows()
+                if window_config.empty:
+                    st.info('Ainda não há janelas salvas. Execute a Otimização de Janelas; a regra atual será mantida.')
+            except Exception as exc:
+                st.warning(f'Falha ao ler janelas otimizadas; mantendo a regra atual: {exc}')
+        pg.alocacao_por_ativo(df_aloc, df_posicoes, per_data, anos_cotacoes, datas_inicio, datas_fim,
+                             optimized_windows=window_config)
+
+    if escolha == 'Otimização de Janelas':
+        from optimization_page import render_optimization_page
+        assets = pg._normalize_positions_df(gog.read_spreadsheet('Alocacao_Asset'))
+        positions = pg._normalize_positions_df(gog.read_spreadsheet('positions_BrunoBariotto'))
+        tickers = list(assets.get('Acao', [])) + list(positions.get('Acao', []))
+        render_optimization_page(gog, tickers)
 
     if escolha == 'Controle de Posição':
         df = gog.read_spreadsheet('positions_BrunoBariotto')
